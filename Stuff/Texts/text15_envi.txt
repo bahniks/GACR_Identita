@@ -1,0 +1,7 @@
+TEXT ENVI 16
+Toto je environmentalni text 16
+Toto je environmentalni text 16
+Toto je environmentalni text 16
+Toto je environmentalni text 16
+Toto je environmentalni text 16
+Toto je environmentalni text 16

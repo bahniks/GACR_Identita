@@ -1,0 +1,6 @@
+TEXT ENVI 3
+Toto je environmentalni text 3
+Toto je environmentalni text 3
+Toto je environmentalni text 3
+Toto je environmentalni text 3
+Toto je environmentalni text 3

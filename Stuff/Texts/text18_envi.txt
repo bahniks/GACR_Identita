@@ -1,0 +1,2 @@
+TEXT ENVI 19
+Toto je environmentalni text 19

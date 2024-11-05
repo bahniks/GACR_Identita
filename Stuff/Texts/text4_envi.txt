@@ -1,0 +1,6 @@
+TEXT ENVI 5
+Toto je environmentalni text 5
+Toto je environmentalni text 5
+Toto je environmentalni text 5
+Toto je environmentalni text 5
+Toto je environmentalni text 5

@@ -1,0 +1,4 @@
+TEXT ENVI 1
+Toto je environmentalni text 1
+Toto je environmentalni text 1
+Toto je environmentalni text 1

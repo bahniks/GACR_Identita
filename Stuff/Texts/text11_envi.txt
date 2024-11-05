@@ -1,0 +1,4 @@
+TEXT ENVI 12
+Toto je environmentalni text 12
+Toto je environmentalni text 12
+Toto je environmentalni text 12
