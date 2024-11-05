@@ -1,7 +1,5 @@
-TEXT ENVI 2
-Toto je environmentalni text 2
-Toto je environmentalni text 2
-Toto je environmentalni text 2
-Toto je environmentalni text 2
-Toto je environmentalni text 2
-Toto je environmentalni text 2
+TEXT ENVI 1
+Toto je envi text 1
+Toto je envi text 1
+Toto je envi text 1
+Toto je envi text 1
