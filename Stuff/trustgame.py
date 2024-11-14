@@ -33,9 +33,12 @@ Jakmile oba odešlete své odpovědi, dozvíte se jaká byla Vaše role a jaký 
 Tuto úlohu budete hrát v rámci studie celkem čtyřikrát, vždy s různými účastníky studie, a Vaše odměna za úlohu bude záviset na jedné, náhodně vylosované hře z těchto čtyř. Ostatní hry Vaší konečnou odměnu nijak neovlivní."""
 
 
-instructionsT2 = """Nyní obdržíte opět úlohu, v které jste spárován(a) s jiným účastníkem studie a můžete si posílat peníze.
-<b>{}
-V tomto kole oba obdržíte {} Kč.</b>
+instructionsT2 = """Nyní jste spárován(a) s jiným účastníkem studie a můžete si posílat peníze.
+
+<b>Pro tohoto účastníka jsou blízké tyto skupiny:
+{}
+
+On(a) podobně bude vědět, jaké skupiny jsou blízké Vám.</b>
 
 Podobně jako v předchozím kole úlohy:
 <i>Hráč A:</i> Má možnost poslat hráči B od 0 do {} Kč (po {} Kč). Poslaná částka se ztrojnásobí a obdrží ji hráč B.
@@ -50,51 +53,8 @@ Vaše odměna za úlohu bude záviset na jedné, náhodně vylosované hře z ce
 Svou volbu učiňte posunutím modrých ukazatelů níže."""
 
 
-rewardTrustText = """
-Tento účastník studie v minulém kole hry s házením kostkou dostal odměnu {} Kč za {}.
-Tento účastník podobně ví, že jste v minulém kole hry s házením kostkou dostal(a) odměnu {} Kč za {}.
-"""
-versionTrustText = """
-Tento účastník studie si v minulém kole hry s házením kostkou vybral {}.
-Tento účastník podobně ví, že jste si v minulém kole hry s házením kostkou vybral(a) verzi {}.
-"""
-after_text = "PO verzi hry, ve které se uvádí, zda byla předpověď správná, či nikoliv, až poté, co se zobrazí výsledek hodu kostkou"
-before_text = "PŘED verzi hry, ve které se uvádí předpověď před tím, než se zobrazí výsledek hodu kostkou"
-version_rewardTrustText = """
-Tento účastník studie si v minulém kole hry s házením kostkou vybral {}, a dostal odměnu {} Kč za {}.
-Tento účastník podobně ví, že jste si v minulém kole hry s házením kostkou vybral(a) verzi {} a dostal(a) odměnu {} Kč za {}.
-"""
-one = "{} správný odhad"
-two_to_four = "{} správné odhady"
-other = "{} správných odhadů"
+instructionsT4 = instructionsT3 = instructionsT2
 
-
-
-instructionsT3 = instructionsT2
-
-
-instructionsT4 = """Nyní obdržíte opět úlohu, v které jste spárováni s jiným účastníkem studie a můžete si posílat peníze.
-<b>{}
-V tomto kole oba obdržíte {} Kč.</b>
-
-Podobně jako v předchozích kolech úlohy:
-<i>Hráč A:</i> Má možnost poslat hráči B od 0 do {} Kč (po {} Kč). Poslaná částka se ztrojnásobí a obdrží ji hráč B.
-<i>Hráč B:</i> Může poslat zpět hráči A jakékoli množství peněz získaných v této úloze, tedy úvodních {} Kč a ztrojnásobenou částku poslanou hráčem A.
-
-Předem nebudete vědět, jaká je Vaše role a uvedete tedy rozhodnutí pro obě role.
-
-Jakmile oba odešlete své odpovědi, dozvíte se jaká byla Vaše role a jaký je celkový výsledek rozhodnutí Vás a druhého účastníka. 
-
-Vaše odměna za úlohu bude záviset na jedné, náhodně vylosované hře z celkových čtyř, které budete hrát.
-
-Svou volbu učiňte posunutím modrých ukazatelů níže."""
-
-
-contributedText = f"Tento účastník se rozhodl přispět {TOKEN} Kč charitě, když měl možnost."
-notContributedText = f"Tento účastník se rozhodl nepřispět {TOKEN} Kč charitě, když měl možnost."
-controlText = ""
-myselfContributed = f" Podobně on(a) ví, že jste přispěl(a) {TOKEN} Kč charitě."
-myselfNotContributed = f" Podobně on(a) ví, že jste nepřispěl(a) {TOKEN} Kč charitě."
 
 
 trustControl1 = "Jaká je role hráče A a hráče B ve studii?"
@@ -129,7 +89,7 @@ Tato částka byla ztrojnásobena na {} Kč.
 <b>Ze svých {} Kč Vám poslal hráč B {} Kč.</b>
 
 <b>V této úloze jste tedy získal(a) {} Kč a hráč B {} Kč.</b>
-Tuto odměnu získáte, pokud bude toto kolo hry vylosováno pro vyplacení.{}
+Tuto odměnu získáte, pokud bude toto kolo hry vylosováno pro vyplacení.
 """
 
 trustResultTextB = """Náhodně Vám byla vybrána role hráče B.
@@ -139,10 +99,9 @@ Tato částka byla ztrojnásobena na {} Kč.
 <b>Ze svých {} Kč jste poslal(a) hráči B {} Kč.</b>
 
 <b>V této úloze jste tedy získal(a) {} Kč a hráč A {} Kč.</b>
-Tuto odměnu získáte, pokud bude toto kolo hry vylosováno pro vyplacení.{}
+Tuto odměnu získáte, pokud bude toto kolo hry vylosováno pro vyplacení.
 """
 
-diceText = "\n\nNyní budete pokračovat v úloze s odhadováním hodů kostky."
 
 checkButtonText = "Rozhodl(a) jsem se u všech možností"
 
@@ -233,49 +192,18 @@ class Trust(InstructionsFrame):
         else:
             root.status["trustblock"] += 1
 
-        if not "endowments" in root.status:
-            endowments = list(map(TRUST.__getitem__, [1,2,0,1])) if root.status["incentive_order"] == "high-low" else list(map(TRUST.__getitem__, [1,0,2,1]))
-            root.status["endowments"] = endowments
-
-        endowment = root.status["endowments"][root.status["trustblock"] - 1]
+        endowment = 100 # TO DO
 
         if root.status["trustblock"] == 1:            
             text = eval("instructionsT" + str(root.status["trustblock"])).format(endowment, endowment, int(endowment/5), endowment)
             text += "\n\nSvou volbu učiňte posunutím modrých ukazatelů níže."
-        else:
-            _, otherwins, otherreward, otherversion = root.status["outcome" + str(root.status["trustblock"] + 2)].rstrip("_True").split("|") 
-            selectedVersion = after_text if "treatment" in otherversion else before_text
-            prevblock = root.status["block"] - 1
-            yourversion = "PO" if "treatment" in root.status["conditions"][prevblock-1] else "PŘED"
-            if otherwins == "1":
-                otherwinsText = one
-            else:
-                otherwinsText = two_to_four if 2 <= int(otherwins) <= 4 else other
-            otherwinsText = otherwinsText.format(otherwins)
-            wins = root.wins[prevblock]
-            if wins == 1:
-                mywinsText = one
-            else:
-                mywinsText = two_to_four if 2 <= int(wins) <= 4 else other
-            mywinsText = mywinsText.format(wins)
-            if root.status["condition"] == "version":
-                conditionText = versionTrustText.format(selectedVersion, yourversion)
-            elif root.status["condition"] == "reward":
-                reward = sum([i*3 + 3 for i in range(12)][:wins])
-                conditionText = rewardTrustText.format(otherreward, otherwinsText, reward, mywinsText)
-            elif root.status["condition"] == "version_reward":
-                
-                reward = sum([i*3 + 3 for i in range(12)][:wins])                
-                conditionText = version_rewardTrustText.format(selectedVersion, otherreward, otherwinsText, yourversion, reward, mywinsText)
-            elif root.status["condition"] == "control":
-                conditionText = ""
-            if root.status["trustblock"] == 4:
-                conditionText += eval(otherversion.split("_")[1] + "Text")
-                if root.status["tokenCondition"]:
-                    conditionText += myselfContributed if root.status["tokenContributed"] else myselfNotContributed
-            text = eval("instructionsT" + str(root.status["trustblock"])).format(conditionText, endowment, endowment, int(endowment/5), endowment)
+        else:            
+            otherInfo = [f"Skupina {x}" for x in range(1, 31)]
+            random.shuffle(otherInfo)
+            otherInfo = "\n".join(otherInfo[:4])
+            text = eval("instructionsT" + str(root.status["trustblock"])).format(otherInfo, endowment, endowment, int(endowment/5), endowment)
 
-        height = 25
+        height = 26
         width = 100
 
         super().__init__(root, text = text, height = height, font = 15, width = width)
@@ -346,7 +274,7 @@ class Trust(InstructionsFrame):
     def write(self):
         block = self.root.status["trustblock"]
         self.file.write("Trust\n")        
-        d = [self.id, str(block + 2), self.root.status["trust_pairs"][block-1], list(self.root.status["trust_roles"])[block-1], self.root.status["condition"], self.root.status["incentive_order"], self.root.status["endowments"][block-1]]
+        d = [self.id, str(block + 2), self.root.status["trust_pairs"][block-1], list(self.root.status["trust_roles"])[block-1]]
         self.file.write("\t".join(map(str, d + self.responses)))
         if URL == "TEST":
             if self.root.status["trust_roles"][block-1] == "A":                        
@@ -371,7 +299,7 @@ class WaitTrust(InstructionsFrame):
             if perf_counter() - t0 > 5:
                 t0 = perf_counter()
                 block = self.root.status["trustblock"]
-                endowment = self.root.status["endowments"][block - 1] 
+                endowment = 100 # TO DO
 
                 data = urllib.parse.urlencode({'id': self.id, 'round': block, 'offer': "trust"})                
                 data = data.encode('ascii')
@@ -399,12 +327,10 @@ class WaitTrust(InstructionsFrame):
                         reward = endowment - sentA + sentB if self.root.status["trust_roles"][block-1] == "A" else endowment + sentA*3 - sentB    
                         self.root.texts["trust"] = str(reward)
 
-                    dice = "" if block == 4 else diceText
-
                     if self.root.status["trust_roles"][block - 1] == "A": 
-                        text = trustResultTextA.format(sentA, sentA*3, endowment + sentA*3, sentB, endowment - sentA + sentB, endowment + sentA*3 - sentB, dice)
+                        text = trustResultTextA.format(sentA, sentA*3, endowment + sentA*3, sentB, endowment - sentA + sentB, endowment + sentA*3 - sentB)
                     else:
-                        text = trustResultTextB.format(sentA, sentA*3, endowment + sentA*3, sentB, endowment + sentA*3 - sentB, endowment - sentA + sentB, dice)
+                        text = trustResultTextB.format(sentA, sentA*3, endowment + sentA*3, sentB, endowment + sentA*3 - sentB, endowment - sentA + sentB)
                     self.root.texts["trustResult"] = text
 
                     self.write(response)
@@ -430,14 +356,11 @@ InstructionsTrust = (InstructionsAndUnderstanding, {"text": instructionsT1.forma
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
-    from cheating import OutcomeWait
     GUI([Login,    
-         OutcomeWait,
          InstructionsTrust,
          Trust,
          WaitTrust,
          TrustResult,
-         OutcomeWait,
          Trust,
          WaitTrust,
          TrustResult

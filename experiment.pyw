@@ -17,6 +17,7 @@ from trustgame import WaitTrust, Trust, TrustResult, InstructionsTrust
 from questionnaire import PoliticalSkill, TDMS, HEXACOinfo
 from anchoring import Anchoring, AnchoringInstructions
 from comments import Comments
+from cheating import Login
 
 
 from articles import InstructionsArticlesOthers, ChoiceOthers, InstructionsArticlesMyself, ChoiceMyself, InstructionsReading
@@ -24,6 +25,14 @@ from articles import ArticlesMyself, InstructionsReadingOthers, ArticlesOthers
 
 
 frames = [#Initial,
+          Login,    
+          InstructionsTrust,
+          Trust,
+          WaitTrust,
+          TrustResult,
+          Trust,
+          WaitTrust,
+          TrustResult,
           InstructionsArticlesOthers, 
           ChoiceOthers,      
           InstructionsArticlesMyself,
