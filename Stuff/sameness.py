@@ -27,63 +27,73 @@ qSameness = "Zkuste prosím odhadnout, kolik shodných preferencí s tímto člo
 
 
 
+
 ################################################################################
 
 
 class Sameness(InstructionsFrame):
     def __init__(self, root, who):
-        super().__init__(root, text = "", height = 3, font = 15, width = 45)
+        super().__init__(root, text = "", height = 6, font = 15, width = 45)
 
-
+        self.total = 10
         self.trial = 1
-        self.valueVar = StringVar()
-        self.valueVar.set("15")
+        self.maximum = 30
 
+        self.descriptions = [["Kategorie {}".format(random.randint(0,50)) for i in range(4)] for j in range(self.total)] # TODO
+
+        self.valueVar = StringVar()
+        self.valueVar.set(f"{self.maximum//2}")
         
         self.trialText = ttk.Label(self, text = f"Osoba: 1/{self.total}", font = "helvetica 15 bold", background = "white", justify = "right")
+
         self.question = ttk.Label(self, text = qSameness, font = "helvetica 15 bold", background = "white", justify = "right")
 
-        
-
+        self.scaleFrame = Canvas(self, background = "white", highlightbackground = "white", highlightcolor = "white")
         ttk.Style().configure("TScale", background = "white")
-        self.value = ttk.Scale(self, orient = HORIZONTAL, from_ = 0, to = maximum, length = 400,
+        self.value = ttk.Scale(self.scaleFrame, orient = HORIZONTAL, from_ = 0, to = maximum, length = 400,
                             variable = self.valueVar, command = self.changedValue)
         self.value.bind("<Button-1>", self.onClick)
+        self.valueLab = ttk.Label(self.scaleFrame, textvariable = self.valueVar, font = "helvetica {}".format(font), background = "white", width = 3, anchor = "e")
+        self.value.grid(column = 0, row = 0)
+        self.valueLab.grid(column = 1, row = 0)
 
-        self.valueLab = ttk.Label(self, textvariable = self.valueVar, font = "helvetica {}".format(font), background = "white", width = 3, anchor = "e")
+        self.next["command"] = self.nextTrial
+
+        self.scaleFrame.grid(column = 1, row = 3)
+        self.trialText.grid(column = 2, row = 0, pady = 30, padx = 30, sticky = NE)
+        self.question.grid(column = 1, row = 2, pady = 30)
+        self.text.grid(row = 1, column = 1)
+        self.next.grid(row = 4, column = 1)
 
 
-        self.trialText.grid(column = 3, columnspan = 2, row = 0, pady = 30, padx = 30, sticky = NE)
-        self.question.grid(column = 1, row = 3, columnspan = 3, pady = 30)
-        self.valueLab.grid()
-
-
-        self.columnconfigure(0, weight = 3)
+        self.columnconfigure(0, weight = 1)
         self.columnconfigure(2, weight = 1)
-        self.columnconfigure(4, weight = 3)
-
+        
         self.rowconfigure(0, weight = 1)
         self.rowconfigure(5, weight = 2)    
 
         self.file.write("Sameness\n")
         
+        self.nextTrial()
 
+
+    def nextTrial():
+        if self.trial == self.total:
+            self.nextFun()
+        else:
+            self.changeText("\n".join(self.descriptions[self.trial - 1]))
+            self.trial += 1
+            self.trialText["text"] = f"Osoba: {self.trial}/{self.total}"
+            self.valueVar.set(f"{self.total//2}")
+        
 
     def changedValue(self, value):           
         value = str(min([max([eval(str(value)), 0]), self.maximum]))
         self.valueVar.set(value)
-        newval = int(round(eval(self.valueVar.get())/self.rounding, 0)*self.rounding)
+        newval = int(round(eval(self.valueVar.get()), 0))
         self.valueVar.set("{0:3d}".format(newval))
-        if self.player == "A":
-            self.totalLab1["text"] = self.totalText1.format(self.endowment - newval)
-            self.totalLab2["text"] = self.totalText2.format(self.endowment + newval * 3)
-            self.totalLab1["font"] = "helvetica {} bold".format(self.font)
-            self.playerLab1["font"] = "helvetica {} bold".format(self.font)
-        else:
-            self.totalLab1["text"] = self.totalText1.format(self.endowment - self.returned + newval)
-            self.totalLab2["text"] = self.totalText2.format(self.returned * 3 + self.endowment - newval)
-            self.totalLab2["font"] = "helvetica {} bold".format(self.font)
-            self.playerLab2["font"] = "helvetica {} bold".format(self.font)
+        self.valueLab["text"] = newval
+
 
     def onClick(self, event):
         click_position = event.x
