@@ -21,50 +21,64 @@ from constants import TESTING, URL
 # TEXTS
 
 
-introSameness = "Nyní vám ukážeme, odpovědi čtyř dalších účastníků této studie. Uvidíte, které skupiny jim byly blízké a které jim byly vzdálené. Vaším úkolem bude odhadnout, do jaké míry se s těmito lidmi shodujete v tom, co se vám líbí. Pokud bude váš odhad správný dostanete pokaždé bonus 100 Kč."
+introSameness = """Nyní vám ukážeme, odpovědi deseti osob, z nichž čtyři jsou od dalších účastníků této studie a zbývajících šest je uměle vytvořených. Uvidíte, které skupiny těmto osobám byly blízké a které vzdálené. 
 
-qSameness = "Zkuste prosím odhadnout, kolik shodných preferencí s tímto člověkem máte. Pokud se shodnete (+/- 1 shoda), dostanete bonus 100 Kč."
+Vaším úkolem bude odhadnout, do jaké míry se s těmito lidmi shodujete v tom, co se vám líbí. Za každého účastníka studie, kde bude váš odhad správný dostanete bonus 100 Kč. Za odhady u uměle vytvořených osob žádný bonus nedostáváte. 
 
+Shoda je určována podle počtu položek v předchozí úloze, kde jste uvedli s daným účastníkem studie stejnou preferenci z nabídnuté dvojice. Celkem jste oba obdrželi 30 stejných dvojic. Pokud byste oba odpovídali náhodně, lze očekávat, že se budete shodovat u 15 položek. Pokud si myslíte, že jste si spíše podobní a máte stejné preference, měl(a) byste uvádět odhad vyšší než 15. Pokud si naopak myslíte, že si podobní nejste a máte různé preference, měl(a) byste uvádět odhad nižší než 15."""
 
+qSameness = "Pomocí modrého ukazatele níže zkuste odhadnout kolik shodných preferencí s tímto člověkem máte."
 
+descriptionText = """Hodnocená osoba vybrala, že je členem těchto skupin:
+{}
+"""
 
+leftLabelText = "Nejvíce\nodlišný"
+rightLabelText = "Nejvíce\npodobný"
+
+infoValueLabelText = "Očekávám shodu v počtu položek: "
 ################################################################################
 
 
 class Sameness(InstructionsFrame):
-    def __init__(self, root, who):
+    def __init__(self, root):
         super().__init__(root, text = "", height = 6, font = 15, width = 45)
 
-        self.total = 10
-        self.trial = 1
+        self.totalTrials = 10
+        self.trial = 0
+
         self.maximum = 30
 
-        self.descriptions = [["Kategorie {}".format(random.randint(0,50)) for i in range(4)] for j in range(self.total)] # TODO
+        self.descriptions = [["Kategorie {}".format(random.randint(0,50)) for i in range(4)] for j in range(self.totalTrials)] # TODO
 
         self.valueVar = StringVar()
-        self.valueVar.set(f"{self.maximum//2}")
         
-        self.trialText = ttk.Label(self, text = f"Osoba: 1/{self.total}", font = "helvetica 15 bold", background = "white", justify = "right")
+        self.trialText = ttk.Label(self, text = "", font = "helvetica 15", background = "white", justify = "right")
 
-        self.question = ttk.Label(self, text = qSameness, font = "helvetica 15 bold", background = "white", justify = "right")
+        self.question = ttk.Label(self, text = qSameness, font = "helvetica 15", background = "white", justify = "right")
 
         self.scaleFrame = Canvas(self, background = "white", highlightbackground = "white", highlightcolor = "white")
         ttk.Style().configure("TScale", background = "white")
-        self.value = ttk.Scale(self.scaleFrame, orient = HORIZONTAL, from_ = 0, to = maximum, length = 400,
+        self.value = ttk.Scale(self.scaleFrame, orient = HORIZONTAL, from_ = 0, to = self.maximum, length = 400,
                             variable = self.valueVar, command = self.changedValue)
         self.value.bind("<Button-1>", self.onClick)
-        self.valueLab = ttk.Label(self.scaleFrame, textvariable = self.valueVar, font = "helvetica {}".format(font), background = "white", width = 3, anchor = "e")
-        self.value.grid(column = 0, row = 0)
-        self.valueLab.grid(column = 1, row = 0)
+        self.leftLabel = ttk.Label(self.scaleFrame, text = leftLabelText, font = "helvetica 15 bold", background = "white", justify = "right")
+        self.rightLabel = ttk.Label(self.scaleFrame, text = rightLabelText, font = "helvetica 15 bold", background = "white", justify = "left")
+        self.valueLab = ttk.Label(self.scaleFrame, textvariable = self.valueVar, font = "helvetica 15", background = "white", width = 3, anchor = "e")
+        self.infoValueLabel = ttk.Label(self.scaleFrame, text = infoValueLabelText, font = "helvetica 15", background = "white")
+        self.value.grid(column = 1, columnspan = 2, row = 0)
+        self.valueLab.grid(column = 2, row = 1)
+        self.leftLabel.grid(column = 0, row = 0, padx = 10) 
+        self.rightLabel.grid(column = 3, row = 0, padx = 10)        
+        self.infoValueLabel.grid(row = 1, column = 1)
 
         self.next["command"] = self.nextTrial
 
         self.scaleFrame.grid(column = 1, row = 3)
-        self.trialText.grid(column = 2, row = 0, pady = 30, padx = 30, sticky = NE)
+        self.trialText.grid(column = 1, columnspan = 2, row = 0, pady = 30, padx = 30, sticky = NE)
         self.question.grid(column = 1, row = 2, pady = 30)
         self.text.grid(row = 1, column = 1)
-        self.next.grid(row = 4, column = 1)
-
+        self.next.grid(row = 4, column = 1)        
 
         self.columnconfigure(0, weight = 1)
         self.columnconfigure(2, weight = 1)
@@ -77,14 +91,15 @@ class Sameness(InstructionsFrame):
         self.nextTrial()
 
 
-    def nextTrial():
-        if self.trial == self.total:
+    def nextTrial(self):
+        if self.trial == self.totalTrials:
             self.nextFun()
         else:
-            self.changeText("\n".join(self.descriptions[self.trial - 1]))
             self.trial += 1
-            self.trialText["text"] = f"Osoba: {self.trial}/{self.total}"
-            self.valueVar.set(f"{self.total//2}")
+            self.changeText(descriptionText.format("\n".join(self.descriptions[self.trial - 1]))) 
+            self.trialText["text"] = f"Osoba: {self.trial}/{self.totalTrials}"
+            self.valueVar.set(f"{self.maximum//2}")
+            
         
 
     def changedValue(self, value):           
@@ -105,71 +120,14 @@ class Sameness(InstructionsFrame):
 
 
 
-
-class Articles(ExperimentFrame):
-    def __init__(self, root, who):
-        super().__init__(root)
-
-        self.who = who
-
-        if TESTING and self.who == "myself" and not "articles" in self.root.status:
-            self.root.status["articles"] = ["7_anti", "11_filler", "20_envi"]
-        if TESTING and self.who == "others" and not "othersArticles" in self.root.status:
-            self.root.status["othersArticles"] = ["12_anti", "5_filler", "3_envi"]
-            
-        self.total = 3
-        self.trial = 1
-
-        self.trialText = ttk.Label(self, text = f"Článek: 1/{self.total}", font = "helvetica 15 bold", background = "white", justify = "right")
-
-        self.text = Text(self, font = "helvetica 15", relief = "flat", background = "white", width = 80, height = 15, wrap = "word", highlightbackground = "white")
-
-        self.scrollbar = ttk.Scrollbar(self, command = self.text.yview)        
-        self.text.config(yscrollcommand = self.scrollbar.set)
-
-        ttk.Style().configure("TButton", font = "helvetica 15")
-        self.next = ttk.Button(self, text = "Pokračovat", command = self.proceed)
-
-        self.trialText.grid(column = 1, columnspan = 2, row = 0, pady = 30, padx = 30, sticky = NE)
-        self.text.grid(column = 1, row = 2)
-        self.scrollbar.grid(column = 2, row = 2, sticky = "NSW")
-        self.next.grid(column = 1, row = 4, pady = 30)
-
-        self.columnconfigure(0, weight = 1)
-        self.columnconfigure(2, weight = 1)
-
-        self.rowconfigure(0, weight = 3)
-        self.rowconfigure(2, weight = 1)   
-        self.rowconfigure(4, weight = 1)
-        self.rowconfigure(5, weight = 3)    
-
-        self.createText()
-
-    def createText(self):
-        self.text.delete("1.0", "end")
-        source = self.root.status["articles"] if self.who == "myself" else self.root.status["othersArticles"]
-        with open(os.path.join(os.getcwd(), "Stuff", "Texts", "text{}_{}.txt".format(*source[self.trial - 1].split("_")))) as f:
-            self.text.insert("1.0", f.read()*3)
-        
-    def proceed(self):
-        self.trial += 1
-        if self.trial > self.total:
-            self.nextFun()
-        else:
-            self.trialText["text"] = f"Článek: {self.trial}/{self.total}"
-            self.createText()
-
-
-
-    
-
-InstructionsSameness = (InstructionsFrame, {"text": introSameness, "height": 5})
+InstructionsSameness = (InstructionsFrame, {"text": introSameness, "height": 10})
 
 
 
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
-    GUI([InstructionsSameness, 
+    GUI([Sameness,
+         InstructionsSameness, 
          Sameness
          ])
