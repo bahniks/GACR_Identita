@@ -29,9 +29,7 @@ Shoda je určována podle počtu položek v předchozí úloze, kde jste uvedli 
 
 qSameness = "Pomocí modrého ukazatele níže zkuste odhadnout kolik shodných preferencí s tímto člověkem máte."
 
-descriptionText = """Hodnocená osoba vybrala, že je členem těchto skupin:
-{}
-"""
+descriptionLabelText = "Hodnocená osoba vybrala, že je členem těchto skupin:"
 
 leftLabelText = "Nejvíce\nodlišný"
 rightLabelText = "Nejvíce\npodobný"
@@ -52,7 +50,8 @@ class Sameness(InstructionsFrame):
         self.descriptions = [["Kategorie {}".format(random.randint(0,50)) for i in range(4)] for j in range(self.totalTrials)] # TODO
 
         self.valueVar = StringVar()
-        
+
+        self.descriptionText = ttk.Label(self, text = descriptionLabelText, font = "helvetica 15", background = "white", justify = "center")      
         self.trialText = ttk.Label(self, text = "", font = "helvetica 15", background = "white", justify = "right")
 
         self.question = ttk.Label(self, text = qSameness, font = "helvetica 15", background = "white", justify = "right")
@@ -61,7 +60,9 @@ class Sameness(InstructionsFrame):
         ttk.Style().configure("TScale", background = "white")
         self.value = ttk.Scale(self.scaleFrame, orient = HORIZONTAL, from_ = 0, to = self.maximum, length = 400,
                             variable = self.valueVar, command = self.changedValue)
-        self.value.bind("<Button-1>", self.onClick)
+        # self.value.bind("<Button-1>", self.onClick)
+        # self.value.bind("<ButtonRelease-1>", self.onRelease)
+        # self.clicked = False
         self.leftLabel = ttk.Label(self.scaleFrame, text = leftLabelText, font = "helvetica 15 bold", background = "white", justify = "right")
         self.rightLabel = ttk.Label(self.scaleFrame, text = rightLabelText, font = "helvetica 15 bold", background = "white", justify = "left")
         self.valueLab = ttk.Label(self.scaleFrame, textvariable = self.valueVar, font = "helvetica 15", background = "white", width = 3, anchor = "e")
@@ -75,6 +76,7 @@ class Sameness(InstructionsFrame):
         self.next["command"] = self.nextTrial
 
         self.scaleFrame.grid(column = 1, row = 3)
+        self.descriptionText.grid(column = 1, row = 0)
         self.trialText.grid(column = 1, columnspan = 2, row = 0, pady = 30, padx = 30, sticky = NE)
         self.question.grid(column = 1, row = 2, pady = 30)
         self.text.grid(row = 1, column = 1)
@@ -96,38 +98,49 @@ class Sameness(InstructionsFrame):
             self.nextFun()
         else:
             self.trial += 1
-            self.changeText(descriptionText.format("\n".join(self.descriptions[self.trial - 1]))) 
+            self.changeText("\n".join(self.descriptions[self.trial - 1]))
             self.trialText["text"] = f"Osoba: {self.trial}/{self.totalTrials}"
             self.valueVar.set(f"{self.maximum//2}")
-            
-        
 
-    def changedValue(self, value):           
+
+    def changedValue(self, value):          
+        # if self.clicked:
+        #     return
+        #self.value.configure(command=None)               
         value = str(min([max([eval(str(value)), 0]), self.maximum]))
-        self.valueVar.set(value)
-        newval = int(round(eval(self.valueVar.get()), 0))
-        self.valueVar.set("{0:3d}".format(newval))
-        self.valueLab["text"] = newval
+        self.valueVar.set(value)        
+        newval = int(round(eval(self.valueVar.get())))
+        self.valueVar.set("{0:2d}".format(newval))
+        #self.value.configure(command=self.changedValue)
 
 
-    def onClick(self, event):
-        click_position = event.x
-        newValue = int((click_position / self.value.winfo_width()) * self.value['to'])
-        self.changedValue(newValue)
-        self.update()
+    # def onClick(self, event):
+    #     #self.value.configure(command=None)
+    #     if not self.clicked:
+    #         self.clicked = True
+    #         newValue = int((event.x / self.value.winfo_width()) * self.value['to'])
+    #         value = str(min([max([eval(str(newValue)), 0]), self.maximum]))
+    #         self.valueVar.set(value)        
+    #         newval = int(round(eval(self.valueVar.get())))
+    #         self.valueVar.set("{0:2d}".format(newval))        
+    #         #self.changedValue(newValue)
+    #         #self.update()
+
+    #     #self.value.configure(command=self.changedValue)
        
+    # def onRelease(self, event):
+    #     self.clicked = False
 
 
 
 
-InstructionsSameness = (InstructionsFrame, {"text": introSameness, "height": 10})
+InstructionsSameness = (InstructionsFrame, {"text": introSameness, "height": 15})
 
 
 
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
-    GUI([Sameness,
-         InstructionsSameness, 
+    GUI([InstructionsSameness, 
          Sameness
          ])
