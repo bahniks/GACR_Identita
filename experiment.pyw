@@ -18,14 +18,17 @@ from trustgame import WaitTrust, Trust, TrustResult, InstructionsTrust
 from comments import Comments
 from cheating import Login
 from sameness import InstructionsSameness, Sameness
-
-
+from liking import InstructionsLiking, Liking
 from articles import InstructionsArticlesOthers, ChoiceOthers, InstructionsArticlesMyself, ChoiceMyself, InstructionsReading
 from articles import ArticlesMyself, InstructionsReadingOthers, ArticlesOthers  
 
 
+
 frames = [#Initial,
+          #Intro,
           Login,    
+          InstructionsLiking,
+          Liking,
           InstructionsSameness, 
           Sameness,
           InstructionsTrust,
@@ -42,14 +45,7 @@ frames = [#Initial,
           InstructionsReading,
           ArticlesMyself,
           InstructionsReadingOthers,
-          ArticlesOthers#,
-        #   Login,
-        #   Intro,       
-        #   HEXACOintro,   
-        #   CheatingInstructions,
-        #   Cheating,
-        #   Instructions2,
-        #   Cheating,
+          ArticlesOthers,
         #   Instructions3, # selection
         #   Cheating,
         #   Info3,
@@ -63,17 +59,6 @@ frames = [#Initial,
         #   Trust,
         #   WaitTrust,
         #   TrustResult,
-        #   Instructions5, # selection + info about trust
-        #   Cheating,
-        #   OutcomeWait,
-        #   Trust,
-        #   WaitTrust,
-        #   TrustResult,
-        #   Instructions6, # selection + info about trust and token contribution to charity
-        #   Cheating,
-        #   OutcomeWait,
-        #   Trust,
-        #   WaitTrust,
         #   TrustResult,
         #   EndCheating,
         #   Lottery,
@@ -84,9 +69,9 @@ frames = [#Initial,
         #   PoliticalSkill,
         #   TDMS,
         #   HEXACOinfo,
-        #   Demographics,
-        #   Comments,
-        #   Ending
+          Demographics,
+          Comments#,
+          #Ending
          ]
 
 #frames = [Login, HEXACOinfo]
