@@ -18,12 +18,17 @@ from cheating import Login
 # TEXTS
 intro = """
 Studie se skládá z několika různých úkolů a otázek. Níže je uveden přehled toho, co Vás čeká:
-<b>1) Hod kostkou:</b> Vaším úkolem bude uhodnout, zda na kostce padne liché nebo sudé číslo. Budete hádat v šesti blocích, každém po dvanácti kolech. V tomto úkolu si můžete vydělat peníze.
-<b>2) Dělení peněz:</b> Budete se rozhodovat, jak dělit peníze v páru s jiným účastníkem studie. V tomto úkolu si můžete vydělat peníze. Proběhnou celkem čtyři kola této úlohy.
-<b>3) Loterie:</b> můžete se rozhodnout zúčastnit se loterie a získat další peníze v závislosti na výsledcích loterie.
-<b>4) Odhady:</b> budete odhadovat různé vlastnosti objektů.
-<b>5) Dotazníky:</b> budete odpovídat na otázky ohledně Vašich vlastností a postojů. 
-<b>6) Konec studie a platba:</b> poté, co skončíte, půjdete do vedlejší místnosti, kde podepíšete pokladní dokument, na základě kterého obdržíte vydělané peníze v hotovosti. <b>Jelikož v dokumentu bude uvedena pouze celková suma, experimentátor, který Vám bude vyplácet odměnu, nebude vědět, kolik jste vydělali v jednotlivých částech studie.</b>
+<b>1) Skupiny:</b> Budete uvádět, jaké skupiny jsou Vám blízké a jaké vzdálené.
+<b>2) Dělení peněz:</b> Budete se rozhodovat, jak dělit peníze v páru s jiným účastníkem studie. V tomto úkolu si můžete vydělat peníze.
+<b>3) Preference:</b> Budete uvádět, jaká možnost z dvojice se Vám více líbí.
+<b>4) Články:</b> Budete vybírat články pro přečtení a následně budete mít čas si vybrané články přečíst.
+<b>5) Přidělování peněz:</b> Budete rozdělovat peníze mezi další účastníky studie. V tomto úkolu můžete od ostatních účastníků získat peníze.
+<b>6) Podobnost:</b> Budete hodnotit, nakolik jsou Vám další účastníci studie podobní.
+<b>7) Loterie:</b> můžete se rozhodnout zúčastnit se loterie a získat další peníze v závislosti na výsledcích loterie.
+<b>8) Dotazníky:</b> budete odpovídat na otázky ohledně Vašich vlastností a postojů. 
+<b>9) Konec studie a platba:</b> poté, co skončíte, půjdete do vedlejší místnosti, kde podepíšete pokladní dokument, na základě kterého obdržíte vydělané peníze v hotovosti. <b>Jelikož v dokumentu bude uvedena pouze celková suma, experimentátor, který Vám bude vyplácet odměnu, nebude vědět, kolik jste vydělali v jednotlivých částech studie.</b>
+
+Veškeré interakce s ostatními účastniky studie proběhnou pouze přes počítač a anonymně. Nikdy nebudete navzájem vědět, s kým v rámci experimentu interagujete.
 
 V případě, že máte otázky nebo narazíte na technický problém během úkolů, zvedněte ruku a tiše vyčkejte příchodu výzkumného asistenta.
 
@@ -58,13 +63,6 @@ Pokud jste již tak neučinil(a), přečtěte si informovaný souhlas a pokud s 
 
 Počkejte na pokyn experimentátora.""".format(PARTICIPATION_FEE)
 
-
-hexacointrotext = """
-Před sebou máte na papíře vytištěný dotazník a záznamový arch. Do záznamového archu vyplňte do pole vlevo dole své identifikační číslo <b>{}</b>. Samotný dotazník ještě nevyplňujte.
-
-Jelikož probíhá v některých částech studie interakce s ostatními účastníky studie, může se stát, že na ně budete muset chvíli čekat. Během případného čekání můžete vyplňovat odpovědi na vytištěný dotazník do přiloženého záznamového archu. Aby nemuseli ostatní účastníci studie čekat na Vás, nevyplňujte dotazník, když je možné pokračovat ve studii na počítači.
-
-Po vyplnění identifikačního čísla do záznamového archu klikněte na tlačítko Pokračovat."""
 
 ################################################################################
 
@@ -111,9 +109,8 @@ class Ending(InstructionsFrame):
 
 
 
-Intro = (InstructionsFrame, {"text": intro, "proceed": True, "height": 23})
+Intro = (InstructionsFrame, {"text": intro, "proceed": True, "height": 30})
 Initial = (InstructionsFrame, {"text": login, "proceed": False, "height": 17, "keys": ["g", "G"]})
-HEXACOintro = (InstructionsFrame, {"text": hexacointrotext, "height": 11, "update": ["idNumber"]})
 
 
 if __name__ == "__main__":
@@ -121,5 +118,4 @@ if __name__ == "__main__":
     GUI([Login,
          Initial, 
          Intro,
-        #  HEXACOintro,
          Ending])

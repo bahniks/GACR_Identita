@@ -21,23 +21,26 @@ from sameness import InstructionsSameness, Sameness
 from liking import InstructionsLiking, Liking
 from articles import InstructionsArticlesOthers, ChoiceOthers, InstructionsArticlesMyself, ChoiceMyself, InstructionsReading
 from articles import ArticlesMyself, InstructionsReadingOthers, ArticlesOthers  
+from groups import Groups
+from favoritism import Favoritism, InstructionsFavoritism
 
 
 
-frames = [#Initial,
-          #Intro,
+frames = [Initial,
+          Intro,
           Login,    
           InstructionsLiking,
           Liking,
+          Groups,
           InstructionsSameness, 
           Sameness,
+          InstructionsFavoritism,
+          Favoritism,
           InstructionsTrust,
           Trust,
           WaitTrust,
-          TrustResult,
           Trust,
           WaitTrust,
-          TrustResult,
           InstructionsArticlesOthers, 
           ChoiceOthers,      
           InstructionsArticlesMyself,
