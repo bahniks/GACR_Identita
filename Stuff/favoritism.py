@@ -14,22 +14,20 @@ import urllib.parse
 
 from common import ExperimentFrame, InstructionsFrame, Measure, MultipleChoice, InstructionsAndUnderstanding, OneFrame, Question, TextArea
 from gui import GUI
-from constants import TESTING, URL
+from constants import TESTING, URL, FAVORITISM
 
 
 ################################################################################
 # TEXTS
 
 
-introFavoritism = """Před následující úlohou dostanete Vy i všichni ostatní účastníci studie bonus 30 Kč.
+introFavoritism = f"""V rámci této úlohy dostanete Vy i všichni ostatní účastníci studie počáteční bonus {FAVORITISM*3} Kč.
 
-V této úloze dostanete popis pěti trojic osob (tj. informaci o tom, jaké skupiny jsou jim blízké). U každé trojice vyberete jednu osobu, které přidělíte 10 Kč, a jednu, které 10 Kč vezmete. Z pěti trojic bude jedna trojice odpovídat skutečné trojici dalších účastníků výzkumu a zbývající čtyři trojice budou uměle vytvořené. Pouze u trojice skutečných účastníků studie budou peníze na základě Vašich voleb skutečně přiděleny či odebrány.
+V této úloze dostanete popis pěti trojic osob (tj. informaci o tom, jaké skupiny jsou jim blízké). U každé trojice vyberete jednu osobu, které přidělíte {FAVORITISM} Kč, a jednu, které {FAVORITISM} Kč odeberete. Z pěti trojic bude jedna trojice odpovídat skutečné trojici dalších účastníků výzkumu a zbývající čtyři trojice budou uměle vytvořené. Pouze u trojice skutečných účastníků studie budou peníze na základě Vašich voleb skutečně přiděleny či odebrány.
 
-Váš popis bude podobně u třech dalších účastníků studie. Na základě jejich voleb tedy za tuto úlohu dostanete 0-60 Kč k odměně."""
+Váš popis bude podobně zobrazen u třech dalších účastníků studie. Na základě jejich voleb tedy za tuto úlohu dostanete celkem 0-{FAVORITISM*6} Kč k odměně. Výši této odměny se dozvíte na konci studie."""
 
-
-
-qFavoritism= "Pomocí tlačítek vyberte, které osobě přidělíte a které odeberete 10 Kč.\nKaždá možnost musí být zvolena právě jednou."
+qFavoritism= f"Pomocí tlačítek vyberte, které osobě přidělíte a které odeberete {FAVORITISM} Kč.\nKaždá možnost musí být zvolena právě jednou."
 
 descriptionLabelText = "Hodnocené osoby vybraly, že jsou jim blízké tyto skupiny:"
 
@@ -53,9 +51,9 @@ class FavoritismFrame(Canvas):
         self.choice.set("ignore")
 
         ttk.Style().configure("TRadiobutton", background = "white", font = "helvetica 15")
-        self.add = ttk.Radiobutton(self, text = "Přidělit 10 Kč", variable = self.choice, value = "add", command = self.clicked)
+        self.add = ttk.Radiobutton(self, text = f"Přidělit {FAVORITISM} Kč", variable = self.choice, value = "add", command = self.clicked)
         self.ignore = ttk.Radiobutton(self, text = "", variable = self.choice, value = "ignore", command = self.clicked)
-        self.remove = ttk.Radiobutton(self, text = "Odebrat 10 Kč", variable = self.choice, value = "remove", command = self.clicked)
+        self.remove = ttk.Radiobutton(self, text = f"Odebrat {FAVORITISM} Kč", variable = self.choice, value = "remove", command = self.clicked)
 
         self.label.grid(column = 0, row = 0, pady = 10)
         self.text.grid(column = 0, row = 1)

@@ -126,7 +126,7 @@ class DiceLottery(ExperimentFrame):
 
 
     def end(self):
-        self.root.texts["lottery_win"] += self.currentReward
+        self.root.texts["lottery_win"] = self.currentReward
         self.nextFun()
 
 

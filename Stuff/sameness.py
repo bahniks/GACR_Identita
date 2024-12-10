@@ -14,20 +14,23 @@ import urllib.parse
 
 from common import ExperimentFrame, InstructionsFrame, Measure, MultipleChoice, InstructionsAndUnderstanding, OneFrame, Question, TextArea
 from gui import GUI
-from constants import TESTING, URL
+from constants import TESTING, URL, SAMENESS
 
 
 ################################################################################
 # TEXTS
 
 
-introSameness = """Nyní vám ukážeme, odpovědi deseti osob, z nichž čtyři jsou od dalších účastníků této studie a zbývajících šest je uměle vytvořených. Uvidíte, které skupiny těmto osobám byly blízké a které vzdálené. 
+introSameness = f"""Nyní vám ukážeme odpovědi deseti osob, z nichž čtyři jsou od dalších účastníků této studie a zbývajících šest je uměle vytvořených. Uvidíte, které skupiny těmto osobám byly blízké a které vzdálené. 
 
-Vaším úkolem bude odhadnout, do jaké míry se s těmito lidmi shodujete v tom, co se vám líbí. Za každého účastníka studie, kde bude váš odhad správný dostanete bonus 100 Kč. Za odhady u uměle vytvořených osob žádný bonus nedostáváte. 
+Vaším úkolem bude odhadnout, do jaké míry se s těmito lidmi shodujete v tom, co se vám líbí. Za každého účastníka studie, kde bude váš odhad správný dostanete bonus {SAMENESS} Kč. Za odhady u uměle vytvořených osob žádný bonus nedostáváte. 
 
-Shoda je určována podle počtu položek v předchozí úloze, kde jste uvedli s daným účastníkem studie stejnou preferenci z nabídnuté dvojice. Celkem jste oba obdrželi 30 stejných dvojic. Pokud byste oba odpovídali náhodně, lze očekávat, že se budete shodovat u 15 položek. Pokud si myslíte, že jste si spíše podobní a máte stejné preference, měl(a) byste uvádět odhad vyšší než 15. Pokud si naopak myslíte, že si podobní nejste a máte různé preference, měl(a) byste uvádět odhad nižší než 15."""
+Shoda je určována podle odpovědí v úloze, kde jste uváděli své preference z nabízených dvojic možností. Jako shoda jsou počítány dvojice, kde jste s daným účastníkem studie určili preferenci stejné možnosti z nabídnuté dvojice. 
+Celkem jste oba obdrželi 30 stejných dvojic. Pokud byste oba odpovídali náhodně, lze očekávat, že se budete shodovat u 15 položek. Pokud si myslíte, že jste si spíše podobní a máte stejné preference, měl(a) byste uvádět odhad vyšší než 15. Pokud si naopak myslíte, že jste odlišní a máte tedy různé preference, měl(a) byste uvádět odhad nižší než 15.
 
-qSameness = "Pomocí modrého ukazatele níže zkuste odhadnout kolik shodných preferencí s tímto člověkem máte."
+Kolikrát jste správně shodu odhadl(a), a jakou jste tedy za úlohu obdržel(a) odměnu, se dozvíte na konci studie."""
+
+qSameness = "Pomocí modrého ukazatele níže zkuste odhadnout kolik shodných preferencí s tímto účastníkem studie máte."
 
 descriptionLabelText = "Hodnocená osoba vybrala, že je členem těchto skupin:"
 

@@ -20,10 +20,10 @@ from constants import TESTING, URL
 ################################################################################
 # TEXTS
 
-
-introLiking = """Nyní vám budeme předkládat dvojice z různých kategorií. Vaším úkolem bude říci, která možnost z každé dvojice se Vám líbí více. Tento úkol bude mít 30 kol."""
+introLiking = """Nyní vám budeme předkládat dvojice z různých kategorií. Vaším úkolem bude určit, která možnost z každé dvojice se Vám líbí více. Tento úkol bude mít 30 kol."""
 
 likingQuestion = "Pomocí tlačítek níže určete, která možnost z dvojice uvedené na tlačítcích se Vám líbí více."
+
 
 ################################################################################
 
@@ -46,8 +46,8 @@ class Liking(InstructionsFrame):
         self.left = ttk.Button(self, text = "", command = self.leftClicked, width = 15)
         self.right = ttk.Button(self, text = "", command = self.rightClicked, width = 15)
 
-        self.left.grid(column = 1, row = 2, padx = 30) 
-        self.right.grid(column = 2, row = 2, padx = 30)        
+        self.left.grid(column = 1, row = 2, padx = 60, sticky = E) 
+        self.right.grid(column = 2, row = 2, padx = 60, sticky = W)        
         
 
         self.trialText.grid(column = 2, columnspan = 2, row = 0, pady = 30, padx = 30, sticky = NE)

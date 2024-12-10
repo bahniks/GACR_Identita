@@ -20,13 +20,15 @@ from constants import TESTING, URL
 # TEXTS
 NUMGROUPS = 6
 
-closeText = f"""Ze skupin níže vyberte kliknutím na tlačítko {NUMGROUPS} skupin, které jsou Vám nejblíže.
+closeText = f"""Ze skupin níže vyberte kliknutím na tlačítko {NUMGROUPS} skupin, které jsou Vám nejbližší.
 (Dalším kliknutím na tlačítko výběr zrušíte.)"""
 
-distantText = f"""Nyní skupin níže vyberte kliknutím na tlačítko {NUMGROUPS} skupin, které jsou Vám nejvzdálenější.
+distantText = f"""Nyní ze skupin níže vyberte kliknutím na tlačítko {NUMGROUPS} skupin, které jsou Vám nejvzdálenější.
 (Dalším kliknutím na tlačítko výběr zrušíte.)"""
 
 remainingText = "Zbývá vybrat skupin: {}"
+
+introGroups = """V následující úloze bude Vaším úkolem vybrat z uvedených skupin, které jsou Vám nejbližší a následně ty, které jsou Vám nejvzdálenější."""
 
 ################################################################################
 
@@ -129,9 +131,12 @@ class Groups(InstructionsFrame):
 
         
 
+InstructionsGroups = (InstructionsFrame, {"text": introGroups, "height": 5})
+
 
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
-    GUI([Groups
+    GUI([InstructionsGroups,
+         Groups
          ])

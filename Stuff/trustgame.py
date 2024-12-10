@@ -10,9 +10,9 @@ import urllib.parse
 
 from common import ExperimentFrame, InstructionsFrame, Measure, MultipleChoice, InstructionsAndUnderstanding
 from gui import GUI
-from constants import TESTING, URL, TRUST, TOKEN
+from constants import TESTING, URL, TRUST
 from questionnaire import Questionnaire
-from cheating import Login
+from login import Login
 
 
 ################################################################################
@@ -21,39 +21,31 @@ instructionsT1 = """Vaše rozhodnutí v této úloze budou mít finanční důsl
 
 V rámci této úlohy jste spárován(a) s dalším účastníkem studie. Oba obdržíte {} Kč.
 
-Bude Vám náhodně přidělena jedna ze dvou rolí: budete buď hráčem A, nebo hráčem B. Oba účastníci ve dvojici budou vždy informováni o rozhodnutích druhého hráče.
+Bude Vám náhodně přidělena jedna ze dvou rolí: budete buď hráčem A, nebo hráčem B.
 
 <i>Hráč A:</i> Má možnost poslat hráči B od 0 do {} Kč (po {} Kč). Poslaná částka se ztrojnásobí a obdrží ji hráč B.
 <i>Hráč B:</i> Může poslat zpět hráči A jakékoli množství peněz získaných v této úloze, tedy úvodních {} Kč a ztrojnásobenou částku poslanou hráčem A.
 
 Předem nebudete vědět, jaká je Vaše role a uvedete tedy rozhodnutí pro obě role.
 
-Jakmile oba odešlete své odpovědi, dozvíte se jaká byla Vaše role a jaký je celkový výsledek rozhodnutí Vás a druhého účastníka. 
+Tuto úlohu budete hrát v rámci studie celkem pětkrát. Vždy dostanete popis druhého hráče, s kterým hrajete (tj. informaci o tom, jaké skupiny jsou jim blízké). Pouze jeden popis bude nicméně odpovídat skutečnému účastníkovi studie. Zbývající čtyři popisy budou uměle vytvořené. Vaše odměna za úlohu bude záviset pouze na Vaší hře se skutečným účastníkem studie. Ostatní hry Vaší konečnou odměnu nijak neovlivní.
 
-Tuto úlohu budete hrát v rámci studie celkem čtyřikrát, vždy s různými účastníky studie, a Vaše odměna za úlohu bude záviset na jedné, náhodně vylosované hře z těchto čtyř. Ostatní hry Vaší konečnou odměnu nijak neovlivní."""
+Na konci studie se dozvíte, jaká byla Vaše role a jaký je celkový výsledek rozhodnutí Vás a druhého účastníka. 
+"""
 
 
-instructionsT2 = """Nyní jste spárován(a) s jiným účastníkem studie a můžete si posílat peníze.
-
-<b>Pro tohoto účastníka jsou blízké tyto skupiny:
+instructionsT2 = """<b>Pro účastníka studie, s kterým jste spárován(a), jsou blízké tyto skupiny:
 {}
 
 On(a) podobně bude vědět, jaké skupiny jsou blízké Vám.</b>
 
-Podobně jako v předchozím kole úlohy:
 <i>Hráč A:</i> Má možnost poslat hráči B od 0 do {} Kč (po {} Kč). Poslaná částka se ztrojnásobí a obdrží ji hráč B.
 <i>Hráč B:</i> Může poslat zpět hráči A jakékoli množství peněz získaných v této úloze, tedy úvodních {} Kč a ztrojnásobenou částku poslanou hráčem A.
 
 Předem nebudete vědět, jaká je Vaše role a uvedete tedy rozhodnutí pro obě role.
-
-Jakmile oba odešlete své odpovědi, dozvíte se jaká byla Vaše role a jaký je celkový výsledek rozhodnutí Vás a druhého účastníka. 
-
-Vaše odměna za úlohu bude záviset na jedné, náhodně vylosované hře z celkových čtyř, které budete hrát.
+Kromě Vašich rozhodnutí uveďte také, kolik očekáváte, že Vám pošle zpět hráč B, pokud bude náhodně vybráno, že jste hráč A.
 
 Svou volbu učiňte posunutím modrých ukazatelů níže."""
-
-
-instructionsT4 = instructionsT3 = instructionsT2
 
 
 
@@ -82,24 +74,22 @@ wait_text = "Prosím počkejte na druhého hráče."
 
 
 
-trustResultTextA = """Náhodně Vám byla vybrána role hráče A.
+trustResultTextA = """V úloze s dělením peněz Vám byla při hře hrané se skutečným účastníkem studie náhodně vybrána role hráče A.
 
 <b>Rozhodl(a) jste se poslat {} Kč.</b>
 Tato částka byla ztrojnásobena na {} Kč.
 <b>Ze svých {} Kč Vám poslal hráč B {} Kč.</b>
 
 <b>V této úloze jste tedy získal(a) {} Kč a hráč B {} Kč.</b>
-Tuto odměnu získáte, pokud bude toto kolo hry vylosováno pro vyplacení.
 """
 
-trustResultTextB = """Náhodně Vám byla vybrána role hráče B.
+trustResultTextB = """V úloze s dělením peněz Vám byla při hře hrané se skutečným účastníkem studie náhodně vybrána role hráče B.
 
 <b>Hráč A se rozhodl(a) poslat {} Kč.</b>
 Tato částka byla ztrojnásobena na {} Kč.
 <b>Ze svých {} Kč jste poslal(a) hráči B {} Kč.</b>
 
 <b>V této úloze jste tedy získal(a) {} Kč a hráč A {} Kč.</b>
-Tuto odměnu získáte, pokud bude toto kolo hry vylosováno pro vyplacení.
 """
 
 
@@ -192,19 +182,15 @@ class Trust(InstructionsFrame):
         else:
             root.status["trustblock"] += 1
 
-        endowment = 100 # TO DO
-
-        if root.status["trustblock"] == 1:            
-            text = eval("instructionsT" + str(root.status["trustblock"])).format(endowment, endowment, int(endowment/5), endowment)
-            text += "\n\nSvou volbu učiňte posunutím modrých ukazatelů níže."
-        else:            
-            otherInfo = [f"Skupina {x}" for x in range(1, 31)]
-            random.shuffle(otherInfo)
-            otherInfo = "\n".join(otherInfo[:4])
-            text = eval("instructionsT" + str(root.status["trustblock"])).format(otherInfo, endowment, endowment, int(endowment/5), endowment)
+        endowment = TRUST
+     
+        otherInfo = [f"Skupina {x}" for x in range(1, 31)]
+        random.shuffle(otherInfo)
+        otherInfo = "\n".join(otherInfo[:4])
+        text = instructionsT2.format(otherInfo, endowment, endowment, int(endowment/5), endowment)
 
         height = 26
-        width = 100
+        width = 102
 
         super().__init__(root, text = text, height = height, font = 15, width = width)
 
@@ -286,7 +272,7 @@ class Trust(InstructionsFrame):
 
 
 
-class WaitTrust(InstructionsFrame):
+class WaitResults(InstructionsFrame):
     def __init__(self, root):
         super().__init__(root, text = wait_text, height = 3, font = 15, proceed = False, width = 45)
         self.progressBar = ttk.Progressbar(self, orient = HORIZONTAL, length = 400, mode = 'indeterminate')
@@ -351,17 +337,15 @@ class WaitTrust(InstructionsFrame):
 TrustResult = (InstructionsFrame, {"text": "{}", "update": ["trustResult"]})
 
 controlTexts = [[trustControl1, trustAnswers1, trustFeedback1], [trustControl2, trustAnswers2, trustFeedback2], [trustControl3, trustAnswers3, trustFeedback3]]
-InstructionsTrust = (InstructionsAndUnderstanding, {"text": instructionsT1.format(TRUST[1], TRUST[1], int(TRUST[1]/5), TRUST[1]) + "\n\n", "height": 23, "width": 100, "name": "Trust Control Questions", "randomize": False, "controlTexts": controlTexts, "fillerheight": 300, "finalButton": "Pokračovat k volbě"})
+InstructionsTrust = (InstructionsAndUnderstanding, {"text": instructionsT1.format(TRUST, TRUST, int(TRUST/5), TRUST) + "\n\n", "height": 23, "width": 100, "name": "Trust Control Questions", "randomize": False, "controlTexts": controlTexts, "fillerheight": 300, "finalButton": "Pokračovat k volbě"})
 
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
     GUI([Login,    
-         InstructionsTrust,
+         #InstructionsTrust,
+         Trust,         
          Trust,
-         WaitTrust,
-         TrustResult,
-         Trust,
-         WaitTrust,
+         WaitResults,
          TrustResult
          ])
