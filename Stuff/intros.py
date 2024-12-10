@@ -11,7 +11,7 @@ from common import InstructionsFrame
 from gui import GUI
 
 from constants import PARTICIPATION_FEE, URL
-from cheating import Login
+from login import Login
 
 
 ################################################################################

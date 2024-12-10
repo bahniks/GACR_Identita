@@ -8,7 +8,6 @@ from math import ceil
 
 from common import InstructionsFrame
 from gui import GUI
-from constants import BONUS
 
 
 intro = "Uveďte své demografické údaje."

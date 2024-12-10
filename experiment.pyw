@@ -21,7 +21,7 @@ from sameness import InstructionsSameness, Sameness
 from liking import InstructionsLiking, Liking
 from articles import InstructionsArticlesOthers, ChoiceOthers, InstructionsArticlesMyself, ChoiceMyself, InstructionsReading
 from articles import ArticlesMyself, InstructionsReadingOthers, ArticlesOthers  
-from groups import Groups
+from groups import InstructionsGroups, Groups
 from favoritism import Favoritism, InstructionsFavoritism
 
 
@@ -29,6 +29,7 @@ from favoritism import Favoritism, InstructionsFavoritism
 frames = [Initial,
           Intro,
           Login,    
+          InstructionsGroups,
           Groups,
           InstructionsLiking,
           Liking,          
