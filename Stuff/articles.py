@@ -20,17 +20,17 @@ from constants import TESTING, URL
 ################################################################################
 # TEXTS
 
-introArticlesOthers = "Nyní Vám vám budeme ukazovat titulky článků. Jedná se o krátké články, které vyjadřují různé názory autorů. Vaším úkolem bude vybrat z každé dvojice článek, který by si podle Vás měli ostatní účastníci experimentu přečíst. Některé z článků, které vyberete, dostanou náhodně vybraní účastníci experimentu a budou mít čas si je přečíst. Tento úkol bude mít 30 kol."
+introArticlesOthers = "Nyní Vám vám budeme ukazovat titulky článků. Jedná se o krátké články, které vyjadřují různé názory autorů. Vaším úkolem bude vybrat z každé dvojice článek, který by si podle Vás měli ostatní účastníci experimentu přečíst. Některé z článků, které vyberete, dostanou náhodně vybraní účastníci této studie a budou mít čas si je přečíst. Tento úkol bude mít 30 kol."
 
 qOthers = "Který z uvedených článků chcete, aby si jiný účastník studie přečetl?"
 
 
-introArticlesMyself = "Nyní Vám budeme ukazovat titulky jiných článků. Jedná se o naučné encyklopedické články. Vaším úkolem bude vybrat z každé dvojice článek, který byste si raději přečetli. Po vybrání článků budete mít možnost si přečíst náhodně vybrané tři články z Vámi vybraných článků. Tento úkol bude mít opět 30 kol."
+introArticlesMyself = "Nyní Vám budeme ukazovat titulky jiných článků. Jedná se o naučné encyklopedické články. Vaším úkolem bude vybrat z každé dvojice článek, který byste si raději přečetli. Následně budete mít možnost přečíst si z těchto článků tři náhodně vybrané. Tento úkol bude mít opět 30 kol."
 
 qMyself = "Který článek byste si raději chtěl(a) přečíst?"
 
 
-introReading = "Nyní máte možnost si přečíst náhodně vybrané články, které jste si vybrali v dřívější části studie."
+introReading = "Nyní máte možnost přečíst si tři náhodně vybrané články z těch, které jste si vybrali dříve."
 
 introReadingOthers = "Nyní máte možnost si přečíst náhodně vybrané články, které vybrali ostatní účastníci studie."
 

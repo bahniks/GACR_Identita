@@ -20,9 +20,9 @@ from constants import TESTING, URL
 ################################################################################
 # TEXTS
 
-introLiking = """Nyní vám budeme předkládat dvojice z různých kategorií. Vaším úkolem bude určit, která možnost z každé dvojice se Vám líbí více. Tento úkol bude mít 30 kol."""
+introLiking = """Nyní vám budeme ukazovat různé dvojice. Vaším úkolem bude určit, která možnost z každé dvojice se Vám líbí více. Tento úkol bude mít 30 kol."""
 
-likingQuestion = "Pomocí tlačítek níže určete, která možnost z dvojice uvedené na tlačítcích se Vám líbí více."
+likingQuestion = "Klikněte na možnost, která se Vám více líbí z této dvojice."
 
 
 ################################################################################

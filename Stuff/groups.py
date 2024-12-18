@@ -21,10 +21,10 @@ from constants import TESTING, URL
 NUMGROUPS = 6
 
 closeText = f"""Ze skupin níže vyberte kliknutím na tlačítko {NUMGROUPS} skupin, které jsou Vám nejbližší.
-(Dalším kliknutím na tlačítko výběr zrušíte.)"""
+(Dalším kliknutím na tlačítko můžete volbu zrušit.)"""
 
 distantText = f"""Nyní ze skupin níže vyberte kliknutím na tlačítko {NUMGROUPS} skupin, které jsou Vám nejvzdálenější.
-(Dalším kliknutím na tlačítko výběr zrušíte.)"""
+(Dalším kliknutím na tlačítko můžete volbu zrušit.)"""
 
 remainingText = "Zbývá vybrat skupin: {}"
 

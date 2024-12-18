@@ -92,6 +92,7 @@ Tato částka byla ztrojnásobena na {} Kč.
 
 
 checkButtonText = "Rozhodl(a) jsem se u všech možností"
+checkButtonText2 = "Uvedl(a) jsem svou předpověď"
 
 
 ################################################################################
@@ -236,6 +237,8 @@ class Trust(InstructionsFrame):
         
         self.text.grid(row = 1, column = 0, columnspan = 3)
 
+        self.deciding = True
+
         self.rowconfigure(0, weight = 1)
         self.rowconfigure(1, weight = 0)
         self.rowconfigure(2, weight = 0)
@@ -251,20 +254,24 @@ class Trust(InstructionsFrame):
 
     def checkbuttoned(self):
         self.next["state"] = "normal" if self.checkVar.get() else "disabled"
-        for i, frame in self.frames.items():
-            if i != 7:
-                frame.value["state"] = "normal" if not self.checkVar.get() else "disabled"
-            else:
-                frame.value["state"] = "normal" if self.checkVar.get() else "disabled"
-                frame.maximum = TRUST + int(self.frames[6].valueVar.get()) * 3
-                frame.value["to"] = frame.maximum
-
-        
-
+      
     def nextFun(self):
-        self.send()
-        self.write()
-        super().nextFun()
+        if self.deciding:
+            for i, frame in self.frames.items():
+                if i != 7:
+                    frame.value["state"] = "normal" if not self.checkVar.get() else "disabled"
+                else:
+                    frame.value["state"] = "normal" if self.checkVar.get() else "disabled"
+                    frame.maximum = TRUST + int(self.frames[6].valueVar.get()) * 3
+                    frame.value["to"] = frame.maximum
+            self.deciding = False
+            self.checkBut["text"] = checkButtonText2
+            self.next["state"] = "disabled"
+            self.checkVar.set(False)
+        else:
+            self.send()
+            self.write()
+            super().nextFun()
 
     def send(self):        
         self.responses = [self.frames[i].valueVar.get().strip() for i in range(7)]
