@@ -13,7 +13,7 @@ from intros import Initial, Intro, Ending
 from demo import Demographics
 #from lottery import Lottery, LotteryWin
 from dicelottery import LotteryInstructions, DiceLottery
-from trustgame import WaitResults, Trust, TrustResult, InstructionsTrust
+from trustgame import WaitResults, Trust, TrustResult, InstructionsTrust, IntroTrust
 #from questionnaire import PoliticalSkill, TDMS, HEXACOinfo
 from comments import Comments
 from login import Login
@@ -23,7 +23,7 @@ from articles import InstructionsArticlesOthers, ChoiceOthers, InstructionsArtic
 from articles import ArticlesMyself, InstructionsReadingOthers, ArticlesOthers  
 from groups import InstructionsGroups, Groups
 from favoritism import Favoritism, InstructionsFavoritism
-
+from products import ProductsIntro, Choices
 
 
 frames = [Initial,
@@ -38,6 +38,7 @@ frames = [Initial,
           InstructionsArticlesMyself,
           ChoiceMyself,     
           #WaitGroups, # cekani na vyplneni skupin
+          IntroTrust,
           InstructionsTrust,
           #WaitTrust, 
           Trust,
@@ -53,14 +54,16 @@ frames = [Initial,
           InstructionsReadingOthers,
           # cekani na vyber clanku
           ArticlesOthers,
-        #   Lottery,
-        #   LotteryWin,
+        #   Lottery,  ?
+        #   LotteryWin,  ?
+           ProductsIntro,
+           Choices,
            LotteryInstructions,
            DiceLottery,
         #   QuestInstructions,
         #   PoliticalSkill,
         #   TDMS,
-        #   HEXACOinfo,
+        #   HEXACOinfo,        
           Demographics,
           Comments,
           # pridat cekani na vysledky

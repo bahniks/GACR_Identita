@@ -137,7 +137,7 @@ class Sameness(InstructionsFrame):
 
 
 
-InstructionsSameness = (InstructionsFrame, {"text": introSameness, "height": 15})
+InstructionsSameness = (InstructionsFrame, {"text": introSameness, "height": 19})
 
 
 

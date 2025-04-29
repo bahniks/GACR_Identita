@@ -37,8 +37,10 @@ class Liking(InstructionsFrame):
 
         self.maximum = 30
 
-        self.pairs = [["Něco {}".format(i), "Něco {}".format(i + self.totalTrials)] for i in range(self.totalTrials)] # TODO
-
+        #self.pairs = [["Něco {}".format(i), "Něco {}".format(i + self.totalTrials)] for i in range(self.totalTrials)] # TODO
+        with open(os.path.join(os.getcwd(), "Stuff", "pairs.txt"), "r", encoding="utf-8") as file:
+            self.pairs = [line.strip().split(" ") for line in file]
+        random.shuffle(self.pairs)
    
         self.trialText = ttk.Label(self, text = "", font = "helvetica 15", background = "white", justify = "right")
 
@@ -94,6 +96,6 @@ InstructionsLiking = (InstructionsFrame, {"text": introLiking, "height": 5})
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
-    GUI([InstructionsLiking, 
+    GUI([#InstructionsLiking, 
          Liking
          ])

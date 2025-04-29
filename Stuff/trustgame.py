@@ -17,9 +17,14 @@ from login import Login
 
 ################################################################################
 # TEXTS
-instructionsT1 = """Vaše rozhodnutí v této úloze budou mít finanční důsledky pro Vás a pro dalšího přítomného účastníka v laboratoři. Pozorně si přečtěte pokyny, abyste porozuměl(a) studii a své roli v ní. 
+instructionsT0 = """Nyní začíná další úloha.
 
-V rámci této úlohy jste spárován(a) s dalším účastníkem studie. Oba obdržíte {} Kč.
+Vaše rozhodnutí v této úloze budou mít finanční důsledky pro Vás a pro dalšího přítomného účastníka v laboratoři. 
+
+Pozorně si přečtěte pokyny na další obrazovce, abyste porozuměl(a) studii a své roli v ní."""
+
+
+instructionsT1 = """V rámci této úlohy jste spárován(a) s dalším účastníkem studie. Oba obdržíte {} Kč.
 
 Bude Vám náhodně přidělena jedna ze dvou rolí: budete buď hráčem A, nebo hráčem B.
 
@@ -188,7 +193,7 @@ class Trust(InstructionsFrame):
         otherInfo = [f"Skupina {x}" for x in range(1, 31)]
         random.shuffle(otherInfo)
         otherInfo = "\n".join(otherInfo[:4])
-        text = instructionsT2.format(otherInfo, endowment, endowment, int(endowment/5), endowment)
+        text = instructionsT2.format(otherInfo, endowment, int(endowment/5), endowment)
 
         height = 20
         width = 102
@@ -358,13 +363,15 @@ class WaitResults(InstructionsFrame):
 TrustResult = (InstructionsFrame, {"text": "{}", "update": ["trustResult"]})
 
 controlTexts = [[trustControl1, trustAnswers1, trustFeedback1], [trustControl2, trustAnswers2, trustFeedback2], [trustControl3, trustAnswers3, trustFeedback3]]
-InstructionsTrust = (InstructionsAndUnderstanding, {"text": instructionsT1.format(TRUST, TRUST, int(TRUST/5), TRUST) + "\n\n", "height": 23, "width": 100, "name": "Trust Control Questions", "randomize": False, "controlTexts": controlTexts, "fillerheight": 300, "finalButton": "Pokračovat k volbě"})
+IntroTrust = (InstructionsFrame, {"text": instructionsT0, "height": 6, "width": 80, "font": 15})
+InstructionsTrust = (InstructionsAndUnderstanding, {"text": instructionsT1.format(TRUST, TRUST, int(TRUST/5), TRUST) + "\n\n", "height": 20, "width": 100, "name": "Trust Control Questions", "randomize": False, "controlTexts": controlTexts, "fillerheight": 300, "finalButton": "Pokračovat k volbě"})
 
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
     GUI([Login,    
-         #InstructionsTrust,
+         IntroTrust,
+         InstructionsTrust,
          Trust,         
          Trust,
          WaitResults,

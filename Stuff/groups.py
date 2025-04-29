@@ -38,10 +38,13 @@ class Groups(InstructionsFrame):
     def __init__(self, root):
         super().__init__(root, text = closeText, height = 2, font = 15, width = 80, proceed = True)
 
-        self.groups = [f"Skupina {i+1}" for i in range(30)]
+        with open(os.path.join(os.getcwd(), "Stuff", "groups.txt"), "r", encoding="utf-8") as file:
+            self.groups = [line.strip() for line in file if line.strip()]
+        #self.groups = [f"Skupina {i+1}" for i in range(30)]
+        random.shuffle(self.groups)
 
-        columns = 6
-        rows = 5
+        columns = 3
+        rows = 10
 
         self.chosen = set()
         self.distant = set()
@@ -52,7 +55,7 @@ class Groups(InstructionsFrame):
 
         self.buttons = {}
         for i, group in enumerate(self.groups):
-            self.buttons[group] = ttk.Button(self.groupFrame, text = group, command = lambda g = group: self.clicked(g))
+            self.buttons[group] = ttk.Button(self.groupFrame, text = group, command = lambda g = group: self.clicked(g), width = 35)
             self.buttons[group].config(style="Padded.TButton")    
             self.buttons[group].grid(row = i // columns, column = i % columns, padx = 10, pady = 10)
 
@@ -137,6 +140,6 @@ InstructionsGroups = (InstructionsFrame, {"text": introGroups, "height": 5})
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
-    GUI([InstructionsGroups,
+    GUI([#InstructionsGroups,
          Groups
          ])
