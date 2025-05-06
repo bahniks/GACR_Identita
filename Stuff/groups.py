@@ -49,8 +49,8 @@ class Groups(InstructionsFrame):
         self.chosen = set()
         self.distant = set()
 
-        ttk.Style().configure("Padded.TButton", padding = (2,2))        
-
+        ttk.Style().configure("Padded.TButton", padding = (2,2)) 
+        
         self.groupFrame = Canvas(self, background = "white", highlightbackground = "white", highlightcolor = "white")
 
         self.buttons = {}

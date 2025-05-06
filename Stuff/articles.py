@@ -141,45 +141,76 @@ class Articles(ExperimentFrame):
         self.total = 3
         self.trial = 1
 
-        self.trialText = ttk.Label(self, text = f"Článek: 1/{self.total}", font = "helvetica 15 bold", background = "white", justify = "right")
+        self.trialText = ttk.Label(self, text=f"Článek: 1/{self.total}", font="helvetica 15 bold", background="white", justify="right")
 
-        self.text = Text(self, font = "helvetica 15", relief = "flat", background = "white", width = 80, height = 15, wrap = "word", highlightbackground = "white")
+        self.text = Text(self, font="helvetica 15", relief="flat", background="white", width=80, height=15, wrap="word", highlightbackground="white")
 
-        self.scrollbar = ttk.Scrollbar(self, command = self.text.yview)        
-        self.text.config(yscrollcommand = self.scrollbar.set)
+        self.scrollbar = ttk.Scrollbar(self, command=self.on_scroll)  # Bind to custom scroll function
+        self.text.config(yscrollcommand=self.scrollbar.set)
 
-        ttk.Style().configure("TButton", font = "helvetica 15")
-        self.next = ttk.Button(self, text = "Pokračovat", command = self.proceed)
+        ttk.Style().configure("TButton", font="helvetica 15")
+        self.next = ttk.Button(self, text="Pokračovat", command=self.proceed)
 
-        self.trialText.grid(column = 1, columnspan = 2, row = 0, pady = 30, padx = 30, sticky = NE)
-        self.text.grid(column = 1, row = 2)
-        self.scrollbar.grid(column = 2, row = 2, sticky = "NSW")
-        self.next.grid(column = 1, row = 4, pady = 30)
+        self.trialText.grid(column=1, columnspan=2, row=0, pady=30, padx=30, sticky=NE)
+        self.text.grid(column=1, row=2)
+        self.scrollbar.grid(column=2, row=2, sticky="NSW")
+        self.next.grid(column=1, row=4, pady=30)
 
-        self.columnconfigure(0, weight = 1)
-        self.columnconfigure(2, weight = 1)
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(2, weight=1)
 
-        self.rowconfigure(0, weight = 3)
-        self.rowconfigure(2, weight = 1)   
-        self.rowconfigure(4, weight = 1)
-        self.rowconfigure(5, weight = 3)    
+        self.rowconfigure(0, weight=3)
+        self.rowconfigure(2, weight=1)   
+        self.rowconfigure(4, weight=1)
+        self.rowconfigure(5, weight=3)    
+
+        self.next["state"] = "disabled"
+
+        self.file.write("Articles\n")
 
         self.createText()
+        
+    def on_scroll(self, *args):
+        """Custom scroll function to track scrollbar usage and end position."""
+        self.scrolled = True  # Mark that the scrollbar was used
+        self.text.yview(*args)  # Perform the actual scrolling
+
+        # Check if the scrollbar is at the bottom
+        if float(self.text.yview()[1]) == 1.0:
+            self.end = True
+        else:
+            self.end = False
 
     def createText(self):
+        self.text["state"] = "normal"
         self.text.delete("1.0", "end")
         source = self.root.status["articles"] if self.who == "myself" else self.root.status["othersArticles"]
-        with open(os.path.join(os.getcwd(), "Stuff", "Texts", "text{}_{}.txt".format(*source[self.trial - 1].split("_")))) as f:
-            self.text.insert("1.0", f.read()*3)
+        self.filename = "text{}_{}.txt".format(*source[self.trial - 1].split("_"))
+        with open(os.path.join(os.getcwd(), "Stuff", "Texts", self.filename)) as f:
+            self.text.insert("1.0", f.read() * 3)
+        self.text["state"] = "disabled"
+        self.t0 = perf_counter()
+        self.disable()
+        self.scrolled = False  # Tracks if the scrollbar was used
+        self.end = False       # Tracks if the text was scrolled to the end
+        
+    def disable(self):
+        self.next["state"] = "disabled"
+        limit = 0.1 if TESTING else 3
+        self.after(int(limit * 6000), self.enable)   
         
     def proceed(self):
+        self.file.write("\t".join([self.id, self.who, str(self.trial), self.filename, str(perf_counter() - self.t0), str(self.scrolled), str(self.end)]) + "\n")
         self.trial += 1
         if self.trial > self.total:
             self.nextFun()
         else:
             self.trialText["text"] = f"Článek: {self.trial}/{self.total}"
-            self.createText()
-
+            self.createText()  
+        
+    def enable(self):
+        self.next["state"] = "normal"
+        
 
 
     
@@ -204,11 +235,11 @@ ArticlesMyself = (Articles, {"who": "myself"})
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
-    GUI([InstructionsArticlesOthers, 
-         ChoiceOthers,      
-         InstructionsArticlesMyself,
-         ChoiceMyself,
-         InstructionsReading,
+    GUI([#InstructionsArticlesOthers, 
+         #ChoiceOthers,      
+         #InstructionsArticlesMyself,
+         #ChoiceMyself,
+         #InstructionsReading,
          ArticlesMyself,
          InstructionsReadingOthers,
          ArticlesOthers  

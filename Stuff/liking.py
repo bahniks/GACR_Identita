@@ -22,7 +22,7 @@ from constants import TESTING, URL
 
 introLiking = """Nyní vám budeme ukazovat různé dvojice. Vaším úkolem bude určit, která možnost z každé dvojice se Vám líbí více. Tento úkol bude mít 30 kol."""
 
-likingQuestion = "Klikněte na možnost, která se Vám více líbí z této dvojice."
+likingQuestion = "<center>Klikněte na možnost, která se Vám více líbí z této dvojice.</center>"
 
 
 ################################################################################
@@ -37,7 +37,6 @@ class Liking(InstructionsFrame):
 
         self.maximum = 30
 
-        #self.pairs = [["Něco {}".format(i), "Něco {}".format(i + self.totalTrials)] for i in range(self.totalTrials)] # TODO
         with open(os.path.join(os.getcwd(), "Stuff", "pairs.txt"), "r", encoding="utf-8") as file:
             self.pairs = [line.strip().split(" ") for line in file]
         random.shuffle(self.pairs)
@@ -49,8 +48,7 @@ class Liking(InstructionsFrame):
         self.right = ttk.Button(self, text = "", command = self.rightClicked, width = 15)
 
         self.left.grid(column = 1, row = 2, padx = 60, sticky = E) 
-        self.right.grid(column = 2, row = 2, padx = 60, sticky = W)        
-        
+        self.right.grid(column = 2, row = 2, padx = 60, sticky = W)                
 
         self.trialText.grid(column = 2, columnspan = 2, row = 0, pady = 30, padx = 30, sticky = NE)
         
@@ -68,6 +66,8 @@ class Liking(InstructionsFrame):
         
         self.nextTrial("")
 
+        self.t0 = perf_counter()
+
 
     def leftClicked(self):
         self.nextTrial("left")
@@ -75,14 +75,25 @@ class Liking(InstructionsFrame):
     def rightClicked(self):
         self.nextTrial("right")
 
-    def nextTrial(self, answer):
+    def nextTrial(self, answer):        
+        if self.trial != 0:
+            limit = 0.1 if TESTING else 0.5
+            if perf_counter() - self.t0 < limit:            
+                return
+
+            left = self.pairs[self.trial - 1][0]
+            right = self.pairs[self.trial - 1][1]            
+            self.file.write(f"{self.id}\t{self.trial}\t{left}\t{right}\t{answer}\n")
+
         if self.trial == self.totalTrials:
+            self.file.write("\n")
             self.nextFun()
-        else:
+        else:            
             self.trial += 1
             self.left["text"] = self.pairs[self.trial - 1][0]
-            self.right["text"] = self.pairs[self.trial - 1][1]
+            self.right["text"] = self.pairs[self.trial - 1][1]            
             self.trialText["text"] = f"Dvojice: {self.trial}/{self.totalTrials}"
+            self.t0 = perf_counter()
 
 
 

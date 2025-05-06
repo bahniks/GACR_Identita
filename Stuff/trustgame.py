@@ -279,7 +279,7 @@ class Trust(InstructionsFrame):
             super().nextFun()
 
     def send(self):        
-        self.responses = [self.frames[i].valueVar.get().strip() for i in range(7)]
+        self.responses = [self.frames[i].valueVar.get().strip() for i in range(8)]
         data = {'id': self.id, 'round': "trust" + str(self.root.status["trustblock"]), 'offer': "_".join(self.responses)}
         self.sendData(data)
 

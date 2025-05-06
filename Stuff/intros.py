@@ -41,7 +41,7 @@ V případě, že máte otázky nebo narazíte na technický problém během úk
 ending = """Toto je konec experimentu.
 
 V úkolu s dělením peněz v páru jste získal(a) {} Kč. 
-V úkolu, kde Vám ostatní účastníci mohli přidělit peníze, jste získal(a) {} Kč.
+V úkolu, kde Vám ostatní účastníci mohli přidělit nebo sebrat peníze, jste získal(a) {} Kč.
 Správně jste odhadla podobnost u {} účastníků studie a získal(a) jste tedy {} Kč.
 V loterii jste vydělal(a) {} Kč.
 Za účast na studii dostáváte {} Kč.

@@ -23,10 +23,9 @@ from gui import GUI
 questionText = """Který z dvojice výrobků byste si raději odnesl(a) domů?
 Vyberte kliknutím na obrázek."""
 
-intro = """
-Blížíme se ke konci tohoto experimentálního sezení. Jako malé poděkování vylosujeme každého osmého respondenta, který vyhraje nad rámec své odměny několik výrobků podle vlastního výběru. 
+intro = """Blížíme se ke konci tohoto experimentálního sezení. Jako malé poděkování vylosujeme každého desátého respondenta, který vyhraje nad rámec své odměny několik výrobků podle vlastního výběru. 
 
-Nyní Vám postupně ukážeme 15 párů výrobků. U každého páru klikněte na ten výrobek, který by se Vám líbil více. Máte šanci 1:8, že vyhrajete 3 výrobky, které si vyberete. Vybírejte proto prosím pečlivě, později už není možné volbu změnit. 
+Nyní Vám postupně ukážeme 15 párů výrobků. U každého páru klikněte na ten výrobek, který by se Vám líbil více. Máte pravděpodobnost 10%, že vyhrajete náhodně vybraných 5 výrobků z těch, které si vyberete. Vybírejte proto prosím pečlivě, později už není možné volbu změnit. 
 """
 
 ##################################################################################################################
@@ -120,7 +119,7 @@ class OneProduct(Canvas):
 
         self.label = ttk.Label(self, text = "", background = "white", font = "helvetica 15", width = 60, anchor = "center")
         self.label.grid(column = 1, row = 1, pady = 8)
-        self.bottomLabel = ttk.Label(self, text = "", background = "white", font = "helvetica 13")
+        self.bottomLabel = ttk.Label(self, text = "", background = "white", font = "helvetica 15")
         self.bottomLabel.grid(column = 1, row = 2, pady = 4)
 
         self.columnconfigure(0, weight = 1)
@@ -128,7 +127,7 @@ class OneProduct(Canvas):
 
     def changeImage(self, product, description):        
         self.product.changeImage(product + ".png")        
-        self.bottomLabel["text"] = description
+        self.label["text"] = description
             
     def proceed(self):
         self.root.proceed()
@@ -191,7 +190,7 @@ class Product(Label):
 
 def main():
     os.chdir(os.path.dirname(os.getcwd()))
-    GUI([ProductsIntro,
+    GUI([#ProductsIntro,
          Choices
          ])
 

@@ -56,14 +56,10 @@ frames = [Initial,
           ArticlesOthers,
         #   Lottery,  ?
         #   LotteryWin,  ?
-           ProductsIntro,
-           Choices,
-           LotteryInstructions,
-           DiceLottery,
-        #   QuestInstructions,
-        #   PoliticalSkill,
-        #   TDMS,
-        #   HEXACOinfo,        
+          ProductsIntro,
+          Choices,
+          LotteryInstructions,
+          DiceLottery,   
           Demographics,
           Comments,
           # pridat cekani na vysledky

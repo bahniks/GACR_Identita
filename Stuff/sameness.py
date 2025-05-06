@@ -30,7 +30,7 @@ Celkem jste oba obdrželi 30 stejných dvojic. Pokud byste oba odpovídali náho
 
 Kolikrát jste správně shodu odhadl(a), a jakou jste tedy za úlohu obdržel(a) odměnu, se dozvíte na konci studie."""
 
-qSameness = "Pomocí modrého ukazatele níže zkuste odhadnout kolik shodných preferencí s tímto účastníkem studie máte."
+qSameness = "Pomocí modrého ukazatele níže uveďte odhad, kolik máte shodných preferencí s tímto účastníkem studie."
 
 descriptionLabelText = "Hodnocená osoba vybrala, že je členem těchto skupin:"
 
@@ -78,18 +78,20 @@ class Sameness(InstructionsFrame):
 
         self.next["command"] = self.nextTrial
 
-        self.scaleFrame.grid(column = 1, row = 3)
-        self.descriptionText.grid(column = 1, row = 0)
+        self.scaleFrame.grid(column = 1, row = 4)
+        self.descriptionText.grid(column = 1, row = 1)
         self.trialText.grid(column = 1, columnspan = 2, row = 0, pady = 30, padx = 30, sticky = NE)
-        self.question.grid(column = 1, row = 2, pady = 30)
-        self.text.grid(row = 1, column = 1)
-        self.next.grid(row = 4, column = 1)        
+        self.question.grid(column = 1, row = 3, pady = 30)
+        self.text.grid(row = 2, column = 1)
+        self.next.grid(row = 5, column = 1)        
 
         self.columnconfigure(0, weight = 1)
         self.columnconfigure(2, weight = 1)
         
-        self.rowconfigure(0, weight = 1)
-        self.rowconfigure(5, weight = 2)    
+        self.rowconfigure(0, weight = 4)
+        self.rowconfigure(4, weight = 2)
+        self.rowconfigure(5, weight = 2)
+        self.rowconfigure(6, weight = 4)    
 
         self.file.write("Sameness\n")
         
@@ -97,13 +99,23 @@ class Sameness(InstructionsFrame):
 
 
     def nextTrial(self):
+        limit = 0.1 if TESTING else 0.5
+
+        if self.trial != 0:
+            if perf_counter() - self.t0 < limit:
+                return
+            groups = "\t".join(self.descriptions[self.trial - 1])
+            self.file.write(f"{self.id}\t{self.trial}\t{groups}\t{self.valueVar.get()}\n")        
+
         if self.trial == self.totalTrials:
+            self.file.write("\n")
             self.nextFun()
         else:
             self.trial += 1
             self.changeText("\n".join(self.descriptions[self.trial - 1]))
             self.trialText["text"] = f"Osoba: {self.trial}/{self.totalTrials}"
             self.valueVar.set(f"{self.maximum//2}")
+            self.t0 = perf_counter()
 
 
     def changedValue(self, value):          
@@ -144,6 +156,6 @@ InstructionsSameness = (InstructionsFrame, {"text": introSameness, "height": 19}
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
-    GUI([InstructionsSameness, 
+    GUI([#InstructionsSameness, 
          Sameness
          ])

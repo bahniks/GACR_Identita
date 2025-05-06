@@ -92,7 +92,8 @@ class InstructionsFrame(ExperimentFrame):
  
         self.text.tag_configure("bold", font = "helvetica {} bold".format(font))
         self.text.tag_configure("italic", font = "helvetica {} italic".format(font))    
-        self.text.tag_configure("courier", font = "courier {}".format(font))       
+        self.text.tag_configure("courier", font = "courier {}".format(font))      
+        self.text.tag_configure("center", justify="center")       
 
         self.addStandardTags()
 
@@ -122,6 +123,7 @@ class InstructionsFrame(ExperimentFrame):
         self.addtags("<b>", "</b>", "bold")
         self.addtags("<i>", "</i>", "italic")
         self.addtags("<c>", "</c>", "courier")
+        self.addtags("<center>", "</center>", "center")
 
     def addtags(self, starttag, endtag, tag):            
         i_index = "1.0"

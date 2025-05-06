@@ -123,7 +123,11 @@ class Favoritism(InstructionsFrame):
 
 
     def nextTrial(self):
+        if self.trial != 0:
+            self.write()
+
         if self.trial == self.totalTrials:
+            self.file.write("\n")
             self.nextFun()
         else:
             self.trial += 1
@@ -139,6 +143,16 @@ class Favoritism(InstructionsFrame):
             self.choices[self.third.name] = "ignore"
             self.next["state"] = "disabled"
             self.trialText["text"] = f"Trojice: {self.trial}/{self.totalTrials}"
+
+
+    def write(self):
+        leftText = "\t".join(self.descriptions[self.trial - 1][0])
+        middleText = "\t".join(self.descriptions[self.trial - 1][0])
+        rightText = "\t".join(self.descriptions[self.trial - 1][0])
+        left = self.first.choice.get()
+        middle = self.second.choice.get()
+        right = self.third.choice.get()
+        self.file.write(f"{self.id}\t{self.trial}\t{leftText}\t{left}\t{middleText}\t{middle}\t{rightText}\t{right}\n")
 
 
     def changedValue(self, name, value):                  
