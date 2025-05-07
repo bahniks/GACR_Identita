@@ -30,9 +30,10 @@ Celkem jste oba obdrželi 30 stejných dvojic. Pokud byste oba odpovídali náho
 
 Kolikrát jste správně shodu odhadl(a), a jakou jste tedy za úlohu obdržel(a) odměnu, se dozvíte na konci studie."""
 
-qSameness = "Pomocí modrého ukazatele níže uveďte odhad, kolik máte shodných preferencí s tímto účastníkem studie."
+qSameness = """Pomocí modrého ukazatele níže uveďte odhad, kolik máte shodných preferencí s tímto účastníkem studie.
+(Preference označují volby z dvojic možností v dřívější fázi studie.)"""
 
-descriptionLabelText = "Hodnocená osoba vybrala, že je členem těchto skupin:"
+descriptionLabelText = "Hodnocená osoba vybrala, že jsou jí blízké a vzdálené následující skupiny:"
 
 leftLabelText = "Nejvíce\nodlišný"
 rightLabelText = "Nejvíce\npodobný"
@@ -41,23 +42,58 @@ infoValueLabelText = "Očekávám shodu v počtu položek: "
 ################################################################################
 
 
+
+def createSyntetic(value):    
+    #with open(os.path.join(os.getcwd(), "groups.txt"), "r", encoding="utf-8") as file:
+    with open(os.path.join(os.getcwd(), "Stuff", "groups.txt"), "r", encoding="utf-8") as file:
+        groups = [line.strip() for line in file if line.strip()]
+    proenvironmental = groups[:10]
+    neutral = groups[10: 23]
+    antienvironmental = groups[23:]
+    values = [(i + 1, abs(value) - i - 1) for i in range(-1, abs(value)) if i <= 4 and abs(value) - i <= 6]
+
+    close = []
+    distant = []
+
+    v = random.choice(values)
+
+    if value >= 0:
+        close = random.sample(proenvironmental, v[0]) + random.sample(neutral, 5 - v[0])
+        neutral = [group for group in neutral if group not in close]
+        distant = random.sample(neutral, 5 - v[1]) + random.sample(antienvironmental, v[1])
+    elif value < 0:
+        close = random.sample(neutral, 5 - v[0]) + random.sample(antienvironmental, v[0])
+        neutral = [group for group in neutral if group not in close]
+        distant = random.sample(proenvironmental, 5 - v[1]) + random.sample(neutral, v[1])
+
+    return(close, distant)
+
+
+
 class Sameness(InstructionsFrame):
     def __init__(self, root):
-        super().__init__(root, text = "", height = 6, font = 15, width = 45)
+        super().__init__(root, text = "", height = 8, font = 15, width = 35)
 
-        self.totalTrials = 10
+        self.totalTrials = 11
         self.trial = 0
 
         self.maximum = 30
 
-        self.descriptions = [["Kategorie {}".format(random.randint(0,50)) for i in range(4)] for j in range(self.totalTrials)] # TODO
+        self.people = [-9, -7, -5, -3, -1, 1, 3, 5, 7, 9]
+        if URL == "TEST":
+            self.people += [0]
+        else:
+            pass # TODO
+        random.shuffle(self.people)
+
+        self.distantText = Text(self, font = "helvetica 15", background = "white", relief = "flat", wrap = "word", height = 8, highlightbackground = "white", width = 35)
 
         self.valueVar = StringVar()
 
         self.descriptionText = ttk.Label(self, text = descriptionLabelText, font = "helvetica 15", background = "white", justify = "center")      
-        self.trialText = ttk.Label(self, text = "", font = "helvetica 15", background = "white", justify = "right")
+        self.trialText = ttk.Label(self, text = "", font = "helvetica 15", background = "white", justify = "right")        
 
-        self.question = ttk.Label(self, text = qSameness, font = "helvetica 15", background = "white", justify = "right")
+        self.question = ttk.Label(self, text = qSameness, font = "helvetica 15", background = "white", justify = "center")
 
         self.scaleFrame = Canvas(self, background = "white", highlightbackground = "white", highlightcolor = "white")
         ttk.Style().configure("TScale", background = "white")
@@ -78,15 +114,18 @@ class Sameness(InstructionsFrame):
 
         self.next["command"] = self.nextTrial
 
-        self.scaleFrame.grid(column = 1, row = 4)
-        self.descriptionText.grid(column = 1, row = 1)
-        self.trialText.grid(column = 1, columnspan = 2, row = 0, pady = 30, padx = 30, sticky = NE)
-        self.question.grid(column = 1, row = 3, pady = 30)
-        self.text.grid(row = 2, column = 1)
-        self.next.grid(row = 5, column = 1)        
+        self.scaleFrame.grid(column = 1, columnspan = 2, row = 4)
+        self.descriptionText.grid(column = 1, columnspan = 2, row = 1)
+        self.trialText.grid(column = 2, columnspan = 2, row = 0, pady = 30, padx = 30, sticky = NE)
+        self.question.grid(column = 1, columnspan = 2, row = 3, pady = 30)
+        self.text.grid(row = 2, column = 1, sticky = E, padx = 30, columnspan = 1)
+        self.distantText.grid(row = 2, column = 2, sticky = W, padx = 30)
+        self.next.grid(row = 5, column = 1, columnspan = 2)        
 
-        self.columnconfigure(0, weight = 1)
-        self.columnconfigure(2, weight = 1)
+        self.columnconfigure(0, weight = 3)
+        self.columnconfigure(1, weight = 0)
+        self.columnconfigure(2, weight = 0)
+        self.columnconfigure(3, weight = 3)
         
         self.rowconfigure(0, weight = 4)
         self.rowconfigure(4, weight = 2)
@@ -104,16 +143,22 @@ class Sameness(InstructionsFrame):
         if self.trial != 0:
             if perf_counter() - self.t0 < limit:
                 return
-            groups = "\t".join(self.descriptions[self.trial - 1])
-            self.file.write(f"{self.id}\t{self.trial}\t{groups}\t{self.valueVar.get()}\n")        
+            self.file.write(f"{self.id}\t{self.trial}\t{"|".join(self.close)}\t{"|".join(self.distant)}\t{self.valueVar.get()}\n")        
 
         if self.trial == self.totalTrials:
             self.file.write("\n")
             self.nextFun()
         else:
             self.trial += 1
-            self.changeText("\n".join(self.descriptions[self.trial - 1]))
-            self.trialText["text"] = f"Osoba: {self.trial}/{self.totalTrials}"
+            self.close, self.distant = createSyntetic(self.people[self.trial - 1])
+            self.changeText("\n".join(["<blue><b>Blízké skupiny:</b></blue>",""] + self.close))
+            self.distantText["state"] = "normal"
+            self.distantText.delete("1.0", "end")            
+            self.distantText.tag_configure("bold", font = "helvetica 15 bold", foreground = "red")
+            self.distantText.insert("1.0", "\n".join(["Vzdálené skupiny:", ""] + self.distant))
+            self.distantText.tag_add("bold", "1.0", "2.0")
+            self.distantText["state"] = "disabled"  
+            self.trialText["text"] = f"Osoba: {self.trial}/{self.totalTrials}"        
             self.valueVar.set(f"{self.maximum//2}")
             self.t0 = perf_counter()
 
@@ -159,3 +204,5 @@ if __name__ == "__main__":
     GUI([#InstructionsSameness, 
          Sameness
          ])
+
+
