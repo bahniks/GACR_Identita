@@ -18,7 +18,7 @@ from constants import TESTING, URL
 
 ################################################################################
 # TEXTS
-NUMGROUPS = 6
+NUMGROUPS = 5
 
 closeText = f"""Ze skupin níže vyberte kliknutím na tlačítko {NUMGROUPS} skupin, které jsou Vám nejbližší.
 (Dalším kliknutím na tlačítko můžete volbu zrušit.)"""
@@ -87,7 +87,7 @@ class Groups(InstructionsFrame):
             self.distant.remove(group)           
         else:
             if self.close:
-                ttk.Style().configure("Clicked.TButton", background="green", foreground="green", font=("Helvetica", 15, "underline", "bold"), padding = (2, 1))
+                ttk.Style().configure("Clicked.TButton", background="green", foreground="blue", font=("Helvetica", 15, "underline", "bold"), padding = (2, 1))
                 self.buttons[group].config(style="Clicked.TButton")
                 self.chosen.add(group)
             else:

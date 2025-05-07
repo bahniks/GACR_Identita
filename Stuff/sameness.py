@@ -99,9 +99,7 @@ class Sameness(InstructionsFrame):
         ttk.Style().configure("TScale", background = "white")
         self.value = ttk.Scale(self.scaleFrame, orient = HORIZONTAL, from_ = 0, to = self.maximum, length = 400,
                             variable = self.valueVar, command = self.changedValue)
-        # self.value.bind("<Button-1>", self.onClick)
-        # self.value.bind("<ButtonRelease-1>", self.onRelease)
-        # self.clicked = False
+
         self.leftLabel = ttk.Label(self.scaleFrame, text = leftLabelText, font = "helvetica 15 bold", background = "white", justify = "right")
         self.rightLabel = ttk.Label(self.scaleFrame, text = rightLabelText, font = "helvetica 15 bold", background = "white", justify = "left")
         self.valueLab = ttk.Label(self.scaleFrame, textvariable = self.valueVar, font = "helvetica 15", background = "white", width = 3, anchor = "e")
@@ -163,35 +161,11 @@ class Sameness(InstructionsFrame):
             self.t0 = perf_counter()
 
 
-    def changedValue(self, value):          
-        # if self.clicked:
-        #     return
-        #self.value.configure(command=None)               
+    def changedValue(self, value):                 
         value = str(min([max([eval(str(value)), 0]), self.maximum]))
         self.valueVar.set(value)        
         newval = int(round(eval(self.valueVar.get())))
         self.valueVar.set("{0:2d}".format(newval))
-        #self.value.configure(command=self.changedValue)
-
-
-    # def onClick(self, event):
-    #     #self.value.configure(command=None)
-    #     if not self.clicked:
-    #         self.clicked = True
-    #         newValue = int((event.x / self.value.winfo_width()) * self.value['to'])
-    #         value = str(min([max([eval(str(newValue)), 0]), self.maximum]))
-    #         self.valueVar.set(value)        
-    #         newval = int(round(eval(self.valueVar.get())))
-    #         self.valueVar.set("{0:2d}".format(newval))        
-    #         #self.changedValue(newValue)
-    #         #self.update()
-
-    #     #self.value.configure(command=self.changedValue)
-       
-    # def onRelease(self, event):
-    #     self.clicked = False
-
-
 
 
 InstructionsSameness = (InstructionsFrame, {"text": introSameness, "height": 19})

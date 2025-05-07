@@ -13,6 +13,7 @@ from gui import GUI
 from constants import TESTING, URL, TRUST
 from questionnaire import Questionnaire
 from login import Login
+from sameness import createSyntetic
 
 
 ################################################################################
@@ -38,11 +39,10 @@ Tuto úlohu budete hrát v rámci studie celkem pětkrát. Vždy dostanete popis
 Na konci studie se dozvíte, jaká byla Vaše role a jaký je celkový výsledek rozhodnutí Vás a druhého účastníka. 
 """
 
+intstuctionsT2a = "Pro účastníka studie, s kterým jste spárován(a), jsou blízké a vzdálené tyto skupiny:"
 
-instructionsT2 = """<b>Pro účastníka studie, s kterým jste spárován(a), jsou blízké tyto skupiny:
-{}</b>
 
-On(a) podobně bude vědět, jaké skupiny jsou blízké Vám.
+instructionsT2 = """On(a) podobně bude vědět, jaké skupiny jsou blízké a vzdálené Vám.
 
 <i>Hráč A:</i> Má možnost poslat hráči B od 0 do {} Kč (po {} Kč). Poslaná částka se ztrojnásobí a obdrží ji hráč B.
 <i>Hráč B:</i> Může poslat zpět hráči A jakékoli množství peněz získaných v této úloze, tedy úvodních {} Kč a ztrojnásobenou částku poslanou hráčem A.
@@ -154,7 +154,9 @@ class ScaleFrame(Canvas):
         self.changedValue(0)
 
 
-    def onClick(self, event):
+    def onClick(self, event):       
+        if self.value.instate(["disabled"]):
+            return
         click_position = event.x
         newValue = int((click_position / self.value.winfo_width()) * self.value['to'])
         self.changedValue(newValue)
@@ -180,6 +182,31 @@ class ScaleFrame(Canvas):
               
 
 
+class GroupsFrame(Canvas):
+    def __init__(self, root, close, distant):
+        super().__init__(root, background = "white", highlightbackground = "white", highlightcolor = "white")
+
+        self.root = root
+
+        self.label = ttk.Label(self, text=intstuctionsT2a, font="helvetica 15 bold", background="white")
+        self.label.grid(row = 0, column = 0, columnspan = 2, pady = 10, sticky=W)
+
+        self.closeText = Text(self, wrap=WORD, font="helvetica 15", height=7, width=50, background="white", relief="flat")
+        self.closeText.grid(row = 1, column = 0, pady = 10)
+        self.closeText.tag_configure("bold", font = "helvetica 15 bold", foreground = "blue")
+        self.closeText.insert("1.0", "\n".join(["Blízké skupiny:"] + close))
+        self.closeText.tag_add("bold", "1.0", "2.0")
+        self.closeText.config(state=DISABLED)
+
+        self.distantText = Text(self, wrap=WORD, font="helvetica 15", height=7, width=50, background="white", relief="flat")
+        self.distantText.grid(row = 1, column = 1, pady = 10)
+        self.distantText.tag_configure("bold", font = "helvetica 15 bold", foreground = "red")
+        self.distantText.insert("1.0", "\n".join(["Vzdálené skupiny:"] + distant))
+        self.distantText.tag_add("bold", "1.0", "2.0")
+        self.distantText.config(state=DISABLED)
+
+
+
 class Trust(InstructionsFrame):
     def __init__(self, root):
 
@@ -190,15 +217,16 @@ class Trust(InstructionsFrame):
 
         endowment = TRUST
      
-        otherInfo = [f"Skupina {x}" for x in range(1, 31)]
-        random.shuffle(otherInfo)
-        otherInfo = "\n".join(otherInfo[:4])
-        text = instructionsT2.format(otherInfo, endowment, int(endowment/5), endowment)
+        close, distant = createSyntetic(5) # TODO
 
-        height = 20
+        text = instructionsT2.format(endowment, int(endowment/5), endowment)
+
+        height = 13
         width = 102
 
         super().__init__(root, text = text, height = height, font = 15, width = width)
+
+        self.groupFrame = GroupsFrame(self, close, distant)
 
         self.labA = ttk.Label(self, text = "Pokud budu hráč A", font = "helvetica 15 bold", background = "white")
         self.labA.grid(column = 0, row = 2, columnspan = 3, pady = 10)        
@@ -240,6 +268,7 @@ class Trust(InstructionsFrame):
         self.next.grid(column = 0, row = 20, columnspan = 3, pady = 5, sticky = N)            
         self.next["state"] = "disabled"
         
+        self.groupFrame.grid(row = 0, column = 0, columnspan = 3, pady = 5, sticky = S)
         self.text.grid(row = 1, column = 0, columnspan = 3)
 
         self.deciding = True
@@ -370,8 +399,8 @@ InstructionsTrust = (InstructionsAndUnderstanding, {"text": instructionsT1.forma
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
     GUI([Login,    
-         IntroTrust,
-         InstructionsTrust,
+         #IntroTrust,
+         #InstructionsTrust,
          Trust,         
          Trust,
          WaitResults,

@@ -15,6 +15,7 @@ import urllib.parse
 from common import ExperimentFrame, InstructionsFrame, Measure, MultipleChoice, InstructionsAndUnderstanding, OneFrame, Question, TextArea
 from gui import GUI
 from constants import TESTING, URL, FAVORITISM
+from sameness import createSyntetic
 
 
 ################################################################################
@@ -29,7 +30,7 @@ Váš popis bude podobně zobrazen u třech dalších účastníků studie. Na z
 
 qFavoritism= f"Pomocí tlačítek vyberte, které osobě přidělíte a které odeberete {FAVORITISM} Kč.\nKaždá možnost musí být zvolena právě jednou."
 
-descriptionLabelText = "Hodnocené osoby vybraly, že jsou jim blízké tyto skupiny:"
+descriptionLabelText = "<center>Hodnocené osoby vybraly, že jsou jim blízké tyto skupiny:</center>"
 
 
 ################################################################################
@@ -40,12 +41,17 @@ class FavoritismFrame(Canvas):
         super().__init__(root, background = "white", highlightbackground = "white", highlightcolor = "white")
 
         self.root = root
-        self.name = label
+        self.name = label        
 
         self.label = ttk.Label(self, text = label, font = "helvetica 15 bold", background = "white", justify = "center")
 
-        self.text = Text(self, font = "helvetica 15", relief = "flat", background = "white", width = 30, height = 7, wrap = "word",
-                         highlightbackground = "white")
+        self.closeText = Text(self, wrap=WORD, font="helvetica 15", height=7, width=33, background="white", relief="flat")
+        self.closeText.grid(row = 1, column = 0, pady = 10)
+        self.closeText.tag_configure("bold", font = "helvetica 15 bold", foreground = "blue")
+
+        self.distantText = Text(self, wrap=WORD, font="helvetica 15", height=7, width=33, background="white", relief="flat")
+        self.distantText.grid(row = 1, column = 1, pady = 10)
+        self.distantText.tag_configure("bold", font = "helvetica 15 bold", foreground = "red")
 
         self.choice = StringVar()
         self.choice.set("ignore")
@@ -56,19 +62,28 @@ class FavoritismFrame(Canvas):
         self.remove = ttk.Radiobutton(self, text = f"Odebrat {FAVORITISM} Kč", variable = self.choice, value = "remove", command = self.clicked)
 
         self.label.grid(column = 0, row = 0, pady = 10)
-        self.text.grid(column = 0, row = 1)
-        self.add.grid(column = 0, row = 2, sticky = W)
-        self.ignore.grid(column = 0, row = 3, sticky = W)
-        self.remove.grid(column = 0, row = 4, sticky = W)
+        self.closeText.grid(column = 0, row = 1)
+        self.distantText.grid(column = 0, row = 2)
+        self.add.grid(column = 0, row = 3, sticky = W)
+        self.ignore.grid(column = 0, row = 4, sticky = W)
+        self.remove.grid(column = 0, row = 5, sticky = W)
 
     def clicked(self):
         self.root.changedValue(self.name, self.choice.get())
 
-    def addText(self, text):
-        self.text["state"] = "normal"
-        self.text.delete("1.0", "end")
-        self.text.insert("1.0", text)
-        self.text["state"] = "disabled"
+    def addText(self, value):
+        self.close, self.distant = createSyntetic(value)
+        self.value = value        
+        self.closeText.config(state=NORMAL)
+        self.closeText.delete("1.0", END)
+        self.closeText.insert("1.0", "\n".join(["Blízké skupiny:"] + self.close))
+        self.closeText.tag_add("bold", "1.0", "2.0")
+        self.closeText.config(state=DISABLED)
+        self.distantText.config(state=NORMAL)
+        self.distantText.delete("1.0", END)
+        self.distantText.insert("1.0", "\n".join(["Vzdálené skupiny:"] + self.distant))
+        self.distantText.tag_add("bold", "1.0", "2.0")
+        self.distantText.config(state=DISABLED)
 
     def indicate(self, what):
         ttk.Style().configure("Indicated.TRadiobutton", background = "pink")
@@ -91,7 +106,14 @@ class Favoritism(InstructionsFrame):
         self.totalTrials = 5
         self.trial = 0
 
-        self.descriptions = [[["Skupina {}".format(random.randint(0,30)) for i in range(4)] for g in range(3)] for j in range(self.totalTrials)] # TODO
+        self.people = [] # TODO 
+        for i in range(self.totalTrials):
+            proenvi = random.randint(-7,-3)
+            neutral = random.choice([-2, -1, 1, 2])
+            antienvi = random.randint(4,8)
+            persons = [proenvi, neutral, antienvi]
+            random.shuffle(persons)
+            self.people.append(persons)        
   
         self.trialText = ttk.Label(self, text = "", font = "helvetica 15", background = "white", justify = "right")
         self.question = ttk.Label(self, text = qFavoritism, font = "helvetica 15", background = "white", justify = "center")
@@ -111,6 +133,9 @@ class Favoritism(InstructionsFrame):
         self.next.grid(row = 4, column = 1, columnspan = 3)        
 
         self.columnconfigure(0, weight = 1)
+        self.columnconfigure(1, weight = 0)
+        self.columnconfigure(2, weight = 0)
+        self.columnconfigure(3, weight = 0)
         self.columnconfigure(4, weight = 1)
         
         self.rowconfigure(0, weight = 2)
@@ -131,9 +156,9 @@ class Favoritism(InstructionsFrame):
             self.nextFun()
         else:
             self.trial += 1
-            self.first.addText("\n".join(self.descriptions[self.trial - 1][0]))
-            self.second.addText("\n".join(self.descriptions[self.trial - 1][1]))
-            self.third.addText("\n".join(self.descriptions[self.trial - 1][2]))
+            self.first.addText(self.people[self.trial - 1][0])
+            self.second.addText(self.people[self.trial - 1][1])
+            self.third.addText(self.people[self.trial - 1][2])
             self.first.choice.set("ignore")
             self.second.choice.set("ignore")
             self.third.choice.set("ignore")
@@ -146,9 +171,9 @@ class Favoritism(InstructionsFrame):
 
 
     def write(self):
-        leftText = "\t".join(self.descriptions[self.trial - 1][0])
-        middleText = "\t".join(self.descriptions[self.trial - 1][0])
-        rightText = "\t".join(self.descriptions[self.trial - 1][0])
+        leftText = "\t".join(["|".join(self.first.close), "|".join(self.first.distant), str(self.first.value)])
+        middleText = "\t".join(["|".join(self.second.close), "|".join(self.second.distant), str(self.second.value)])
+        rightText = "\t".join(["|".join(self.third.close), "|".join(self.third.distant), str(self.third.value)])
         left = self.first.choice.get()
         middle = self.second.choice.get()
         right = self.third.choice.get()

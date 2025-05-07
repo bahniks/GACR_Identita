@@ -99,9 +99,12 @@ class Choice(ExperimentFrame):
 
         self.file.write("Articles\n")
         self.createText()
-        
 
+        
     def chosen(self, choice):
+        limit = 0.2 if TESTING else 0.5
+        if perf_counter() - self.t0 < limit:
+            return
         chosen = 0 if choice == "A" else 1
         self.root.status["articles"].append(self.items[self.trial - 1][chosen])
         self.file.write("\t".join([self.id, self.who, str(self.trial), *self.items[self.trial - 1][0].split("_"), *self.items[self.trial - 1][1].split("_"), choice]) + "\n")
@@ -116,6 +119,7 @@ class Choice(ExperimentFrame):
         
 
     def createText(self):
+        self.t0 = perf_counter()
         self.left.delete("1.0", "end")
         self.right.delete("1.0", "end")
         with open(os.path.join(os.getcwd(), "Stuff", "Texts", "text{}_{}.txt".format(*self.items[self.trial - 1][0].split("_")))) as f:
@@ -236,7 +240,7 @@ ArticlesMyself = (Articles, {"who": "myself"})
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
     GUI([#InstructionsArticlesOthers, 
-         #ChoiceOthers,      
+         ChoiceOthers,      
          #InstructionsArticlesMyself,
          #ChoiceMyself,
          #InstructionsReading,

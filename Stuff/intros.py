@@ -16,8 +16,7 @@ from login import Login
 
 ################################################################################
 # TEXTS
-intro = """
-Studie se skládá z několika různých úkolů a otázek. Níže je uveden přehled toho, co Vás čeká:
+intro = """Studie se skládá z několika různých úkolů a otázek. Níže je uveden přehled toho, co Vás čeká:
 
 <b>1) Skupiny:</b> Budete uvádět, jaké skupiny jsou Vám blízké a jaké vzdálené.
 <b>2) Preference:</b> Budete uvádět, jaká možnost z dvojice se Vám více líbí.
@@ -25,10 +24,11 @@ Studie se skládá z několika různých úkolů a otázek. Níže je uveden př
 <b>4) Dělení peněz:</b> Budete se rozhodovat, jak dělit peníze v páru s jiným účastníkem studie.
 <b>5) Přidělování peněz:</b> Budete rozdělovat peníze mezi další účastníky studie. V tomto úkolu můžete od ostatních účastníků získat peníze.
 <b>6) Podobnost:</b> Budete hodnotit, nakolik jsou Vám další účastníci studie podobní.
-<b>7) Čtení článků:</b> Budete mít čas si dříve vybrané články přečíst.
-<b>8) Loterie:</b> Můžete se rozhodnout zúčastnit se loterie a získat další peníze v závislosti na výsledcích loterie.
-<b>9) Dotazníky:</b> Budete odpovídat na otázky ohledně Vašich vlastností a postojů. 
-<b>10) Konec studie a platba:</b> Poté, co skončíte, půjdete do vedlejší místnosti, kde podepíšete pokladní dokument, na základě kterého obdržíte vydělané peníze v hotovosti. Jelikož v dokumentu bude uvedena pouze celková suma, experimentátor, který Vám bude vyplácet odměnu, nebude vědět, kolik jste vydělali v jednotlivých částech studie.
+<b>7) Výběr výrobků:</b> Budete si vybírat výrobky, které budete moct získat.
+<b>8) Čtení článků:</b> Budete mít čas si dříve vybrané články přečíst.
+<b>9) Příspěvek charitě:</b> Budete se rozhodovat, zda přispějete na charitu, pokud získáte peníze v loterii.
+<b>10) Loterie:</b> Můžete se rozhodnout zúčastnit se další loterie a získat peníze v závislosti na výsledcích loterie.
+<b>11) Konec studie a platba:</b> Poté, co skončíte, půjdete do vedlejší místnosti, kde podepíšete pokladní dokument, na základě kterého obdržíte vydělané peníze v hotovosti. Jelikož v dokumentu bude uvedena pouze celková suma, experimentátor, který Vám bude vyplácet odměnu, nebude vědět, kolik jste vydělali v jednotlivých částech studie.
 
 Veškeré interakce s ostatními účastniky studie proběhnou pouze přes počítač a anonymně. Nikdy nebudete navzájem vědět, s kým v rámci experimentu interagujete.
 
@@ -120,7 +120,7 @@ class Ending(InstructionsFrame):
 
 
 Intro = (InstructionsFrame, {"text": intro, "proceed": True, "height": 30})
-Initial = (InstructionsFrame, {"text": login, "proceed": False, "height": 17, "keys": ["g", "G"]})
+Initial = (InstructionsFrame, {"text": login, "proceed": False, "height": 19, "keys": ["g", "G"]})
 
 
 if __name__ == "__main__":
