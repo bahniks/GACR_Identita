@@ -12,7 +12,7 @@ import os
 import urllib.request
 import urllib.parse
 
-from common import ExperimentFrame, InstructionsFrame, Measure, MultipleChoice, InstructionsAndUnderstanding, OneFrame, Question, TextArea
+from common import ExperimentFrame, InstructionsFrame, Measure, MultipleChoice, InstructionsAndUnderstanding, OneFrame, Question, TextArea, read_all
 from gui import GUI
 from constants import TESTING, URL
 
@@ -20,7 +20,7 @@ from constants import TESTING, URL
 ################################################################################
 # TEXTS
 
-introArticlesOthers = "Nyní Vám budeme ukazovat titulky článků. Jedná se o krátké články, které vyjadřují různé názory autorů. Vaším úkolem bude vybrat z každé dvojice článek, který by si podle Vás měli ostatní účastníci experimentu přečíst. Některé z článků, které vyberete, dostanou náhodně vybraní účastníci této studie a budou mít čas si je přečíst. Tento úkol bude mít 30 kol."
+introArticlesOthers = "Nyní Vám budeme ukazovat titulky článků. Jedná se o krátké články, které vyjadřují různé názory autorů. Vaším úkolem bude vybrat z každé dvojice článek, který by si podle Vás měli ostatní účastníci experimentu přečíst. Některé z článků, které vyberete, dostanou náhodně vybraní účastníci této studie a budou mít čas si je přečíst. Tento úkol bude mít 24 kol."
 
 qOthers = "Který z uvedených článků chcete, aby si jiný účastník studie přečetl?"
 
@@ -37,19 +37,28 @@ introReadingOthers = "Nyní máte možnost si přečíst náhodně vybrané čl�
 ################################################################################
 
 
+
 class Choice(ExperimentFrame):
     def __init__(self, root, who):
         super().__init__(root)
 
-        self.total = 3
+        self.total = 24
         self.who = who
         self.root.status["articles"] = []
         
+        self.titles = {}
+        types = ["envi", "filler", "anti"]
+        if who == "others":
+            t = read_all("articles_others_titles.txt")                        
+            for count, title in enumerate(t.split("\n")):      
+                n = count % 16    
+                self.titles[types[count // 16] + str(n + 1)] = title                                
+
         pairs = [["envi", "anti"], ["envi", "filler"], ["anti", "filler"]]
         pairs *= int(self.total / 3)        
-        envi = [i for i in range(1, 21)]
-        anti = [i for i in range(1, 21)]
-        filler = [i for i in range(1, 21)]
+        envi = [i for i in range(1, self.total*2 // 3 + 1)]
+        anti = [i for i in range(1, self.total*2 // 3 + 1)] 
+        filler = [i for i in range(1, self.total*2 // 3 + 1)]
         random.shuffle(pairs)
         random.shuffle(envi)
         random.shuffle(anti)
@@ -58,8 +67,8 @@ class Choice(ExperimentFrame):
         for i in range(self.total):
             pair = pairs.pop()
             random.shuffle(pair)     
-            left = "{}_{}".format(eval(pair[0]).pop(), pair[0])
-            right = "{}_{}".format(eval(pair[1]).pop(), pair[1])
+            left = "{}{}".format(pair[0], eval(pair[0]).pop())
+            right = "{}{}".format(pair[1], eval(pair[1]).pop())            
             self.items.append([left, right])
 
         self.trial = 1
@@ -120,14 +129,20 @@ class Choice(ExperimentFrame):
 
     def createText(self):
         self.t0 = perf_counter()
+        self.left["state"] = "normal"
+        self.right["state"] = "normal"
         self.left.delete("1.0", "end")
         self.right.delete("1.0", "end")
-        with open(os.path.join(os.getcwd(), "Stuff", "Texts", "text{}_{}.txt".format(*self.items[self.trial - 1][0].split("_")))) as f:
-            text = f.read()
-            self.left.insert("1.0", text) 
-        with open(os.path.join(os.getcwd(), "Stuff", "Texts", "text{}_{}.txt".format(*self.items[self.trial - 1][1].split("_")))) as f:
-            text = f.read()
-            self.right.insert("1.0", text) 
+        self.left.insert("1.0", self.titles[self.items[self.trial - 1][0]]) 
+        self.right.insert("1.0", self.titles[self.items[self.trial - 1][1]])
+        self.left["state"] = "disabled" 
+        self.right["state"] = "disabled"
+        # with open(os.path.join(os.getcwd(), "Stuff", "Texts", "text{}_{}.txt".format(*self.items[self.trial - 1][0].split("_")))) as f:
+        #     text = f.read()
+        #     self.left.insert("1.0", text) 
+        # with open(os.path.join(os.getcwd(), "Stuff", "Texts", "text{}_{}.txt".format(*self.items[self.trial - 1][1].split("_")))) as f:
+        #     text = f.read()
+        #     self.right.insert("1.0", text) 
 
 
 
