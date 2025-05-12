@@ -21,9 +21,9 @@ from constants import TESTING, URL, SAMENESS
 # TEXTS
 
 
-introSameness = f"""Nyní vám ukážeme odpovědi deseti osob, z nichž čtyři jsou od dalších účastníků této studie a zbývajících šest je uměle vytvořených. Uvidíte, které skupiny těmto osobám byly blízké a které vzdálené. 
+introSameness = f"""Nyní vám ukážeme odpovědi deseti osob, z nichž jedna je od dalších účastníků této studie a zbývajících devět je uměle vytvořených. Uvidíte, které skupiny těmto osobám byly blízké a které vzdálené. 
 
-Vaším úkolem bude odhadnout, do jaké míry se s těmito lidmi shodujete v tom, co se vám líbí. Za každého účastníka studie, kde bude váš odhad správný dostanete bonus {SAMENESS} Kč. Za odhady u uměle vytvořených osob žádný bonus nedostáváte. 
+Vaším úkolem bude odhadnout, do jaké míry se s těmito lidmi shodujete v tom, co se vám líbí. Pokud bude váš odhad správný u dalšího účastníka studie, dostanete bonus {SAMENESS} Kč. Za odhady u uměle vytvořených osob žádný bonus nedostáváte. 
 
 Shoda je určována podle odpovědí v úloze, kde jste uváděli své preference z nabízených dvojic možností. Jako shoda jsou počítány dvojice, kde jste s daným účastníkem studie určili preferenci stejné možnosti z nabídnuté dvojice. 
 Celkem jste oba obdrželi 30 stejných dvojic. Pokud byste oba odpovídali náhodně, lze očekávat, že se budete shodovat u 15 položek. Pokud si myslíte, že jste si spíše podobní a máte stejné preference, měl(a) byste uvádět odhad vyšší než 15. Pokud si naopak myslíte, že jste odlišní a máte tedy různé preference, měl(a) byste uvádět odhad nižší než 15.
