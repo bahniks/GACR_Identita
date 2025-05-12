@@ -152,17 +152,20 @@ class Articles(ExperimentFrame):
 
         self.who = who
 
+        self.total = 48
+        self.trial = 1
+
         if TESTING and self.who == "myself" and not "articles" in self.root.status:
             self.root.status["articles"] = ["7_anti", "11_filler", "20_envi"]
         if TESTING and self.who == "others" and not "othersArticles" in self.root.status:
-            self.root.status["othersArticles"] = ["12_anti", "5_filler", "3_envi"]
-            
-        self.total = 3
-        self.trial = 1
+            titles = read_all("articles_others_titles.txt")            
+            self.root.status["othersArticles"] = random.sample(titles.split("\n"), self.total)            
 
         self.trialText = ttk.Label(self, text=f"Článek: 1/{self.total}", font="helvetica 15 bold", background="white", justify="right")
 
-        self.text = Text(self, font="helvetica 15", relief="flat", background="white", width=80, height=15, wrap="word", highlightbackground="white")
+        self.title = Text(self, font="helvetica 15 bold", relief="flat", background="white", width=80, height=2, wrap="word", highlightbackground="white")
+        self.title.tag_configure("center", justify="center")  
+        self.text = Text(self, font="helvetica 15", relief="flat", background="white", width=80, height=15, wrap="word", highlightbackground="white", spacing2 = 5, spacing3 = 20)
 
         self.scrollbar = ttk.Scrollbar(self, command=self.on_scroll)  # Bind to custom scroll function
         self.text.config(yscrollcommand=self.scrollbar.set)
@@ -171,6 +174,7 @@ class Articles(ExperimentFrame):
         self.next = ttk.Button(self, text="Pokračovat", command=self.proceed)
 
         self.trialText.grid(column=1, columnspan=2, row=0, pady=30, padx=30, sticky=NE)
+        self.title.grid(column=1, row=1, pady=10, sticky = S)
         self.text.grid(column=1, row=2)
         self.scrollbar.grid(column=2, row=2, sticky="NSW")
         self.next.grid(column=1, row=4, pady=30)
@@ -201,12 +205,18 @@ class Articles(ExperimentFrame):
             self.end = False
 
     def createText(self):
+        source = self.root.status["articles"] if self.who == "myself" else self.root.status["othersArticles"]
+
+        self.title["state"] = "normal"
+        self.title.delete("1.0", "end")
+        self.title.insert("1.0", source[self.trial - 1].replace(".", "\n"), "center")
+        self.title["state"] = "disabled"
+
         self.text["state"] = "normal"
         self.text.delete("1.0", "end")
-        source = self.root.status["articles"] if self.who == "myself" else self.root.status["othersArticles"]
-        self.filename = "text{}_{}.txt".format(*source[self.trial - 1].split("_"))
-        with open(os.path.join(os.getcwd(), "Stuff", "Texts", self.filename)) as f:
-            self.text.insert("1.0", f.read() * 3)
+        self.filename = "{}.txt".format(source[self.trial - 1]).replace(":", "").replace("?", ".")
+        with open(os.path.join(os.getcwd(), "Stuff", "Texts", self.filename), encoding = "utf-8") as f:
+            self.text.insert("1.0", f.read().strip("'").strip('"').strip())
         self.text["state"] = "disabled"
         self.t0 = perf_counter()
         self.disable()
@@ -255,11 +265,11 @@ ArticlesMyself = (Articles, {"who": "myself"})
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
     GUI([#InstructionsArticlesOthers, 
-         ChoiceOthers,      
+         #ChoiceOthers,      
          #InstructionsArticlesMyself,
          #ChoiceMyself,
          #InstructionsReading,
-         ArticlesMyself,
-         InstructionsReadingOthers,
+         #ArticlesMyself,
+         #InstructionsReadingOthers,
          ArticlesOthers  
          ])
