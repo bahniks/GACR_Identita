@@ -11,7 +11,6 @@ import urllib.parse
 from common import ExperimentFrame, InstructionsFrame, Measure, MultipleChoice, InstructionsAndUnderstanding
 from gui import GUI
 from constants import TESTING, URL, TRUST
-from questionnaire import Questionnaire
 from login import Login
 from sameness import createSyntetic
 

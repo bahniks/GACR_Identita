@@ -1,4 +1,6 @@
 #! python3
+from tkinter import *
+from tkinter import ttk
 
 import os
 import urllib.request
@@ -70,7 +72,10 @@ Děkujeme, že jste vypnul(a) svůj mobilní telefon, a že nebudete s nikým ko
 
 Pokud jste již tak neučinil(a), přečtěte si informovaný souhlas a pokud s ním budete souhlasit, podepište ho. 
 
-Počkejte na pokyn experimentátora.""".format(PARTICIPATION_FEE)
+Do textového pole níže zadejte Váš kód, který jste obdržel(a) mailem a uvedl(a) v rámci dotazníkového šetření. Poté klikněte na tlačítko pokračovat.
+
+Pokud kód neznáte, nebo pokud máte jakékoliv dotazy, zvedněte ruku a tiše vyčkejte příchodu výzkumného asistenta.
+""".format(PARTICIPATION_FEE)
 
 
 ################################################################################
@@ -116,16 +121,67 @@ class Ending(InstructionsFrame):
 
 
 
+class Initial(InstructionsFrame):
+    def __init__(self, root):
+        super().__init__(root, text = login, proceed = True, height = 21)
+        self.codeFrame = Canvas(self, background = "white", highlightbackground = "white", highlightcolor = "white")
+        self.codeFrame.grid(row = 2, column = 1, sticky = EW)
+
+        self.codeFrame.columnconfigure(0, weight = 1)
+        self.codeFrame.columnconfigure(3, weight = 1)
+
+        self.next.grid(row = 3, column = 1)
+        self.next["state"] = "disabled"
+
+        self.codeVar = StringVar()
+
+        self.codeVar.trace_add("write", lambda *args: self.enable(self.codeVar.get()))
+        self.codeEntry = ttk.Entry(self.codeFrame, width = 8, font = "Helvetica 15", textvariable = self.codeVar)
+        self.codeEntry.grid(row = 0, column = 2, padx = 10)
+
+        self.codeLabel = ttk.Label(self.codeFrame, text = "Kód:", font = "Helvetica 15", background = "white") 
+        self.codeLabel.grid(row = 0, column = 1)
+
+        self.problemLabel = ttk.Label(self.codeFrame, text = "", font = "Helvetica 15", background = "white", foreground = "red")
+        self.problemLabel.grid(row = 1, column = 0, columnspan = 4, pady = 10)
+
+        self.rowconfigure(4, weight = 3)
+
+
+    def nextFun(self):
+        if URL == "TEST":
+            super().nextFun()
+        # TODO
+
+        
+    def enable(self, value):
+        if not value.isalnum():
+            self.problemLabel["text"] = "Kód může obsahovat pouze písmena a číslice"
+            self.next["state"] = "disabled"
+            return
+        elif self.problemLabel["text"] == "Kód může obsahovat pouze písmena a číslice":
+            self.problemLabel["text"] = ""
+
+        if len(value) == 6:
+            self.next["state"] = "normal"
+            if self.problemLabel["text"] == "Kód může mít maximálně 6 znaků":
+                self.problemLabel["text"] = ""
+        elif len(value) > 6:
+            self.problemLabel["text"] = "Kód může mít maximálně 6 znaků"
+            self.next["state"] = "disabled"
+
+            
+
 
 
 
 Intro = (InstructionsFrame, {"text": intro, "proceed": True, "height": 30})
-Initial = (InstructionsFrame, {"text": login, "proceed": False, "height": 19, "keys": ["g", "G"]})
+#Initial = (InstructionsFrame, {"text": login, "proceed": False, "height": 19, "keys": ["g", "G"]})
 
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
-    GUI([Login,
-         Initial, 
+    GUI([Initial, 
+         Login,
          Intro,
          Ending])
