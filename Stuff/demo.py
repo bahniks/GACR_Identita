@@ -23,7 +23,7 @@ class Demographics(InstructionsFrame):
         self.age = StringVar()
         self.student = StringVar()
         self.field = StringVar()
-        self.field.set("Nestuduju VŠ")
+        self.field.set("Nestuduji VŠ")
 
         self.lab1 = ttk.Label(self, text = "Pohlaví:", background = "white",
                               font = "helvetica 15")
