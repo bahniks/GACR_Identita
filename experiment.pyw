@@ -36,7 +36,7 @@ frames = [Initial,
           InstructionsArticlesOthers,
           ChoiceOthers,     
           InstructionsArticlesMyself,
-          ChoiceMyself,     
+          #ChoiceMyself,     # vratit, az budou pripravene clanky
           #WaitGroups, # cekani na vyplneni skupin
           IntroTrust,
           InstructionsTrust,
@@ -52,7 +52,7 @@ frames = [Initial,
           ProductsIntro,
           Choices,
           InstructionsReading,
-          ArticlesMyself,
+          #ArticlesMyself,     # vratit, az budou pripravene clanky
           InstructionsReadingOthers,
           # cekani na vyber clanku
           ArticlesOthers,

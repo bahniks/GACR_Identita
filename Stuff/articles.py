@@ -152,7 +152,7 @@ class Articles(ExperimentFrame):
 
         self.who = who
 
-        self.total = 48
+        self.total = 3
         self.trial = 1
 
         if TESTING and self.who == "myself" and not "articles" in self.root.status:
@@ -214,7 +214,7 @@ class Articles(ExperimentFrame):
 
         self.text["state"] = "normal"
         self.text.delete("1.0", "end")
-        self.filename = "{}.txt".format(source[self.trial - 1]).replace(":", "").replace("?", ".")
+        self.filename = "{}.txt".format(source[self.trial - 1]).replace(":", "_").replace("?", "_").replace("%", "_").replace("„", "_").replace("“", "_").strip()
         with open(os.path.join(os.getcwd(), "Stuff", "Texts", self.filename), encoding = "utf-8") as f:
             self.text.insert("1.0", f.read().strip("'").strip('"').strip())
         self.text["state"] = "disabled"
