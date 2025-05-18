@@ -1,29 +1,29 @@
-charita 1
-Toto je popisek charity 1.
+Hnutí DUHA
+Zaměřuje se na ochranu přírody a prosazování ekologicky šetrných řešení.
 
-charita 2
-Toto je popisek charity 2.
+Děti Země
+Angažuje se v řadě kampaní zaměřených na ochranu životního prostředí a prosazování udržitelných řešení.
 
-charita 3
-Toto je popisek charity 3.
+Český svaz ochránců přírody
+Největší nevládní organizace v České republice zabývající se ochranou přírody a krajiny s širokou členskou základnou.
 
-charita 4
-Toto je popisek charity 4.
+Ekologický institut Veronica
+Věnuje se výzkumu, vzdělávání a osvětě v oblasti ochrany přírody a udržitelného rozvoje.
 
-charita 5
-Toto je popisek charity 5.
+Hnutí Brontosaurus
+Dobrovolnické environmentální hnutí mládeže, které realizuje praktické projekty na ochranu přírody a pořádá osvětové akce.
 
-charita 6
-Toto je popisek charity 6.
+Linka bezpečí
+Bezplatná telefonická a online krizová linka pro děti a mladé lidi v obtížných životních situacích, poskytuje jim podporu, poradenství a pomoc.
 
-charita 7
-Toto je popisek charity 7.
+Český červený kříž
+Humanitární organizace, která poskytuje první pomoc, sociální služby, zdravotní a vzdělávací činnosti a reaguje na mimořádné události.
 
-charita 8
-Toto je popisek charity 8.
+Světluška - Nadační fond Českého rozhlasu
+Pomáhá nevidomým a slabozrakým lidem v České republice prostřednictvím finanční podpory, projektů a osvětových kampaní.
 
-charita 9
-Toto je popisek charity 9.
+Elpida, o.p.s.
+Zaměřuje se na aktivní a důstojné stárnutí, nabízí vzdělávací, kulturní a sociální aktivity pro seniory a propojování generací.
 
-charita 10
-Toto je popisek charity 10.
+Paměť národa
+Dokumentuje vzpomínky pamětníků klíčových událostí 20. století, šíří jejich svědectví a podporuje úctu k demokratickým hodnotám a historii.

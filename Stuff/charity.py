@@ -2,8 +2,10 @@ from tkinter import *
 from tkinter import ttk
 from time import perf_counter, sleep
 
+import os
+import random
 
-from common import InstructionsFrame
+from common import InstructionsFrame, read_all
 from gui import GUI
 from constants import TESTING, URL, CHARITY
 
@@ -17,131 +19,128 @@ charityInstructions = f"""Jako dodatečnou odměnu dáme jednomu z deseti náhod
 
 Částku {CHARITY} Kč si budete moct nechat, anebo jí celou anebo její část věnovat nějaké neziskové organizaci. 
 
-Nyní Vám úkažeme 10 neziskových organizací s krátkým popiskem, čím se zabývají. Vy můžete určit, kolik peněz byste kqaždé z těchto organizací chtěli dát a kolik si nechat pro sebe v případě, že budete vylosováni. 
+Nyní Vám úkažeme 10 neziskových organizací s krátkým popiskem, čím se zabývají. Vy můžete určit, kolik peněz byste každé z těchto organizací chtěli dát a kolik si nechat pro sebe v případě, že budete vylosováni. 
 
 Pokud budete vylosováni, tak náhodně vybereme jednu z těchto organizací a rozdělíme peníze mezi Vás a danou organizaci podle rozhodnutí, které učiníte nyní. Jinými slovy, rozhodnutí pro jednotlivé organizace jsou nezávislá. Bude vybrána pouze jedna z těchto organizací a jen podle Vašeho rozhodnutí u dané organizace se budou peníze rozdělovat mezi ní a Vás."""
 
 
-#Pokud dostanete 500 Kč, jak tuto částku rozdělíte mezi sebe a tuto organizaci zabývající se ochranou životního prostředí: Greenpeace
+charityInstructions2 = f"""Pokud budete vylosováni, tak náhodně vybereme jednu z těchto organizací a rozdělíme {CHARITY} Kč mezi Vás a danou organizaci podle rozhodnutí, které učiníte nyní. Pomocí posuvníků níže určete, kolik peněz byste dané organizaci chtěli dát a kolik si nechat pro sebe v případě, že bude náhodně vybrána daná organizace."""
+
 
 ################################################################################
+
+
+
+class ScaleFrame(Canvas):
+    def __init__(self, root, maximum, charity, description):
+        super().__init__(root, background = "white", highlightbackground = "white", highlightcolor = "white")
+
+        self.charity = charity
+        self.description = description
+        self.parent = root
+        self.root = root.root
+        self.rounding = 10
+        self.maximum = maximum
+
+        self.valueVar = StringVar()
+        self.valueVar.set("0")
+
+        ttk.Style().configure("TScale", background = "white")
+
+        self.value = ttk.Scale(self, orient = HORIZONTAL, from_ = 0, to = maximum, length = 400,
+                            variable = self.valueVar, command = self.changedValue)
+        self.value.bind("<Button-1>", self.onClick)
+
+        self.playerText2 = f"{self.charity}"
+        self.playerText1 = "Já"
+        self.totalText1 = "{0:3d} Kč"
+        self.totalText2 = "{0:3d} Kč"
+
+        #self.charityLab = ttk.Label(self, text = self.charity, font = "helvetica 15 bold", background = "white")
+        self.descriptionLab = ttk.Label(self, text = self.description, font = "helvetica 13", background = "white")
+
+        #self.charityLab.grid(column = 0, row = 0, pady = 5, sticky = "w")
+        self.descriptionLab.grid(column = 0, row = 1, columnspan = 6, pady = 5, sticky = "w")
+
+        self.value.grid(column = 3, row = 0, padx = 10)
+
+        self.playerLab1 = ttk.Label(self, text = self.playerText1, font = "helvetica 15", background = "white", width = 3, anchor = "w") 
+        self.playerLab2 = ttk.Label(self, text = self.playerText2, font = "helvetica 15 bold", background = "white", width = 26, anchor = "w") 
+        self.totalLab1 = ttk.Label(self, text = self.totalText1.format(0), font = "helvetica 15", background = "white", width = 6, anchor = "w")
+        self.totalLab2 = ttk.Label(self, text = self.totalText2.format(0), font = "helvetica 15", background = "white", width = 6, anchor = "w")
+
+        self.playerLab1.grid(column = 1, row = 0, padx = 3, sticky = W)
+        self.totalLab1.grid(column = 2, row = 0, padx = 3, sticky = "ew")
+
+        self.playerLab2.grid(column = 5, row = 0, padx = 3, sticky = W)        
+        self.totalLab2.grid(column = 4, row = 0, padx = 3, sticky = "ew")
+
+        self.columnconfigure(5, weight = 1)
+  
+        
+        self.changedValue(0)
+
+
+    def onClick(self, event):       
+        if self.value.instate(["disabled"]):
+            return
+        click_position = event.x
+        newValue = int((click_position / self.value.winfo_width()) * self.value['to'])
+        self.changedValue(newValue)
+        self.update()
+
+    def changedValue(self, value):           
+        value = str(min([max([eval(str(value)), 0]), self.maximum]))
+        self.valueVar.set(value)
+        newval = int(round(eval(self.valueVar.get())/self.rounding, 0)*self.rounding)
+        self.valueVar.set("{0:3d}".format(newval))
+        self.totalLab1["text"] = self.totalText1.format(self.maximum - newval)
+        self.totalLab2["text"] = self.totalText2.format(newval)
+
+
+
 
 class Charity(InstructionsFrame):
     def __init__(self, root):
 
-        if not "trustblock" in root.status:
-            root.status["trustblock"] = 1
-        else:
-            root.status["trustblock"] += 1
+        super().__init__(root, text = charityInstructions2, height = 3, font = 15, width = 100)
 
         endowment = CHARITY
-     
-        close, distant = createSyntetic(5) # TODO
 
-        text = instructionsT2.format(endowment, int(endowment/5), endowment)
-
-        height = 13
-        width = 102
-
-        super().__init__(root, text = text, height = height, font = 15, width = width)
-
-        self.groupFrame = GroupsFrame(self, close, distant)
-
-        self.labA = ttk.Label(self, text = "Pokud budu hráč A", font = "helvetica 15 bold", background = "white")
-        self.labA.grid(column = 0, row = 2, columnspan = 3, pady = 10)        
-
-        # ta x-pozice tady je hnusny hack, idealne by se daly texty odmen vsechny sem ze slideru
-        self.labR = ttk.Label(self, text = "Rozdělení odměn po tomto kroku", font = "helvetica 15 bold", background = "white", anchor = "center", width = 30)
-        self.labR.grid(column = 1, row = 2, pady = 5, sticky = E)
-
-        self.labX = ttk.Label(self, text = "Finální rozdělení odměn", font = "helvetica 15 bold", background = "white", anchor = "center", width = 28)
-        self.labX.grid(column = 1, row = 6, pady = 5, sticky = E)
+        charities = read_all("charities.txt").splitlines()
+        randomizer = [i for i in range(len(charities)//3 + 1)]
+        random.shuffle(randomizer)
+        self.charities = [charities[0 + i*3] for i in randomizer]
+        self.descriptions = [charities[1 + i*3] for i in randomizer]
 
         self.frames = {}
-        for i in range(8):            
-            if i < 6:
-                text = "Pokud hráč A pošle {} Kč, pošlu hráči A zpět:".format(int(i*endowment/5))
-                ttk.Label(self, text = text, font = "helvetica 15", background = "white").grid(column = 0, row = 7 + i, pady = 1, sticky = E)
-                player = "B"
-            elif i == 6:
-                ttk.Label(self, text = "Pošlu hráči B:", font = "helvetica 15", background = "white").grid(column = 0, row = 3, pady = 1, sticky = E)            
-                player = "A"
-            else:
-                ttk.Label(self, text = "Očekávám, že hráč B pošle zpět:", font = "helvetica 15", background = "white").grid(column = 0, row = 4, pady = 1, sticky = E)  
-                player = None
-            maximum = int(i * 3 * endowment / 5 + endowment) if i < 6 else endowment            
-            self.frames[i] = ScaleFrame(self, maximum = maximum, player = player, returned = int(i*endowment/5), endowment = endowment)
-            row = 7 + i if i < 6 else i - 3
-            self.frames[i].grid(column = 1, row = row, pady = 1)
-            if i == 7:
-                self.frames[i].value["state"] = "disabled"
+        for i in range(len(self.charities)):                        
+            self.frames[i] = ScaleFrame(self, maximum = CHARITY, charity = self.charities[i], description = self.descriptions[i])            
+            self.frames[i].grid(column = 1, row = i + 2, pady = 1, sticky = W)
+            self.rowconfigure(i + 2, weight = 1)
+            
+        self.next.grid(column = 0, row = 20, columnspan = 3, pady = 10, sticky = N)            
         
-        self.labB = ttk.Label(self, text = "Pokud budu hráč B", font = "helvetica 15 bold", background = "white")
-        self.labB.grid(column = 0, row = 6, columnspan = 3, pady = 10)
-
-        self.checkVar = BooleanVar()
-        ttk.Style().configure("TCheckbutton", background = "white", font = "helvetica 15")
-        self.checkBut = ttk.Checkbutton(self, text = checkButtonText, command = self.checkbuttoned, variable = self.checkVar, onvalue = True, offvalue = False)
-        self.checkBut.grid(row = 19, column = 0, columnspan = 3, pady = 10)
-
-        self.next.grid(column = 0, row = 20, columnspan = 3, pady = 5, sticky = N)            
-        self.next["state"] = "disabled"
-        
-        self.groupFrame.grid(row = 0, column = 0, columnspan = 3, pady = 5, sticky = S)
         self.text.grid(row = 1, column = 0, columnspan = 3)
 
-        self.deciding = True
-
         self.rowconfigure(0, weight = 1)
-        self.rowconfigure(1, weight = 0)
-        self.rowconfigure(2, weight = 0)
-        self.rowconfigure(3, weight = 0)
-        self.rowconfigure(4, weight = 1)
-        self.rowconfigure(18, weight = 2)
+        self.rowconfigure(1, weight = 2)
         self.rowconfigure(20, weight = 2)
 
         self.columnconfigure(0, weight = 2)
         self.columnconfigure(1, weight = 1)
         self.columnconfigure(2, weight = 1)
         self.columnconfigure(3, weight = 2)
-
-    def checkbuttoned(self):
-        self.next["state"] = "normal" if self.checkVar.get() else "disabled"
       
     def nextFun(self):
-        if self.deciding:
-            for i, frame in self.frames.items():
-                if i != 7:
-                    frame.value["state"] = "normal" if not self.checkVar.get() else "disabled"
-                else:
-                    frame.value["state"] = "normal" if self.checkVar.get() else "disabled"
-                    frame.maximum = TRUST + int(self.frames[6].valueVar.get()) * 3
-                    frame.value["to"] = frame.maximum
-            self.deciding = False
-            self.checkBut["text"] = checkButtonText2
-            self.next["state"] = "disabled"
-            self.checkVar.set(False)
-        else:
-            self.send()
-            self.write()
-            super().nextFun()
-
-    def send(self):        
-        self.responses = [self.frames[i].valueVar.get().strip() for i in range(8)]
-        data = {'id': self.id, 'round': "trust" + str(self.root.status["trustblock"]), 'offer': "_".join(self.responses)}
-        self.sendData(data)
+        self.write()
+        super().nextFun()
 
     def write(self):
-        block = self.root.status["trustblock"]
-        self.file.write("Trust\n")        
-        d = [self.id, str(block + 2), self.root.status["trust_pairs"][block-1], list(self.root.status["trust_roles"])[block-1]]
-        self.file.write("\t".join(map(str, d + self.responses)))
-        if URL == "TEST":
-            if self.root.status["trust_roles"][block-1] == "A":                        
-                self.root.status["trustTestSentA"] = int(self.frames[6].valueVar.get())
-            else:
-                self.root.status["trustTestSentB"] = [int(self.frames[i].valueVar.get()) for i in range(6)]       
-        self.file.write("\n\n")
+        self.file.write("Charities\n")                
+        for i in range(len(self.charities)):
+            self.file.write(f"{self.id}\t{self.charities[i]}\t{self.frames[i].valueVar.get()}\n")        
+        self.file.write("\n")
 
 
 CharityInstructions = (InstructionsFrame, {"text": charityInstructions, "height": 8, "width": 80, "font": 15})
@@ -153,3 +152,4 @@ if __name__ == "__main__":
     GUI([CharityInstructions,
          Charity
          ])
+    

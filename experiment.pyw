@@ -24,6 +24,7 @@ from articles import ArticlesMyself, InstructionsReadingOthers, ArticlesOthers
 from groups import InstructionsGroups, Groups
 from favoritism import Favoritism, InstructionsFavoritism
 from products import ProductsIntro, Choices
+from charity import CharityInstructions, Charity
 
 
 frames = [Initial,
@@ -58,6 +59,8 @@ frames = [Initial,
           ArticlesOthers,
         #   Lottery,  ?
         #   LotteryWin,  ?
+          CharityInstructions, 
+          Charity,
           LotteryInstructions,
           DiceLottery,   
           Demographics,
