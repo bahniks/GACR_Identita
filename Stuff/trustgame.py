@@ -211,21 +211,39 @@ class Trust(InstructionsFrame):
 
         if not "trustblock" in root.status:
             root.status["trustblock"] = 1
+            self.groups = {}                
+            self.groups["real1"] = root.status["groups"][4]
+            proenvi = random.randint(-7,-3)
+            neutral = random.choice([-2, -1, 1, 2])            
+            antienvi = random.randint(4,8)
+            self.groups["proenvi"] = createSyntetic(proenvi, "string")
+            self.groups["neutral"] = createSyntetic(neutral, "string")
+            self.groups["antienvi"] = createSyntetic(antienvi, "string")
+            if len(root.status["groups"]) == 6:                
+                self.groups["real2"] = self.root.status["groups"][5]
+            else:                
+                neutral2 = random.choice([-2, -1, 1, 2])                
+                self.groups["neutral2"] = createSyntetic(neutral2, "string")                        
+            keys = list(self.groups.keys())
+            random.shuffle(keys)
+            root.status["trust_groups_order"] = keys
+            root.status["trust_groups"] = {key: self.groups[key] for key in keys}         
         else:
             root.status["trustblock"] += 1
 
-        endowment = TRUST
-     
-        close, distant = createSyntetic(5) # TODO
-
+        endowment = TRUST    
+        
         text = instructionsT2.format(endowment, int(endowment/5), endowment)
 
         height = 13
         width = 102
 
         super().__init__(root, text = text, height = height, font = 15, width = width)
+        
+        self.person = self.root.status["trust_groups_order"][self.root.status["trustblock"] - 1]
+        close, distant = self.root.status["trust_groups"][self.person].split("|")       
 
-        self.groupFrame = GroupsFrame(self, close, distant)
+        self.groupFrame = GroupsFrame(self, close.split("_"), distant.split("_"))
 
         self.labA = ttk.Label(self, text = "Pokud budu hráč A", font = "helvetica 15 bold", background = "white")
         self.labA.grid(column = 0, row = 2, columnspan = 3, pady = 10)        
@@ -314,10 +332,10 @@ class Trust(InstructionsFrame):
     def write(self):
         block = self.root.status["trustblock"]
         self.file.write("Trust\n")        
-        d = [self.id, str(block + 2), self.root.status["trust_pairs"][block-1], list(self.root.status["trust_roles"])[block-1]]
+        d = [self.id, str(block + 2)]
         self.file.write("\t".join(map(str, d + self.responses)))
-        if URL == "TEST":
-            if self.root.status["trust_roles"][block-1] == "A":                        
+        if URL == "TEST" and self.person == "real1":
+            if random.random() < 0.5:                        
                 self.root.status["trustTestSentA"] = int(self.frames[6].valueVar.get())
             else:
                 self.root.status["trustTestSentB"] = [int(self.frames[i].valueVar.get()) for i in range(6)]       
@@ -340,17 +358,13 @@ class Wait(InstructionsFrame):
             self.update()
             if perf_counter() - t0 > 5:
                 t0 = perf_counter()
-                block = self.root.status["trustblock"]
-
-                data = urllib.parse.urlencode({'id': self.id, 'round': block, 'offer': "trust"})                
-                data = data.encode('ascii')
+                
                 if URL == "TEST":                    
                     if self.what == "groups":
                         persons = []
                         for i in range(5):
-                            value = random.randint(-9, 9)
-                            close, distant = createSyntetic(value)
-                            persons += "_".join(close) + "|" + "_".join(distant)
+                            value = random.randint(-9, 9)                            
+                            persons.append(createSyntetic(value, "string"))                            
                         response = "~".join(persons)                       
                     elif self.what == "articles":
                         titles = read_all("articles_others_titles.txt") 
@@ -369,6 +383,8 @@ class Wait(InstructionsFrame):
                     # response = "_".join(map(str, [self.root.status["trust_pairs"][block - 1], sentA, sentB]))
                 else:
                     try:
+                        data = urllib.parse.urlencode({'id': self.id, 'round': self.what, 'offer': "wait"})                
+                        data = data.encode('ascii')                
                         with urllib.request.urlopen(URL, data = data) as f:
                             response = f.read().decode("utf-8")       
                     except Exception as e:
@@ -423,11 +439,11 @@ InstructionsTrust = (InstructionsAndUnderstanding, {"text": instructionsT1.forma
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
-    GUI([Login,    
+    GUI([#Login,    
+         WaitGroups,
          #IntroTrust,
          #InstructionsTrust,
-         Trust,         
-         Trust,
+         Trust, Trust, Trust, Trust, Trust,
          WaitResults,
-         TrustResult
+         #TrustResult
          ])

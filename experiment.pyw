@@ -34,12 +34,11 @@ frames = [Initial,
           InstructionsArticlesOthers,
           ChoiceOthers,     
           InstructionsArticlesMyself,
-          #ChoiceMyself,     # vratit, az budou pripravene clanky
+          ChoiceMyself,
           WaitGroups, # cekani na vyplneni skupin
           IntroTrust,
           InstructionsTrust,
-          Trust,
-          Trust, # bude se jeste opakovat vicekrat (+ synteticke osoby) - predelat s uvadenim trialu, jako jinde              
+          Trust, Trust, Trust, Trust, Trust,
           InstructionsFavoritism,
           Favoritism,
           InstructionsSameness, 

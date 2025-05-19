@@ -162,8 +162,8 @@ class Initial(InstructionsFrame):
             if count % 50 == 0:            
                 data = urllib.parse.urlencode({'id': self.root.id, 'round': self.codeVar.get(), 'offer': "code"})
                 data = data.encode('ascii')
-                if URL == "TEST":
-                    super().nextFun()
+                if URL == "TEST":                    
+                    response = "validated"
                 else:
                     response = ""
                     try:

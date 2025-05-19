@@ -35,9 +35,9 @@ class Login(InstructionsFrame):
             if count % 50 == 0:            
                 data = urllib.parse.urlencode({'id': self.root.id, 'round': self.root.status["code"], 'offer': "login"})
                 data = data.encode('ascii')
-                if URL == "TEST":                    
+                if URL == "TEST":                                                       
                     win = random.random() < 0.1
-                    response = "|".join(["start", win])
+                    response = "|".join(["start", str(win)]) 
                 else:
                     response = ""
                     try:

@@ -45,34 +45,45 @@ class Choice(ExperimentFrame):
         self.total = 24
         self.who = who
         if who == "myself":
-            self.root.status["articles"] = []
+            self.root.status["myselfArticlesChosen"] = []            
+            self.titles = {}
+            types = ["envi", "filler"]
+            t = read_all("articles_myself_titles.txt")
+            self.root.status["myselfArticlesTitles"] = t.split("\n")
+            for count, title in enumerate(self.root.status["myselfArticlesTitles"]):      
+                n = count % self.total
+                self.titles[types[count // self.total] + str(n + 1)] = title     
+                
+            envi = ["envi{}".format(i) for i in range(1, self.total + 1)]
+            filler = ["filler{}".format(i) for i in range(1, self.total + 1)]
+            random.shuffle(envi)
+            random.shuffle(filler)
+            self.items = [[i, j] if random.random() < 0.5 else [j, i] for i, j in zip(envi, filler)]            
         else:
-            self.root.status["othersArticlesChosen"] = []
-        
-        self.titles = {}
-        types = ["envi", "filler", "anti"]
-        if who == "others":
+            self.root.status["othersArticlesChosen"] = []        
+            self.titles = {}
+            types = ["envi", "filler", "anti"]
             t = read_all("articles_others_titles.txt")                        
             for count, title in enumerate(t.split("\n")):      
                 n = count % 16    
                 self.titles[types[count // 16] + str(n + 1)] = title                                
 
-        pairs = [["envi", "anti"], ["envi", "filler"], ["anti", "filler"]]
-        pairs *= int(self.total / 3)        
-        envi = [i for i in range(1, self.total*2 // 3 + 1)]
-        anti = [i for i in range(1, self.total*2 // 3 + 1)] 
-        filler = [i for i in range(1, self.total*2 // 3 + 1)]
-        random.shuffle(pairs)
-        random.shuffle(envi)
-        random.shuffle(anti)
-        random.shuffle(filler)        
-        self.items = []        
-        for i in range(self.total):
-            pair = pairs.pop()
-            random.shuffle(pair)     
-            left = "{}{}".format(pair[0], eval(pair[0]).pop())
-            right = "{}{}".format(pair[1], eval(pair[1]).pop())            
-            self.items.append([left, right])
+            pairs = [["envi", "anti"], ["envi", "filler"], ["anti", "filler"]]
+            pairs *= int(self.total / 3)        
+            envi = [i for i in range(1, self.total*2 // 3 + 1)]
+            anti = [i for i in range(1, self.total*2 // 3 + 1)] 
+            filler = [i for i in range(1, self.total*2 // 3 + 1)]
+            random.shuffle(pairs)
+            random.shuffle(envi)
+            random.shuffle(anti)
+            random.shuffle(filler)        
+            self.items = []        
+            for i in range(self.total):
+                pair = pairs.pop()
+                random.shuffle(pair)     
+                left = "{}{}".format(pair[0], eval(pair[0]).pop())
+                right = "{}{}".format(pair[1], eval(pair[1]).pop())            
+                self.items.append([left, right])
 
         self.trial = 1
 
@@ -119,7 +130,7 @@ class Choice(ExperimentFrame):
             return
         chosen = 0 if choice == "A" else 1
         if self.who == "myself":            
-            self.root.status["articles"].append(self.items[self.trial - 1][chosen])
+            self.root.status["myselfArticlesChosen"].append(self.items[self.trial - 1][chosen])
         else:
             self.root.status["othersArticlesChosen"].append([*self.items[self.trial - 1], self.items[self.trial - 1][chosen]])
         
@@ -128,7 +139,7 @@ class Choice(ExperimentFrame):
         self.trialText["text"] = f"Volba: {self.trial}/{self.total}"
         if self.trial > self.total:
             if self.who == "myself":
-                random.shuffle(self.root.status["articles"])
+                random.shuffle(self.root.status["myselfArticlesChosen"])
             else:
                 triples = "|".join(["_".join(i) for i in self.root.status["othersArticlesChosen"]])
                 data = {'id': self.id, 'round': "articles", 'offer': triples}
@@ -149,12 +160,6 @@ class Choice(ExperimentFrame):
         self.right.insert("1.0", self.titles[self.items[self.trial - 1][1]])
         self.left["state"] = "disabled" 
         self.right["state"] = "disabled"
-        # with open(os.path.join(os.getcwd(), "Stuff", "Texts", "text{}_{}.txt".format(*self.items[self.trial - 1][0].split("_")))) as f:
-        #     text = f.read()
-        #     self.left.insert("1.0", text) 
-        # with open(os.path.join(os.getcwd(), "Stuff", "Texts", "text{}_{}.txt".format(*self.items[self.trial - 1][1].split("_")))) as f:
-        #     text = f.read()
-        #     self.right.insert("1.0", text) 
 
 
 
@@ -167,8 +172,8 @@ class Articles(ExperimentFrame):
         self.total = 3
         self.trial = 1
 
-        if TESTING and self.who == "myself" and not "articles" in self.root.status:
-            self.root.status["articles"] = ["7_anti", "11_filler", "20_envi"]
+        if TESTING and self.who == "myself" and not "myselfArticlesChosen" in self.root.status:
+            self.root.status["articles"] = ["7_anti", "11_filler", "20_envi"]                      
         if TESTING and self.who == "others" and not "othersArticles" in self.root.status:
             titles = read_all("articles_others_titles.txt")            
             self.root.status["othersArticlesTitles"] = random.sample(titles.split("\n"), self.total) 
@@ -220,7 +225,7 @@ class Articles(ExperimentFrame):
             self.end = False
 
     def createText(self):
-        source = self.root.status["articles"] if self.who == "myself" else self.root.status["othersArticlesTitles"]
+        source = self.root.status["myselfArticlesTitles"] if self.who == "myself" else self.root.status["othersArticlesTitles"]
 
         self.title["state"] = "normal"
         self.title.delete("1.0", "end")
@@ -280,11 +285,11 @@ ArticlesMyself = (Articles, {"who": "myself"})
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
     GUI([#InstructionsArticlesOthers, 
-         ChoiceOthers,      
+         #ChoiceOthers,      
          #InstructionsArticlesMyself,
-         #ChoiceMyself,
+         ChoiceMyself,
          #InstructionsReading,
-         #ArticlesMyself,
+         ArticlesMyself,
          #InstructionsReadingOthers,
          #ArticlesOthers  
          ])

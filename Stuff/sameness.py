@@ -43,7 +43,7 @@ infoValueLabelText = "Očekávám shodu v počtu položek: "
 
 
 
-def createSyntetic(value):    
+def createSyntetic(value, output = "lists"):    
     #with open(os.path.join(os.getcwd(), "groups.txt"), "r", encoding="utf-8") as file:
     with open(os.path.join(os.getcwd(), "Stuff", "groups.txt"), "r", encoding="utf-8") as file:
         groups = [line.strip() for line in file if line.strip()]
@@ -66,7 +66,10 @@ def createSyntetic(value):
         neutral = [group for group in neutral if group not in close]
         distant = random.sample(proenvironmental, 5 - v[1]) + random.sample(neutral, v[1])
 
-    return(close, distant)
+    if output == "lists":
+        return(close, distant)
+    elif output == "string":
+        return "_".join(close) + "|" + "_".join(distant)
 
 
 

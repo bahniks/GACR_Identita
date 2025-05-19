@@ -90,12 +90,12 @@ class Liking(InstructionsFrame):
             left = self.pairs[self.trial - 1][0]
             right = self.pairs[self.trial - 1][1]            
             self.file.write(f"{self.id}\t{self.trial}\t{left}\t{right}\t{answer}\n")
-            for i in len(self.originalPairs):
+            for i in range(len(self.originalPairs)):
                 search = left if answer == "left" else right
-                if self.originalPairs[i][0] == left:
+                if self.originalPairs[i][0] == search:
                     self.originalPairs[i] = "0"
                     break
-                elif self.originalPairs[i][0] == right:
+                elif self.originalPairs[i][0] == search:
                     self.originalPairs[i] = "1"
                     break
 
