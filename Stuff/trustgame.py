@@ -426,8 +426,8 @@ class Wait(InstructionsFrame):
 
 
 WaitGroups = (Wait, {"what": "groups"})
-WaitResults = (Wait, {"what": "articles"})
-WaitArticles = (Wait, {"what": "results"})
+WaitResults = (Wait, {"what": "results"})
+WaitArticles = (Wait, {"what": "articles"})
 
 
 TrustResult = (InstructionsFrame, {"text": "{}", "update": ["trustResult"]})
