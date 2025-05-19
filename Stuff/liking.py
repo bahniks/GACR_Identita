@@ -39,6 +39,7 @@ class Liking(InstructionsFrame):
 
         with open(os.path.join(os.getcwd(), "Stuff", "pairs.txt"), "r", encoding="utf-8") as file:
             self.pairs = [line.strip().split(" ") for line in file]
+        self.originalPairs = self.pairs.copy()
         random.shuffle(self.pairs)
    
         self.trialText = ttk.Label(self, text = "", font = "helvetica 15", background = "white", justify = "right")
@@ -69,6 +70,11 @@ class Liking(InstructionsFrame):
         self.t0 = perf_counter()
 
 
+    def write(self):        
+        data = {'id': self.id, 'round': "liking", 'offer': "".join(self.originalPairs)}
+        if URL != "TEST":
+            self.sendData(data)
+
     def leftClicked(self):
         self.nextTrial("left")
 
@@ -84,6 +90,14 @@ class Liking(InstructionsFrame):
             left = self.pairs[self.trial - 1][0]
             right = self.pairs[self.trial - 1][1]            
             self.file.write(f"{self.id}\t{self.trial}\t{left}\t{right}\t{answer}\n")
+            for i in len(self.originalPairs):
+                search = left if answer == "left" else right
+                if self.originalPairs[i][0] == left:
+                    self.originalPairs[i] = "0"
+                    break
+                elif self.originalPairs[i][0] == right:
+                    self.originalPairs[i] = "1"
+                    break
 
         if self.trial == self.totalTrials:
             self.file.write("\n")

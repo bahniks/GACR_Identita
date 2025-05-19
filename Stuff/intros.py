@@ -142,16 +142,67 @@ class Initial(InstructionsFrame):
         self.codeLabel = ttk.Label(self.codeFrame, text = "Kód:", font = "Helvetica 15", background = "white") 
         self.codeLabel.grid(row = 0, column = 1)
 
-        self.problemLabel = ttk.Label(self.codeFrame, text = "", font = "Helvetica 15", background = "white", foreground = "red")
+        self.problemLabel = ttk.Label(self.codeFrame, text = "", font = "Helvetica 15", background = "white", foreground = "red", wraplength = 800)
         self.problemLabel.grid(row = 1, column = 0, columnspan = 4, pady = 10)
 
-        self.rowconfigure(4, weight = 3)
+        self.filler = ttk.Label(self.codeFrame, text = "\n\n\n\n\n", font = "Helvetica 15", background = "white")
+        self.filler.grid(row = 1, column = 0, columnspan = 1, sticky = W)
+
+        self.codeFrame.rowconfigure(1, weight = 1)
+
+        self.rowconfigure(2, weight = 2)
+        self.rowconfigure(4, weight = 2)
 
 
     def nextFun(self):
-        if URL == "TEST":
-            super().nextFun()
-        # TODO
+        self.next["state"] = "disabled"
+        count = 0
+        while True:
+            self.update()
+            if count % 50 == 0:            
+                data = urllib.parse.urlencode({'id': self.root.id, 'round': self.codeVar.get(), 'offer': "code"})
+                data = data.encode('ascii')
+                if URL == "TEST":
+                    super().nextFun()
+                else:
+                    response = ""
+                    try:
+                        with urllib.request.urlopen(URL, data = data) as f:
+                            response = f.read().decode("utf-8") 
+                    except Exception:
+                        self.problemLabel["text"] = "Server nedostupný. Přivolejte výzkumného asistenta zvednutím ruky."
+                        self.next["state"] = "normal"                        
+                        return
+                if response == "validated":
+                    self.root.status["code"] = self.codeVar.get()                    
+                    super().nextFun()                      
+                    return
+                elif response == "not_found":
+                    self.problemLabel["text"] = "Kód nebyl nalezen. Zkontrolujte prosím, zda jste zadali správný kód."
+                    self.next["state"] = "normal"
+                    return
+                elif response == "too_soon":
+                    self.problemLabel["text"] = "Dotazník jste nevyplnil(a) před alespoň 5 dny. Dnes se experimentu nemůžete zúčastnit. Přivolejte výzkumného asistenta zvednutím ruky. Můžete se přihlasit na jiný termín."                
+                    self.codeEntry["state"] = "disabled"
+                    return
+                elif response == "participated":
+                    self.problemLabel["text"] = "Experimentu jste se již zúčastnil(a). Není možné se zúčastnit znovu. Přivolejte výzkumného asistenta zvednutím ruky."                
+                    self.codeEntry["state"] = "disabled"
+                    return
+                elif response == "load":
+                    self.root.status["code"] = self.codeVar.get()
+                    super().nextFun()   # load from temp.json?  # TODO                 
+                    return
+                elif response == "no_questionnaire":
+                    self.problemLabel["text"] = "Před účastí na experimentu je potřeba vyplnit alespoň 5 dní předem dotazník, na který se dostanete pomocí odkazu, který Vám přišel s pozvánkou mailem. Dnes se experimentu tedy nemůžete zúčastnit. Přivolejte výzkumného asistenta zvednutím ruky. Můžete se přihlasit na jiný termín 5 dní po vyplnění dotazníku."                
+                    self.codeEntry["state"] = "disabled"
+                    return                  
+                elif response == "already_logged":
+                    self.problemLabel["text"] = "Jste již přihlášen(a) do experimentu. Přivolejte výzkumného asistenta zvednutím ruky."                
+                    self.codeEntry["state"] = "disabled"
+                    return
+            count += 1                  
+            sleep(0.1)   
 
         
     def enable(self, value):

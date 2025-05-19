@@ -40,7 +40,6 @@ class Groups(InstructionsFrame):
 
         with open(os.path.join(os.getcwd(), "Stuff", "groups.txt"), "r", encoding="utf-8") as file:
             self.groups = [line.strip() for line in file if line.strip()]
-        #self.groups = [f"Skupina {i+1}" for i in range(30)]
         random.shuffle(self.groups)
 
         columns = 3
@@ -76,6 +75,14 @@ class Groups(InstructionsFrame):
 
         self.close = True
 
+        self.file.write("Groups\n")
+
+
+    def write(self):
+        self.file.write(self.id + "\t" + "_".join(self.chosen) + "\t" + "_".join(self.distant) + "\n")
+        data = {'id': self.id, 'round': "groups", 'offer': "_".join(self.chosen) + "|" + "_".join(self.distant)}
+        if URL != "TEST":
+            self.sendData(data)
 
 
     def clicked(self, group):

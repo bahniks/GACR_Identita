@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-from time import time
+from time import time, sleep
 
 import os
 import sys

@@ -33,17 +33,11 @@ class Login(InstructionsFrame):
         while True:
             self.update()
             if count % 50 == 0:            
-                data = urllib.parse.urlencode({'id': self.root.id, 'round': 0, 'offer': "login"})
+                data = urllib.parse.urlencode({'id': self.root.id, 'round': self.root.status["code"], 'offer': "login"})
                 data = data.encode('ascii')
-                if URL == "TEST":
-                    condition = random.choice(["control", "version", "reward", "version_reward"])
-                    incentive_order = random.choice(["high-low", "low-high"])
-                    tokenCondition = random.choice([True, False])                    
-                    winning_block = str(random.randint(1,6))
-                    winning_trust = str(random.randint(3,6))
-                    trustRoles = "".join([random.choice(["A", "B"]) for i in range(4)])
-                    trustPairs = "_".join([str(random.randint(1, 10)) for i in range(4)])                    
-                    response = "|".join(["start", condition, incentive_order, str(tokenCondition), winning_block, winning_trust, trustRoles, trustPairs, str(random.randint(1,2000))])
+                if URL == "TEST":                    
+                    win = random.random() < 0.1
+                    response = "|".join(["start", win])
                 else:
                     response = ""
                     try:
@@ -52,17 +46,8 @@ class Login(InstructionsFrame):
                     except Exception:
                         self.changeText("Server nedostupný")
                 if "start" in response:
-                    info, condition, incentive_order, tokenCondition, winning_block, winning_trust, trustRoles, trustPairs, idNumber = response.split("|")              
-                    self.root.status["condition"] = condition   
-                    self.create_control_question(condition)
-                    self.root.status["incentive_order"] = incentive_order                    
-                    self.root.status["tokenCondition"] = eval(tokenCondition)
-                    self.root.texts["block"] = self.root.status["winning_block"] = winning_block
-                    self.root.texts["trustblock"] = self.root.status["winning_trust"] = winning_trust
-                    self.root.status["trust_roles"] = list(trustRoles)
-                    self.root.status["trust_pairs"] = trustPairs.split("_")                 
-                    self.root.texts["idNumber"] = '{:03d}'.format(int(idNumber) % 1000)
-                    self.update_intros(condition, incentive_order)
+                    info, productsWin = response.split("|")              
+                    self.root.status["productsWin"] = productsWin
                     self.progressBar.stop()
                     self.write(response)
                     self.nextFun()                      
@@ -83,31 +68,11 @@ class Login(InstructionsFrame):
 
     def run(self):
         self.progressBar.start()
-        self.login()
-
-    def update_intros(self, condition, incentive_order):
-        pass
-        # self.root.texts["incentive_4"] = 50 if incentive_order == "low-high" else 200
-        # self.root.texts["incentive_5"] = 200 if incentive_order == "low-high" else 50
-        # self.root.texts["add_block_4"] = eval(condition + "Text")
-        # self.root.texts["add_block_5"] = eval(condition + "Text")
-        # self.root.texts["add_block_6"] = eval(condition + "Text")
-        # self.root.texts["add_block_6"] += tokenConditionText if self.root.status["tokenCondition"] else "\n\n" + version_choice
-
-    def create_control_question(self, condition):        
-        pass
-        # feedbackManipulation = []
-        # conditions = ["version_reward", "version", "reward", "control"]
-        # cf = correctFeedback if condition != "control" else correctFeedbackControl
-        # inf = incorrectFeedback if condition != "control" else incorrectFeedbackControl
-        # for i, cond in enumerate(conditions):
-        #     f = cf if condition == cond else inf
-        #     feedbackManipulation.append(f + answersManipulation[conditions.index(condition)].lower())
-        # self.root.texts["controlTexts2"] = [[controlManipulation, answersManipulation, feedbackManipulation]]        
+        self.login()  
 
     def write(self, response):
         self.file.write("Login" + "\n")
-        self.file.write(self.id + response.replace("|", "\t").lstrip("start") + "\n\n")        
+        self.file.write(self.id + "\t" + self.root.status["code"] + " \t" + response.replace("|", "\t").lstrip("start") + "\n\n")        
 
     def gothrough(self):
         self.run()

@@ -8,13 +8,10 @@ sys.path.append(os.path.join(os.getcwd(), "Stuff"))
 
 from gui import GUI
 
-#from quest import QuestInstructions
 from intros import Initial, Intro, Ending
 from demo import Demographics
-#from lottery import Lottery, LotteryWin
 from dicelottery import LotteryInstructions, DiceLottery
-from trustgame import WaitResults, Trust, TrustResult, InstructionsTrust, IntroTrust
-#from questionnaire import PoliticalSkill, TDMS, HEXACOinfo
+from trustgame import WaitResults, Trust, TrustResult, InstructionsTrust, IntroTrust, WaitGroups, WaitArticles
 from comments import Comments
 from login import Login
 from sameness import InstructionsSameness, Sameness
@@ -28,8 +25,8 @@ from charity import CharityInstructions, Charity
 
 
 frames = [Initial,
-          Intro,
-          Login,    
+          Login,  
+          Intro,  
           InstructionsGroups,
           Groups,
           InstructionsLiking,
@@ -38,14 +35,11 @@ frames = [Initial,
           ChoiceOthers,     
           InstructionsArticlesMyself,
           #ChoiceMyself,     # vratit, az budou pripravene clanky
-          #WaitGroups, # cekani na vyplneni skupin
+          WaitGroups, # cekani na vyplneni skupin
           IntroTrust,
           InstructionsTrust,
-          #WaitTrust, 
           Trust,
-          #WaitTrust,
-          Trust, # bude se jeste opakovat vicekrat (+ synteticke osoby) - predelat s uvadenim trialu, jako jinde    
-          # cekani na vyplneni skupin      
+          Trust, # bude se jeste opakovat vicekrat (+ synteticke osoby) - predelat s uvadenim trialu, jako jinde              
           InstructionsFavoritism,
           Favoritism,
           InstructionsSameness, 
@@ -55,20 +49,17 @@ frames = [Initial,
           InstructionsReading,
           #ArticlesMyself,     # vratit, az budou pripravene clanky
           InstructionsReadingOthers,
-          # cekani na vyber clanku
+          WaitArticles,          
           ArticlesOthers,
-        #   Lottery,  ?
-        #   LotteryWin,  ?
           CharityInstructions, 
           Charity,
           LotteryInstructions,
           DiceLottery,   
           Demographics,
-          Comments,
-          # pridat cekani na vysledky
-          WaitResults,
-          TrustResult,
-          Ending
+          Comments,          
+          #WaitResults,
+          #TrustResult,
+          #Ending
          ]
 
 #frames = [Login, HEXACOinfo]

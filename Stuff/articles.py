@@ -44,7 +44,10 @@ class Choice(ExperimentFrame):
 
         self.total = 24
         self.who = who
-        self.root.status["articles"] = []
+        if who == "myself":
+            self.root.status["articles"] = []
+        else:
+            self.root.status["othersArticlesChosen"] = []
         
         self.titles = {}
         types = ["envi", "filler", "anti"]
@@ -115,13 +118,22 @@ class Choice(ExperimentFrame):
         if perf_counter() - self.t0 < limit:
             return
         chosen = 0 if choice == "A" else 1
-        self.root.status["articles"].append(self.items[self.trial - 1][chosen])
+        if self.who == "myself":            
+            self.root.status["articles"].append(self.items[self.trial - 1][chosen])
+        else:
+            self.root.status["othersArticlesChosen"].append([*self.items[self.trial - 1], self.items[self.trial - 1][chosen]])
+        
         self.file.write("\t".join([self.id, self.who, str(self.trial), *self.items[self.trial - 1][0].split("_"), *self.items[self.trial - 1][1].split("_"), choice]) + "\n")
         self.trial += 1
         self.trialText["text"] = f"Volba: {self.trial}/{self.total}"
         if self.trial > self.total:
             if self.who == "myself":
                 random.shuffle(self.root.status["articles"])
+            else:
+                triples = "|".join(["_".join(i) for i in self.root.status["othersArticlesChosen"]])
+                data = {'id': self.id, 'round': "articles", 'offer': triples}
+                if URL != "TEST":
+                    self.sendData(data)
             self.nextFun()
         else:            
             self.createText()
@@ -159,7 +171,10 @@ class Articles(ExperimentFrame):
             self.root.status["articles"] = ["7_anti", "11_filler", "20_envi"]
         if TESTING and self.who == "others" and not "othersArticles" in self.root.status:
             titles = read_all("articles_others_titles.txt")            
-            self.root.status["othersArticles"] = random.sample(titles.split("\n"), self.total)            
+            self.root.status["othersArticlesTitles"] = random.sample(titles.split("\n"), self.total) 
+        elif "othersArticles" in self.root.status:
+            titles = read_all("articles_others_titles.txt")
+            self.root.status["othersArticlesTitles"] = titles[self.root.status["othersArticles"]]
 
         self.trialText = ttk.Label(self, text=f"Článek: 1/{self.total}", font="helvetica 15 bold", background="white", justify="right")
 
@@ -205,7 +220,7 @@ class Articles(ExperimentFrame):
             self.end = False
 
     def createText(self):
-        source = self.root.status["articles"] if self.who == "myself" else self.root.status["othersArticles"]
+        source = self.root.status["articles"] if self.who == "myself" else self.root.status["othersArticlesTitles"]
 
         self.title["state"] = "normal"
         self.title.delete("1.0", "end")
@@ -265,11 +280,11 @@ ArticlesMyself = (Articles, {"who": "myself"})
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
     GUI([#InstructionsArticlesOthers, 
-         #ChoiceOthers,      
+         ChoiceOthers,      
          #InstructionsArticlesMyself,
          #ChoiceMyself,
          #InstructionsReading,
          #ArticlesMyself,
          #InstructionsReadingOthers,
-         ArticlesOthers  
+         #ArticlesOthers  
          ])

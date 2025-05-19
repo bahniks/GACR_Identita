@@ -8,7 +8,7 @@ import os
 import urllib.request
 import urllib.parse
 
-from common import ExperimentFrame, InstructionsFrame, Measure, MultipleChoice, InstructionsAndUnderstanding
+from common import ExperimentFrame, InstructionsFrame, Measure, MultipleChoice, InstructionsAndUnderstanding, read_all
 from gui import GUI
 from constants import TESTING, URL, TRUST
 from login import Login
@@ -326,11 +326,13 @@ class Trust(InstructionsFrame):
 
 
 
-class WaitResults(InstructionsFrame):
-    def __init__(self, root):
+class Wait(InstructionsFrame):
+    def __init__(self, root, what):
         super().__init__(root, text = "", height = 3, font = 15, proceed = False, width = 45)
         self.progressBar = ttk.Progressbar(self, orient = HORIZONTAL, length = 400, mode = 'indeterminate')
         self.progressBar.grid(row = 2, column = 1, sticky = N)
+
+        self.what = what
 
     def checkUpdate(self):
         t0 = perf_counter() - 4
@@ -339,19 +341,32 @@ class WaitResults(InstructionsFrame):
             if perf_counter() - t0 > 5:
                 t0 = perf_counter()
                 block = self.root.status["trustblock"]
-                endowment = 100 # TO DO
 
                 data = urllib.parse.urlencode({'id': self.id, 'round': block, 'offer': "trust"})                
                 data = data.encode('ascii')
                 if URL == "TEST":                    
-                    if self.root.status["trust_roles"][block - 1] == "A":                        
-                        sentA = self.root.status["trustTestSentA"]
-                        sentB = random.randint(0, int((sentA * 3 + endowment) / 10)) * 10
-                    else:
-                        chose = random.randint(0,5)
-                        sentA = int(chose * 2 * endowment / 10)
-                        sentB = self.root.status["trustTestSentB"][chose]
-                    response = "_".join(map(str, [self.root.status["trust_pairs"][block - 1], sentA, sentB]))
+                    if self.what == "groups":
+                        persons = []
+                        for i in range(5):
+                            value = random.randint(-9, 9)
+                            close, distant = createSyntetic(value)
+                            persons += "_".join(close) + "|" + "_".join(distant)
+                        response = "~".join(persons)                       
+                    elif self.what == "articles":
+                        titles = read_all("articles_others_titles.txt") 
+                        articles = random.sample([i for i in range(len(titles))], 3)
+                        response = "_".join([str(i) for i in articles])
+                    elif self.what == "results":
+                        pass
+                    
+                    # if self.root.status["trust_roles"][block - 1] == "A":                        
+                    #     sentA = self.root.status["trustTestSentA"]
+                    #     sentB = random.randint(0, int((sentA * 3 + endowment) / 10)) * 10
+                    # else:
+                    #     chose = random.randint(0,5)
+                    #     sentA = int(chose * 2 * endowment / 10)
+                    #     sentB = self.root.status["trustTestSentB"][chose]
+                    # response = "_".join(map(str, [self.root.status["trust_pairs"][block - 1], sentA, sentB]))
                 else:
                     try:
                         with urllib.request.urlopen(URL, data = data) as f:
@@ -360,18 +375,24 @@ class WaitResults(InstructionsFrame):
                         continue
 
                 if response:               
-                    pair, sentA, sentB = response.split("_")
-                    sentA, sentB = int(sentA), int(sentB)
+                    if self.what == "groups":
+                        self.root.status["groups"] = response.split("~")
+                    elif self.what == "articles":
+                        self.root.status["otherArticles"] = response.split("_")                        
+                    elif self.what == "results":
+                        pass
+                    # pair, sentA, sentB = response.split("_")
+                    # sentA, sentB = int(sentA), int(sentB)
                     
-                    if int(self.root.status["winning_trust"]) == block + 2:
-                        reward = endowment - sentA + sentB if self.root.status["trust_roles"][block-1] == "A" else endowment + sentA*3 - sentB    
-                        self.root.texts["trust"] = str(reward)
+                    # if int(self.root.status["winning_trust"]) == block + 2:
+                    #     reward = endowment - sentA + sentB if self.root.status["trust_roles"][block-1] == "A" else endowment + sentA*3 - sentB    
+                    #     self.root.texts["trust"] = str(reward)
 
-                    if self.root.status["trust_roles"][block - 1] == "A": 
-                        text = trustResultTextA.format(sentA, sentA*3, endowment + sentA*3, sentB, endowment - sentA + sentB, endowment + sentA*3 - sentB)
-                    else:
-                        text = trustResultTextB.format(sentA, sentA*3, endowment + sentA*3, sentB, endowment + sentA*3 - sentB, endowment - sentA + sentB)
-                    self.root.texts["trustResult"] = text
+                    # if self.root.status["trust_roles"][block - 1] == "A": 
+                    #     text = trustResultTextA.format(sentA, sentA*3, endowment + sentA*3, sentB, endowment - sentA + sentB, endowment + sentA*3 - sentB)
+                    # else:
+                    #     text = trustResultTextB.format(sentA, sentA*3, endowment + sentA*3, sentB, endowment + sentA*3 - sentB, endowment - sentA + sentB)
+                    # self.root.texts["trustResult"] = text
 
                     self.write(response)
                     self.progressBar.stop()
@@ -382,10 +403,15 @@ class WaitResults(InstructionsFrame):
         self.progressBar.start()
         self.checkUpdate()
 
-    def write(self, response):
-        self.file.write("Trust Results" + "\n")
+    def write(self, response):        
+        self.file.write(self.what.capitalize() + " Results" + "\n")
         self.file.write(self.id + "\t" + response.replace("_", "\t") + "\n\n") 
 
+
+
+WaitGroups = (Wait, {"what": "groups"})
+WaitResults = (Wait, {"what": "articles"})
+WaitArticles = (Wait, {"what": "results"})
 
 
 TrustResult = (InstructionsFrame, {"text": "{}", "update": ["trustResult"]})
