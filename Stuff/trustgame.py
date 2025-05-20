@@ -10,7 +10,7 @@ import urllib.parse
 
 from common import ExperimentFrame, InstructionsFrame, Measure, MultipleChoice, InstructionsAndUnderstanding, read_all
 from gui import GUI
-from constants import TESTING, URL, TRUST
+from constants import TESTING, URL, TRUST, SAMENESS, FAVORITISM
 from login import Login
 from sameness import createSyntetic
 
@@ -74,26 +74,13 @@ trustAnswers3 = ["80 Kč (100 + 40 - 60)", "160 Kč (100 + 3 × 40 - 60)", "240 
 trustFeedback3 = ["Chybná odpověď. Hráč B obdrží 100 Kč, ke kterým obdrží 120 Kč od hráče A (poslaných 40 Kč se ztrojnásobí) a následně pošle hráči A 60 Kč, tj. na konec obdrží 160 Kč (100 + 3 × 40 - 60).", "Správná odpověď.", "Chybná odpověď. Hráč B obdrží 100 Kč, ke kterým obdrží 120 Kč od hráče A (poslaných 40 Kč se ztrojnásobí) a následně pošle hráči A 60 Kč, tj. na konec obdrží 160 Kč (100 + 3 × 40 - 60).", "Chybná odpověď. Hráč B obdrží 100 Kč, ke kterým obdrží 120 Kč od hráče A (poslaných 40 Kč se ztrojnásobí) a následně pošle hráči A 60 Kč, tj. na konec obdrží 160 Kč (100 + 3 × 40 - 60)."]
 
 
+trustResultTextA = """V úloze s dělením peněz Vám byla při hře hrané se skutečným účastníkem studie náhodně vybrána role hráče A. Rozhodl(a) jste se poslat {} Kč. Tato částka byla ztrojnásobena na {} Kč. Ze svých {} Kč Vám poslal hráč B {} Kč. V této úloze jste tedy získal(a) {} Kč a hráč B {} Kč."""
 
+trustResultTextB = """V úloze s dělením peněz Vám byla při hře hrané se skutečným účastníkem studie náhodně vybrána role hráče B. Hráč A se rozhodl(a) poslat {} Kč. Tato částka byla ztrojnásobena na {} Kč. Ze svých {} Kč jste poslal(a) hráči B {} Kč. V této úloze jste tedy získal(a) {} Kč a hráč A {} Kč."""
 
-trustResultTextA = """V úloze s dělením peněz Vám byla při hře hrané se skutečným účastníkem studie náhodně vybrána role hráče A.
-
-<b>Rozhodl(a) jste se poslat {} Kč.</b>
-Tato částka byla ztrojnásobena na {} Kč.
-<b>Ze svých {} Kč Vám poslal hráč B {} Kč.</b>
-
-<b>V této úloze jste tedy získal(a) {} Kč a hráč B {} Kč.</b>
-"""
-
-trustResultTextB = """V úloze s dělením peněz Vám byla při hře hrané se skutečným účastníkem studie náhodně vybrána role hráče B.
-
-<b>Hráč A se rozhodl(a) poslat {} Kč.</b>
-Tato částka byla ztrojnásobena na {} Kč.
-<b>Ze svých {} Kč jste poslal(a) hráči B {} Kč.</b>
-
-<b>V této úloze jste tedy získal(a) {} Kč a hráč A {} Kč.</b>
-"""
-
+favoritismResultText = "V úkolu, kde Vám ostatní účastníci mohli přidělit nebo sebrat peníze, jste získal(a) {} Kč."
+samenessResultTextCorrect = f"Podobnost dalšího účastníka studie jste odhadl(a) správně a získal(a) jste tedy {SAMENESS} Kč."
+samenessResultTextIncorrect = f"Podobnost dalšího účastníka studie jste neodhadl(a) správně a nezískal(a) jste tedy za tuto úlohu žádnou odměnu."
 
 checkButtonText = "Rozhodl(a) jsem se u všech možností"
 checkButtonText2 = "Uvedl(a) jsem svou předpověď"
@@ -335,7 +322,7 @@ class Trust(InstructionsFrame):
         d = [self.id, str(block + 2)]
         self.file.write("\t".join(map(str, d + self.responses)))
         if URL == "TEST" and self.person == "real1":
-            if random.random() < 0.5:                        
+            if self.root.status["trust_roles"][0] == "A":                        
                 self.root.status["trustTestSentA"] = int(self.frames[6].valueVar.get())
             else:
                 self.root.status["trustTestSentB"] = [int(self.frames[i].valueVar.get()) for i in range(6)]       
@@ -370,17 +357,21 @@ class Wait(InstructionsFrame):
                         titles = read_all("articles_others_titles.txt") 
                         articles = random.sample([i for i in range(len(titles))], 3)
                         response = "_".join([str(i) for i in articles])
-                    elif self.what == "results":
-                        pass
-                    
-                    # if self.root.status["trust_roles"][block - 1] == "A":                        
-                    #     sentA = self.root.status["trustTestSentA"]
-                    #     sentB = random.randint(0, int((sentA * 3 + endowment) / 10)) * 10
-                    # else:
-                    #     chose = random.randint(0,5)
-                    #     sentA = int(chose * 2 * endowment / 10)
-                    #     sentB = self.root.status["trustTestSentB"][chose]
-                    # response = "_".join(map(str, [self.root.status["trust_pairs"][block - 1], sentA, sentB]))
+                    elif self.what == "results":                                        
+                        # trustgame
+                        if self.root.status["trust_roles"][0] == "A":                        
+                            sentA = self.root.status["trustTestSentA"]
+                            sentB = random.randint(0, int((sentA * 3 + TRUST) / 10)) * 10
+                        else:
+                            chose = random.randint(0,5)
+                            sentA = int(chose * 2 * TRUST / 10)
+                            sentB = self.root.status["trustTestSentB"][chose]
+                        # favoritism
+                        favoritism = random.randint(0, 6) * FAVORITISM                                               
+                        # sameness
+                        sameness = "True" if random.random() < 0.5 else "False"
+
+                        response = "_".join(map(str, [self.root.status["trust_pairs"][0], sentA, sentB, favoritism, sameness]))
                 else:
                     try:
                         data = urllib.parse.urlencode({'id': self.id, 'round': self.what, 'offer': "wait"})                
@@ -396,19 +387,31 @@ class Wait(InstructionsFrame):
                     elif self.what == "articles":
                         self.root.status["otherArticles"] = response.split("_")                        
                     elif self.what == "results":
-                        pass
-                    # pair, sentA, sentB = response.split("_")
-                    # sentA, sentB = int(sentA), int(sentB)
-                    
-                    # if int(self.root.status["winning_trust"]) == block + 2:
-                    #     reward = endowment - sentA + sentB if self.root.status["trust_roles"][block-1] == "A" else endowment + sentA*3 - sentB    
-                    #     self.root.texts["trust"] = str(reward)
+                        # trustgame
+                        pair, sentA, sentB, favoritism, sameness = response.split("_")
+                        sentA, sentB = int(sentA), int(sentB)
 
-                    # if self.root.status["trust_roles"][block - 1] == "A": 
-                    #     text = trustResultTextA.format(sentA, sentA*3, endowment + sentA*3, sentB, endowment - sentA + sentB, endowment + sentA*3 - sentB)
-                    # else:
-                    #     text = trustResultTextB.format(sentA, sentA*3, endowment + sentA*3, sentB, endowment + sentA*3 - sentB, endowment - sentA + sentB)
-                    # self.root.texts["trustResult"] = text
+                        if self.root.status["trust_roles"][0] == "A": 
+                            reward = TRUST - sentA + sentB
+                            text = trustResultTextA.format(sentA, sentA*3, TRUST + sentA*3, sentB, TRUST - sentA + sentB, TRUST + sentA*3 - sentB)
+                        else:
+                            text = trustResultTextB.format(sentA, sentA*3, TRUST + sentA*3, sentB, TRUST + sentA*3 - sentB, TRUST - sentA + sentB)
+                            reward = TRUST + sentA*3 - sentB                        
+
+                        self.root.status["results"] += [text]
+                        self.root.status["reward"] += reward
+
+                        # favoritism
+                        self.root.status["results"] += [favoritismResultText.format(favoritism)]
+                        self.root.status["reward"] += int(favoritism)
+
+                        # sameness
+                        if sameness == "True":
+                            text = samenessResultTextCorrect
+                            self.root.status["reward"] += SAMENESS
+                        else:
+                            text = samenessResultTextIncorrect
+                        self.root.status["results"] += [text]
 
                     self.write(response)
                     self.progressBar.stop()
@@ -430,7 +433,7 @@ WaitResults = (Wait, {"what": "results"})
 WaitArticles = (Wait, {"what": "articles"})
 
 
-TrustResult = (InstructionsFrame, {"text": "{}", "update": ["trustResult"]})
+#TrustResult = (InstructionsFrame, {"text": "{}", "update": ["trustResult"]})
 
 controlTexts = [[trustControl1, trustAnswers1, trustFeedback1], [trustControl2, trustAnswers2, trustFeedback2], [trustControl3, trustAnswers3, trustFeedback3]]
 IntroTrust = (InstructionsFrame, {"text": instructionsT0, "height": 6, "width": 80, "font": 15})
@@ -439,11 +442,12 @@ InstructionsTrust = (InstructionsAndUnderstanding, {"text": instructionsT1.forma
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
-    GUI([#Login,    
+    from intros import Ending
+    GUI([Login,    
          WaitGroups,
          #IntroTrust,
          #InstructionsTrust,
          Trust, Trust, Trust, Trust, Trust,
          WaitResults,
-         #TrustResult
+         Ending
          ])

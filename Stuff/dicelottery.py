@@ -126,7 +126,8 @@ class DiceLottery(ExperimentFrame):
 
 
     def end(self):
-        self.root.texts["lottery_win"] = self.currentReward
+        self.root.status["results"] += [f"V loterii jste vydělal(a) {self.currentReward} Kč."]
+        self.root.status["reward"] += self.currentReward
         self.nextFun()
 
 
@@ -155,7 +156,9 @@ class DiceLottery(ExperimentFrame):
 LotteryInstructions = (InstructionsFrame, {"text": lotteryinstructions, "height": 12})
 
 if __name__ == "__main__":
+    from intros import Ending
     os.chdir(os.path.dirname(os.getcwd()))
     GUI([LotteryInstructions,
-         DiceLottery
+         DiceLottery,
+         Ending
          ])

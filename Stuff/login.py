@@ -36,8 +36,14 @@ class Login(InstructionsFrame):
                 data = urllib.parse.urlencode({'id': self.root.id, 'round': self.root.status["code"], 'offer': "login"})
                 data = data.encode('ascii')
                 if URL == "TEST":                                                       
-                    win = random.random() < 0.1
-                    response = "|".join(["start", str(win)]) 
+                    bag = str(random.randint(1, 10)) if random.random() < 0.4 else "-1"
+                    if random.random() < 0.5:
+                        trustRoles = random.choice(["A", "B"]) + "X"
+                        trustPairs = str(random.randint(1, 10)) + "_-1" 
+                    else:
+                        trustRoles = random.choice(["A", "B"]) + random.choice(["A", "B"])
+                        trustPairs = "_".join([str(random.randint(1, 10)) for i in range(2)])
+                    response = "|".join(["start", bag, trustPairs, trustRoles]) 
                 else:
                     response = ""
                     try:
@@ -46,8 +52,10 @@ class Login(InstructionsFrame):
                     except Exception:
                         self.changeText("Server nedostupný")
                 if "start" in response:
-                    info, productsWin = response.split("|")              
-                    self.root.status["productsWin"] = productsWin
+                    info, bag, trustPairs, trustRoles = response.split("|")              
+                    self.root.status["bag"] = bag
+                    self.root.status["trust_roles"] = list(trustRoles)
+                    self.root.status["trust_pairs"] = trustPairs.split("_")         
                     self.progressBar.stop()
                     self.write(response)
                     self.nextFun()                      

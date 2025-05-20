@@ -41,12 +41,9 @@ V případě, že máte otázky nebo narazíte na technický problém během úk
 
 
 ending = """Toto je konec experimentu.
-
-V úkolu s dělením peněz v páru jste získal(a) {} Kč. 
-V úkolu, kde Vám ostatní účastníci mohli přidělit nebo sebrat peníze, jste získal(a) {} Kč.
-Správně jste odhadla podobnost u {} účastníků studie a získal(a) jste tedy {} Kč.
-V loterii jste vydělal(a) {} Kč.
+{}
 Za účast na studii dostáváte {} Kč.
+
 <b>Vaše odměna za tuto studii je tedy dohromady {} Kč, zaokrouhleno na desítky korun nahoru získáváte {} Kč. Napište prosím tuto (zaokrouhlenou) částku do příjmového dokladu na stole před Vámi.</b>
 
 Studie založená na datech získaných v tomto experimentu bude volně dostupná na stránkách Centra laboratorního a experimentálního výzkumu FPH VŠE krátce po vyhodnocení dat a publikaci výsledků. 
@@ -58,7 +55,6 @@ Můžete si vzít všechny svoje věci a vyplněný příjmový doklad, a aniž 
 Děkujeme za Vaši účast!
  
 Centrum laboratorního a experimentálního výzkumu FPH VŠE""" 
-
 
 
 login = """
@@ -86,15 +82,19 @@ Pokud kód neznáte, nebo pokud máte jakékoliv dotazy, zvedněte ruku a tiše 
 
 class Ending(InstructionsFrame):
     def __init__(self, root):
-        root.texts["trust"] = "X"
-        root.texts["favoritism"] = "X"
-        root.texts["similarity_correct"] = "X"
-        root.texts["similarity_reward"] = "X"
-        root.texts["reward"] = int(root.texts["lottery_win"]) + PARTICIPATION_FEE # pridat dalsi casti
-        root.texts["rounded_reward"] = ceil(root.texts["reward"] / 10) * 10
+        # root.texts["trust"] = "X"
+        # root.texts["favoritism"] = "X"
+        # root.texts["similarity_correct"] = "X"
+        # root.texts["similarity_reward"] = "X"        
+        # root.texts["reward"] = int(root.texts["lottery_win"]) + PARTICIPATION_FEE # pridat dalsi casti
+
+        root.texts["results"] = "\n" + "\n\n".join(root.status["results"]) + "\n"
+
+        root.texts["reward"] = str(root.status["reward"])
+        root.texts["rounded_reward"] = ceil(root.status["reward"] / 10) * 10
         root.texts["participation_fee"] = PARTICIPATION_FEE
-        updates = ["trust", "favoritism", "similarity_correct", "similarity_reward", "lottery_win", "participation_fee", "reward", "rounded_reward"]
-        super().__init__(root, text = ending, keys = ["g", "G"], proceed = False, height = 24, update = updates)
+        updates = ["results", "participation_fee", "reward", "rounded_reward"]
+        super().__init__(root, text = ending, keys = ["g", "G"], proceed = False, height = 32, update = updates, width = 100)
         self.file.write("Ending\n")
         self.file.write(self.id + "\t" + str(root.texts["rounded_reward"]) + "\n\n")
 

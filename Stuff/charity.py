@@ -21,10 +21,13 @@ charityInstructions = f"""Jako dodatečnou odměnu dáme jednomu z deseti náhod
 
 Nyní Vám úkažeme 10 neziskových organizací s krátkým popiskem, čím se zabývají. Vy můžete určit, kolik peněz byste každé z těchto organizací chtěli dát a kolik si nechat pro sebe v případě, že budete vylosováni. 
 
-Pokud budete vylosováni, tak náhodně vybereme jednu z těchto organizací a rozdělíme peníze mezi Vás a danou organizaci podle rozhodnutí, které učiníte nyní. Jinými slovy, rozhodnutí pro jednotlivé organizace jsou nezávislá. Bude vybrána pouze jedna z těchto organizací a jen podle Vašeho rozhodnutí u dané organizace se budou peníze rozdělovat mezi ní a Vás."""
+Pokud budete vylosováni, tak náhodně vybereme jednu z těchto organizací a rozdělíme peníze mezi Vás a danou organizaci podle rozhodnutí, které učiníte nyní. Jinými slovy, rozhodnutí pro jednotlivé organizace jsou nezávislá. Bude vybrána pouze jedna z těchto organizací a jen podle Vašeho rozhodnutí u dané organizace se budou peníze rozdělovat mezi ní a Vás. Neziskové organizaci pošleme peníze po skončení studie."""
 
 
 charityInstructions2 = f"""Pokud budete vylosováni, tak náhodně vybereme jednu z těchto organizací a rozdělíme {CHARITY} Kč mezi Vás a danou organizaci podle rozhodnutí, které učiníte nyní. Pomocí posuvníků níže určete, kolik peněz byste dané organizaci chtěli dát a kolik si nechat pro sebe v případě, že bude náhodně vybrána daná organizace."""
+
+charityNotChosenText = f"""V úloze s výběrem neziskové organizace jste nebyl(a) vylosován(a)."""
+charityChosenText = """V úloze s výběrem neziskové organizace jste byl(a) vylosován(a). Z neziskových organizací byla náhodně vybrána {}. Dle Vaší volby obdržíte {} Kč a organizaci {} po skončení studie pošleme {} Kč."""
 
 
 ################################################################################
@@ -40,7 +43,7 @@ class ScaleFrame(Canvas):
         self.parent = root
         self.root = root.root
         self.rounding = 10
-        self.maximum = maximum
+        self.maximum = maximum 
 
         self.valueVar = StringVar()
         self.valueVar.set("0")
@@ -103,15 +106,15 @@ class ScaleFrame(Canvas):
 class Charity(InstructionsFrame):
     def __init__(self, root):
 
-        super().__init__(root, text = charityInstructions2, height = 3, font = 15, width = 100)
-
-        endowment = CHARITY
+        super().__init__(root, text = charityInstructions2, height = 3, font = 15, width = 100)        
 
         charities = read_all("charities.txt").splitlines()
         randomizer = [i for i in range(len(charities)//3 + 1)]
         random.shuffle(randomizer)
         self.charities = [charities[0 + i*3] for i in randomizer]
         self.descriptions = [charities[1 + i*3] for i in randomizer]
+        self.win = random.random() < 0.1     
+        self.chosenCharity = random.choice(self.charities)
 
         self.frames = {}
         for i in range(len(self.charities)):                        
@@ -134,12 +137,18 @@ class Charity(InstructionsFrame):
       
     def nextFun(self):
         self.write()
+        if self.win:
+            self.root.status["results"] += [charityChosenText.format(self.chosenCharity, int(self.frames[self.charities.index(self.chosenCharity)].valueVar.get()), self.chosenCharity, CHARITY - int(self.frames[self.charities.index(self.chosenCharity)].valueVar.get()))]
+            self.root.status["reward"] += int(self.frames[self.charities.index(self.chosenCharity)].valueVar.get())
+        else:
+            self.root.status["results"] += [charityNotChosenText]
         super().nextFun()
 
     def write(self):
         self.file.write("Charities\n")                
         for i in range(len(self.charities)):
-            self.file.write(f"{self.id}\t{self.charities[i]}\t{self.frames[i].valueVar.get()}\n")        
+            chosen = 1 if self.charities[i] == self.chosenCharity else 0
+            self.file.write(f"{self.id}\t{self.charities[i]}\t{self.frames[i].valueVar.get()}\t{self.win}\t{chosen}\n")        
         self.file.write("\n")
 
 
@@ -149,7 +158,9 @@ CharityInstructions = (InstructionsFrame, {"text": charityInstructions, "height"
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
+    from intros import Ending
     GUI([CharityInstructions,
-         Charity
+         Charity,
+         Ending
          ])
     

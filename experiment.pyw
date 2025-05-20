@@ -11,7 +11,7 @@ from gui import GUI
 from intros import Initial, Intro, Ending
 from demo import Demographics
 from dicelottery import LotteryInstructions, DiceLottery
-from trustgame import WaitResults, Trust, TrustResult, InstructionsTrust, IntroTrust, WaitGroups, WaitArticles
+from trustgame import WaitResults, Trust, InstructionsTrust, IntroTrust, WaitGroups, WaitArticles
 from comments import Comments
 from login import Login
 from sameness import InstructionsSameness, Sameness
@@ -35,7 +35,7 @@ frames = [Initial,
           ChoiceOthers,     
           InstructionsArticlesMyself,
           ChoiceMyself,
-          WaitGroups, # cekani na vyplneni skupin
+          WaitGroups,
           IntroTrust,
           InstructionsTrust,
           Trust, Trust, Trust, Trust, Trust,
@@ -56,9 +56,8 @@ frames = [Initial,
           DiceLottery,   
           Demographics,
           Comments,          
-          #WaitResults,
-          #TrustResult,
-          #Ending
+          WaitResults,
+          Ending
          ]
 
 #frames = [Login, HEXACOinfo]

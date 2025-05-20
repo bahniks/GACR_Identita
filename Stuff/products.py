@@ -28,6 +28,10 @@ intro = """Blížíme se ke konci tohoto experimentálního sezení. Jako malé 
 Nyní Vám postupně ukážeme 15 párů výrobků. U každého páru klikněte na ten výrobek, který by se Vám líbil více. Máte pravděpodobnost 10%, že vyhrajete náhodně vybraných 5 výrobků z těch, které si vyberete. Vybírejte proto prosím pečlivě, později už není možné volbu změnit. 
 """
 
+notChosenText = """V úloze s výběrem výrobků jste nebyl(a) vylosován(a)."""
+chosenText = """V úloze s výběrem výrobků jste byl(a) vylosován(a). Obdržíte náhodně vybrané výrobky z těch, které jste si vybral(a) v úloze. <b>Zapamatujte si číslo tašky {}, které sdělte při vyplácení odměny výzkumným asistentům.</b>"""
+
+
 ##################################################################################################################
 
 
@@ -64,6 +68,10 @@ class Choices(ExperimentFrame):
         self.order += 1
         if self.order == len(self.infos):
             self.root.status["products"] = self.selected
+            if self.root.status["bag"] == "-1":
+                self.root.status["results"] += [notChosenText]
+            else:
+                self.root.status["results"] += [chosenText.format(self.root.status["bag"])]
             self.nextFun()
         else:
             self.twoProducts.changeImages(self.infos[self.order][0])
@@ -190,8 +198,12 @@ class Product(Label):
 
 def main():
     os.chdir(os.path.dirname(os.getcwd()))
+    from login import Login
+    from intros import Ending
     GUI([#ProductsIntro,
-         Choices
+         Login,
+         Choices,
+         Ending
          ])
 
 
