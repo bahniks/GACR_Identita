@@ -201,7 +201,7 @@ class Trust(InstructionsFrame):
             root.status["trustblock"] = 1
             self.groups = {}                
             self.groups["real1"] = root.status["groups"][4]
-            proenvi = random.randint(-7,-3)
+            proenvi = random.randint(-8,-4)
             neutral = random.choice([-2, -1, 1, 2])            
             antienvi = random.randint(4,8)
             self.groups["proenvi"] = createSyntetic(proenvi, "string")
@@ -313,14 +313,21 @@ class Trust(InstructionsFrame):
             super().nextFun()
 
     def send(self):        
-        self.responses = [self.frames[i].valueVar.get().strip() for i in range(8)]
-        data = {'id': self.id, 'round': "trust" + str(self.root.status["trustblock"]), 'offer': "_".join(self.responses)}
+        key = self.root.status["trust_groups_order"][self.root.status["trustblock"] - 1]
+        if not key.startswith("real"):
+            return
+        num_id = key.lstrip("real")
+        pair = self.root.status["trust_pairs"][int(num_id) - 1]
+        self.responses = [self.frames[i].valueVar.get().strip() for i in range(7)]        
+        data = {'id': self.id, 'round': "trust" + str(pair), 'offer': "_".join(self.responses[:7])}
         self.sendData(data)
 
     def write(self):
         block = self.root.status["trustblock"]
-        self.file.write("Trust\n")        
-        d = [self.id, str(block + 2)]
+        self.file.write("Trust\n")                
+        key = self.root.status["trust_groups_order"][block - 1]
+        d = [self.id, str(block), key, self.root.status["trust_groups"][key]]        
+        self.responses = [self.frames[i].valueVar.get().strip() for i in range(8)]  
         self.file.write("\t".join(map(str, d + self.responses)))
         if URL == "TEST" and self.person == "real1":
             if self.root.status["trust_roles"][0] == "A":                        
@@ -357,7 +364,7 @@ class Wait(InstructionsFrame):
                             part_id = str(uuid4())
                             part_id = "test" + str(value + 20) + part_id[6:]
                             ids.append(part_id)
-                        response = "~".join(persons) + "!" + "_".join(ids)
+                        response = "_".join(ids) + "!" + "~".join(persons)
                     elif self.what == "articles":
                         titles = read_all("articles_others_titles.txt") 
                         articles = random.sample([i for i in range(len(titles))], 3)
@@ -372,9 +379,9 @@ class Wait(InstructionsFrame):
                             sentA = int(chose * 2 * TRUST / 10)
                             sentB = self.root.status["trustTestSentB"][chose]
                         # favoritism
-                        favoritism = random.randint(0, 6) * FAVORITISM                                               
+                        favoritism = random.randint(0, 6) * FAVORITISM                                             
                         # sameness
-                        sameness = "True" if random.random() < 0.5 else "False"
+                        sameness = random.randint(17, 20)
 
                         response = "_".join(map(str, [self.root.status["trust_pairs"][0], sentA, sentB, favoritism, sameness]))
                 else:
@@ -389,7 +396,7 @@ class Wait(InstructionsFrame):
 
                 if response:               
                     if self.what == "groups":
-                        persons, ids = response.split("!")
+                        ids, persons = response.split("!")
                         self.root.status["paired_ids"] = ids.split("_")
                         self.root.status["groups"] = persons.split("~")
                     elif self.what == "articles":
@@ -414,7 +421,7 @@ class Wait(InstructionsFrame):
                         self.root.status["reward"] += int(favoritism)
 
                         # sameness
-                        if sameness == "True":
+                        if self.root.status["sameness_prediction"] == sameness:
                             text = samenessResultTextCorrect
                             self.root.status["reward"] += SAMENESS
                         else:

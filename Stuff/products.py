@@ -79,9 +79,10 @@ class Choices(ExperimentFrame):
 
 
     def nextFun(self):        
-        data = "_".join([i for i in self.selected.keys()]) + "|" + "_".join([i for i in self.selected.values()])
-        data = {'id': self.id, 'round': "products", 'offer': data}
-        self.sendData(data)
+        if self.root.status["bag"] != "-1":
+            data = "_".join([i for i in self.selected.keys()]) + "|" + "_".join([i for i in self.selected.values()])
+            data = {'id': self.id, 'round': "products", 'offer': data}
+            self.sendData(data)
         super().nextFun()
 
 
@@ -181,7 +182,7 @@ class Product(Label):
         self.config(cursor = "arrow")
 
     def clicked(self, _):
-        name = os.path.basename(self.file)
+        name = os.path.basename(self.file).rstrip(".png")
         folder = os.path.basename(os.path.dirname(self.file))
         self.selected[name] = folder
         self.root.root.root.file.write("\t".join([self.root.root.root.id,

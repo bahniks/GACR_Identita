@@ -86,9 +86,9 @@ class Liking(InstructionsFrame):
             limit = 0.1 if TESTING else 0.5
             if perf_counter() - self.t0 < limit:            
                 return
-
-            left = self.pairs[self.trial - 1][0]
-            right = self.pairs[self.trial - 1][1]            
+            
+            left = self.currentPair[0]
+            right = self.currentPair[1]            
             self.file.write(f"{self.id}\t{self.trial}\t{left}\t{right}\t{answer}\n")
 
             for i in range(len(self.originalPairs)):
@@ -108,8 +108,10 @@ class Liking(InstructionsFrame):
             self.nextFun()
         else:            
             self.trial += 1
-            self.left["text"] = self.pairs[self.trial - 1][0]
-            self.right["text"] = self.pairs[self.trial - 1][1]            
+            self.currentPair = self.pairs[self.trial - 1]
+            random.shuffle(self.currentPair)
+            self.left["text"] = self.currentPair[0]
+            self.right["text"] = self.currentPair[1]            
             self.trialText["text"] = f"Dvojice: {self.trial}/{self.totalTrials}"
             self.t0 = perf_counter()
 

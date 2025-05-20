@@ -21,10 +21,10 @@ charityInstructions = f"""Jako dodatečnou odměnu dáme jednomu z deseti náhod
 
 Nyní Vám úkažeme 10 neziskových organizací s krátkým popiskem, čím se zabývají. Vy můžete určit, kolik peněz byste každé z těchto organizací chtěli dát a kolik si nechat pro sebe v případě, že budete vylosováni. 
 
-Pokud budete vylosováni, tak náhodně vybereme jednu z těchto organizací a rozdělíme peníze mezi Vás a danou organizaci podle rozhodnutí, které učiníte nyní. Jinými slovy, rozhodnutí pro jednotlivé organizace jsou nezávislá. Bude vybrána pouze jedna z těchto organizací a jen podle Vašeho rozhodnutí u dané organizace se budou peníze rozdělovat mezi ní a Vás. Neziskové organizaci pošleme peníze po skončení studie."""
+Pokud budete vylosováni, tak náhodně vybereme jednu z těchto organizací a rozdělíme peníze mezi Vás a danou organizaci podle rozhodnutí, které učiníte nyní. <b>Jinými slovy, rozhodnutí pro jednotlivé organizace jsou nezávislá. Bude vybrána pouze jedna z těchto organizací a jen podle Vašeho rozhodnutí u dané organizace se budou peníze rozdělovat mezi ní a Vás.</b> Neziskové organizaci pošleme peníze po skončení studie."""
 
 
-charityInstructions2 = f"""Pokud budete vylosováni, tak náhodně vybereme jednu z těchto organizací a rozdělíme {CHARITY} Kč mezi Vás a danou organizaci podle rozhodnutí, které učiníte nyní. Pomocí posuvníků níže určete, kolik peněz byste dané organizaci chtěli dát a kolik si nechat pro sebe v případě, že bude náhodně vybrána daná organizace."""
+charityInstructions2 = f"""<b>Pokud budete vylosováni, tak náhodně vybereme jednu z těchto organizací a rozdělíme {CHARITY} Kč mezi Vás a danou organizaci podle rozhodnutí, které učiníte nyní.</b> Pomocí posuvníků níže určete, kolik peněz byste dané organizaci chtěli dát a kolik si nechat pro sebe v případě, že bude náhodně vybrána daná organizace."""
 
 charityNotChosenText = f"""V úloze s výběrem neziskové organizace jste nebyl(a) vylosován(a)."""
 charityChosenText = """V úloze s výběrem neziskové organizace jste byl(a) vylosován(a). Z neziskových organizací byla náhodně vybrána {}. Dle Vaší volby obdržíte {} Kč a organizaci {} po skončení studie pošleme {} Kč."""

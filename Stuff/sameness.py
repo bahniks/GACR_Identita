@@ -86,7 +86,7 @@ class Sameness(InstructionsFrame):
         if URL == "TEST":
             self.people += [0]
         else:
-            pass # TODO
+            self.people += ["REAL"]
         random.shuffle(self.people)
 
         self.distantText = Text(self, font = "helvetica 15", background = "white", relief = "flat", wrap = "word", height = 8, highlightbackground = "white", width = 35)
@@ -144,14 +144,23 @@ class Sameness(InstructionsFrame):
         if self.trial != 0:
             if perf_counter() - self.t0 < limit:
                 return
-            self.file.write(f"{self.id}\t{self.trial}\t{"|".join(self.close)}\t{"|".join(self.distant)}\t{self.valueVar.get()}\n")        
+            value = self.people[self.trial - 1]
+            if value == "REAL":
+                self.root.status["sameness_prediction"] = self.valueVar.get()
+            self.file.write(f"{self.id}\t{self.trial}\t{value}\t{"|".join(self.close)}\t{"|".join(self.distant)}\t{self.valueVar.get()}\n")        
 
         if self.trial == self.totalTrials:
             self.file.write("\n")
             self.nextFun()
         else:
             self.trial += 1
-            self.close, self.distant = createSyntetic(self.people[self.trial - 1])
+            value = self.people[self.trial - 1]
+            if value == "REAL":
+                self.close, self.distant = self.root.status["groups"][0].split("|")
+                self.close = self.close.split("_")
+                self.distant = self.distant.split("_")
+            else:
+                self.close, self.distant = createSyntetic(value)
             self.changeText("\n".join(["<blue><b>Blízké skupiny:</b></blue>",""] + self.close))
             self.distantText["state"] = "normal"
             self.distantText.delete("1.0", "end")            

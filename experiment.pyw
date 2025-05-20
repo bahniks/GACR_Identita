@@ -60,7 +60,7 @@ frames = [Initial,
           Ending
          ]
 
-#frames = [Login, HEXACOinfo]
+
 
 if __name__ == "__main__":
     GUI(frames, load = os.path.exists("temp.json"))

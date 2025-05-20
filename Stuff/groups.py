@@ -78,11 +78,12 @@ class Groups(InstructionsFrame):
         self.file.write("Groups\n")
 
 
-    def write(self):
+    def nextFun(self):
         self.file.write(self.id + "\t" + "_".join(self.chosen) + "\t" + "_".join(self.distant) + "\n")
         data = {'id': self.id, 'round': "groups", 'offer': "_".join(self.chosen) + "|" + "_".join(self.distant)}
         if URL != "TEST":
             self.sendData(data)
+        super().nextFun()
 
 
     def clicked(self, group):
