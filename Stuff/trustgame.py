@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 from time import perf_counter, sleep
+from uuid import uuid4
 
 import random
 import os
@@ -349,10 +350,14 @@ class Wait(InstructionsFrame):
                 if URL == "TEST":                    
                     if self.what == "groups":
                         persons = []
+                        ids = []
                         for i in range(5):
                             value = random.randint(-9, 9)                            
                             persons.append(createSyntetic(value, "string"))                            
-                        response = "~".join(persons)                       
+                            part_id = str(uuid4())
+                            part_id = "test" + str(value + 20) + part_id[6:]
+                            ids.append(part_id)
+                        response = "~".join(persons) + "!" + "_".join(ids)
                     elif self.what == "articles":
                         titles = read_all("articles_others_titles.txt") 
                         articles = random.sample([i for i in range(len(titles))], 3)
@@ -374,16 +379,19 @@ class Wait(InstructionsFrame):
                         response = "_".join(map(str, [self.root.status["trust_pairs"][0], sentA, sentB, favoritism, sameness]))
                 else:
                     try:
-                        data = urllib.parse.urlencode({'id': self.id, 'round': self.what, 'offer': "wait"})                
+                        data = urllib.parse.urlencode({'id': self.id, 'round': "wait", 'offer': self.what})                
                         data = data.encode('ascii')                
                         with urllib.request.urlopen(URL, data = data) as f:
-                            response = f.read().decode("utf-8")       
+                            response = f.read().decode("utf-8")     
+                            print(response)  
                     except Exception as e:
                         continue
 
                 if response:               
                     if self.what == "groups":
-                        self.root.status["groups"] = response.split("~")
+                        persons, ids = response.split("!")
+                        self.root.status["paired_ids"] = ids.split("_")
+                        self.root.status["groups"] = persons.split("~")
                     elif self.what == "articles":
                         self.root.status["otherArticles"] = response.split("_")                        
                     elif self.what == "results":

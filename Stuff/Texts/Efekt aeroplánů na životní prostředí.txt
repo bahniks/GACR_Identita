@@ -1,0 +1,12 @@
+"Letecké motory produkují plyny, hluk a pevné částice ze spalování fosilních paliv, což vyvolává obavy o životní prostředí z hlediska jejich globálních účinků a vlivu na kvalitu ovzduší v daném místě.
+Trysková dopravní letadla přispívají ke změně klimatu emisemi oxidu uhličitého (CO2), nejlépe prozkoumaného skleníkového plynu, a s menším vědeckým pochopením i oxidy dusíku, kondenzačními stopami a pevnými částicemi.
+Jejich radiační působení se odhaduje na 1,3–1,4násobek působení samotného CO2, s výjimkou indukované cirrové oblačnosti s velmi nízkou úrovní vědeckého pochopení.
+V roce 2018 vyprodukovaly globální komerční operace 2,4 % všech emisí CO2.
+Trysková dopravní letadla se mezi lety 1967 a 2007 stala o 70 % palivově úspornější a emise CO2 na jeden tunokilometr (RTK) příjmů v roce 2018 činily 47 % emisí z roku 1990. V roce 2018 činily průměrné emise CO2 88 gramů CO2 na jednoho cestujícího na km.
+Přestože je letecký průmysl palivově úspornější, celkové emise se zvýšily s rostoucím objemem letecké dopravy. Do roku 2020 byly emise z letectví o 70 % vyšší než v roce 2005 a do roku 2050 by mohly vzrůst o 300 %.
+Hluková zátěž z letadel narušuje spánek, vzdělávání dětí a mohla by zvýšit kardiovaskulární riziko.
+Letiště mohou generovat znečištění vody v důsledku rozsáhlé manipulace s leteckým palivem a chemikáliemi pro odmrazování, pokud nejsou zadrženy, a kontaminovat tak okolní vodní toky.
+Letecké aktivity emitují ozon a ultrajemné částice, které jsou zdraví škodlivé. Pístové motory používané ve všeobecném letectví spalují Avgas a uvolňují toxické olovo.
+Environmentální stopu letectví lze snížit lepší spotřebou paliva u letadel nebo optimalizací řízení letového provozu a letových tras s cílem snížit ne-CO2 vlivy na klima z NOx, pevných částic nebo kondenzačních stop.
+Biopaliva pro letectví, obchodování s emisemi a kompenzace uhlíku, které jsou součástí programu ICAO CORSIA, mohou snížit emise CO2. Využívání letectví lze snížit zákazy letů na krátké vzdálenosti, vlakovými spoji, osobními rozhodnutími a zdaněním a dotacemi v letectví. Letadla poháněná palivem mohou být nahrazena hybridními elektrickými letadly a elektrickými letadly nebo letadly poháněnými vodíkem.
+Od roku 2021 plánují členové IATA nulové čisté emise uhlíku do roku 2050, následované ICAO v roce 2022."

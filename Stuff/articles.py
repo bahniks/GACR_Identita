@@ -274,13 +274,6 @@ ArticlesOthers = (Articles, {"who": "others"})
 ArticlesMyself = (Articles, {"who": "myself"})
 
 
-# for i in range(20):
-#     with open(os.path.join(os.getcwd(), "Texts", f"text{i + 1}_envi.txt"), mode = "w") as f:
-#         f.write(f"TEXT ENVI {i + 1}\n")
-#         repeats = random.randint(1,6)
-#         for j in range(repeats):
-#             f.write(f"Toto je envi text {i + 1}\n")
-
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))

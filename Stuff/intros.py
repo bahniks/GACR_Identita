@@ -82,19 +82,13 @@ Pokud kód neznáte, nebo pokud máte jakékoliv dotazy, zvedněte ruku a tiše 
 
 class Ending(InstructionsFrame):
     def __init__(self, root):
-        # root.texts["trust"] = "X"
-        # root.texts["favoritism"] = "X"
-        # root.texts["similarity_correct"] = "X"
-        # root.texts["similarity_reward"] = "X"        
-        # root.texts["reward"] = int(root.texts["lottery_win"]) + PARTICIPATION_FEE # pridat dalsi casti
-
         root.texts["results"] = "\n" + "\n\n".join(root.status["results"]) + "\n"
 
         root.texts["reward"] = str(root.status["reward"])
         root.texts["rounded_reward"] = ceil(root.status["reward"] / 10) * 10
         root.texts["participation_fee"] = PARTICIPATION_FEE
         updates = ["results", "participation_fee", "reward", "rounded_reward"]
-        super().__init__(root, text = ending, keys = ["g", "G"], proceed = False, height = 32, update = updates, width = 100)
+        super().__init__(root, text = ending, keys = ["g", "G"], proceed = False, height = 38, update = updates, width = 100)
         self.file.write("Ending\n")
         self.file.write(self.id + "\t" + str(root.texts["rounded_reward"]) + "\n\n")
 

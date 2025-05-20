@@ -46,7 +46,7 @@ frames = [Initial,
           ProductsIntro,
           Choices,
           InstructionsReading,
-          #ArticlesMyself,     # vratit, az budou pripravene clanky
+          ArticlesMyself,
           InstructionsReadingOthers,
           WaitArticles,          
           ArticlesOthers,

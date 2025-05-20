@@ -78,6 +78,15 @@ class Choices(ExperimentFrame):
             self.t0 = time()            
 
 
+    def nextFun(self):        
+        data = "_".join([i for i in self.selected.keys()]) + "|" + "_".join([i for i in self.selected.values()])
+        data = {'id': self.id, 'round': "products", 'offer': data}
+        self.sendData(data)
+        super().nextFun()
+
+
+
+
 class TwoProducts(Canvas):
     def __init__(self, root):
         super().__init__(root, highlightbackground = "white", highlightcolor = "white", background = "white")
@@ -174,7 +183,7 @@ class Product(Label):
     def clicked(self, _):
         name = os.path.basename(self.file)
         folder = os.path.basename(os.path.dirname(self.file))
-        self.selected[name].append(folder)
+        self.selected[name] = folder
         self.root.root.root.file.write("\t".join([self.root.root.root.id,
                                                   str(self.root.root.root.order + 1),
                                                   self.root.label["text"],

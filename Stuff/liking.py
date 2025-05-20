@@ -70,7 +70,7 @@ class Liking(InstructionsFrame):
         self.t0 = perf_counter()
 
 
-    def write(self):        
+    def send(self):                
         data = {'id': self.id, 'round': "liking", 'offer': "".join(self.originalPairs)}
         if URL != "TEST":
             self.sendData(data)
@@ -90,17 +90,21 @@ class Liking(InstructionsFrame):
             left = self.pairs[self.trial - 1][0]
             right = self.pairs[self.trial - 1][1]            
             self.file.write(f"{self.id}\t{self.trial}\t{left}\t{right}\t{answer}\n")
+
             for i in range(len(self.originalPairs)):
                 search = left if answer == "left" else right
+                if len(self.originalPairs[i]) == 1:
+                    continue
                 if self.originalPairs[i][0] == search:
                     self.originalPairs[i] = "0"
                     break
-                elif self.originalPairs[i][0] == search:
+                elif self.originalPairs[i][1] == search:
                     self.originalPairs[i] = "1"
                     break
 
         if self.trial == self.totalTrials:
             self.file.write("\n")
+            self.send()
             self.nextFun()
         else:            
             self.trial += 1

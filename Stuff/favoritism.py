@@ -72,8 +72,14 @@ class FavoritismFrame(Canvas):
         self.root.changedValue(self.name, self.choice.get())
 
     def addText(self, value):
-        self.close, self.distant = createSyntetic(value)
-        self.value = value        
+        if self.root.trial - 1 == self.root.realTrial:
+            close, distant = value.split("|")
+            self.close = close.split("_")
+            self.distant = distant.split("_")
+            self.value = "R"
+        else:
+            self.close, self.distant = createSyntetic(value)
+            self.value = value        
         self.closeText.config(state=NORMAL)
         self.closeText.delete("1.0", END)
         self.closeText.insert("1.0", "\n".join(["Blízké skupiny:"] + self.close))
@@ -106,14 +112,21 @@ class Favoritism(InstructionsFrame):
         self.totalTrials = 5
         self.trial = 0
 
-        self.people = [] # TODO 
-        for i in range(self.totalTrials):
-            proenvi = random.randint(-7,-3)
-            neutral = random.choice([-2, -1, 1, 2])
-            antienvi = random.randint(4,8)
-            persons = [proenvi, neutral, antienvi]
-            random.shuffle(persons)
-            self.people.append(persons)        
+        self.realOrder = [1, 2, 3]
+        random.shuffle(self.realOrder)
+        realPeople = [self.root.status["groups"][self.realOrder[0]], self.root.status["groups"][self.realOrder[1]], self.root.status["groups"][self.realOrder[2]]]        
+        self.people = []
+        self.realTrial = random.randint(0, self.totalTrials - 1)
+        for i in range(self.totalTrials):           
+            if i == self.realTrial:
+                self.people.append(realPeople)
+            else:
+                proenvi = random.randint(-8,-4)
+                neutral = random.choice([-2, -1, 1, 2])
+                antienvi = random.randint(4,8)
+                persons = [proenvi, neutral, antienvi]
+                random.shuffle(persons)
+                self.people.append(persons)                
   
         self.trialText = ttk.Label(self, text = "", font = "helvetica 15", background = "white", justify = "right")
         self.question = ttk.Label(self, text = qFavoritism, font = "helvetica 15", background = "white", justify = "center")
@@ -149,6 +162,11 @@ class Favoritism(InstructionsFrame):
 
     def nextTrial(self):
         if self.trial != 0:
+            if self.trial == self.realTrial:
+                data = "_".join([self.first.choice.get(), self.second.choice.get(), self.third.choice.get()])
+                data += "|" + "_".join(self.root.status["paired_ids"][i] for i in self.realOrder)
+                data = {'id': self.id, 'round': "favoritism", 'offer': data}
+                self.sendData(data)
             self.write()
 
         if self.trial == self.totalTrials:
@@ -177,7 +195,8 @@ class Favoritism(InstructionsFrame):
         left = self.first.choice.get()
         middle = self.second.choice.get()
         right = self.third.choice.get()
-        self.file.write(f"{self.id}\t{self.trial}\t{leftText}\t{left}\t{middleText}\t{middle}\t{rightText}\t{right}\n")
+        real = self.trial - 1 == self.realTrial
+        self.file.write(f"{self.id}\t{self.trial}\t{leftText}\t{left}\t{middleText}\t{middle}\t{rightText}\t{right}\t{real}\n")
 
 
     def changedValue(self, name, value):                  
@@ -206,6 +225,8 @@ InstructionsFavoritism = (InstructionsFrame, {"text": introFavoritism, "height":
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
+    from trustgame import WaitGroups
     GUI([#InstructionsFavoritism, 
+        WaitGroups,
          Favoritism
          ])

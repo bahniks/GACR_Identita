@@ -41,6 +41,8 @@ class ExperimentFrame(Canvas):
         self.nextFun()
 
     def sendData(self, message, pause = 0.1, trials = -1): 
+        if URL == "http://127.0.0.1:8000/":
+            print(message)
         count = 0           
         while trials != count:
             count += 1
@@ -52,6 +54,8 @@ class ExperimentFrame(Canvas):
                 try:
                     with urllib.request.urlopen(URL, data = data) as f:
                         response = f.read().decode("utf-8")       
+                        if URL == "http://127.0.0.1:8000/":
+                            print(response)
                 except Exception:
                     continue
             if response == "ok":                    
