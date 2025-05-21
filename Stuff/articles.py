@@ -25,7 +25,7 @@ introArticlesOthers = "Nyní Vám budeme ukazovat titulky článků. Jedná se o
 qOthers = "Který z uvedených článků chcete, aby si jiný účastník studie přečetl?"
 
 
-introArticlesMyself = "Nyní Vám budeme ukazovat titulky jiných článků. Jedná se o naučné encyklopedické články. Vaším úkolem bude vybrat z každé dvojice článek, který byste si raději přečetli. Následně budete mít možnost přečíst si z těchto článků tři náhodně vybrané. Tento úkol bude mít opět 30 kol."
+introArticlesMyself = "Nyní Vám budeme ukazovat titulky jiných článků. Jedná se o naučné encyklopedické články. Vaším úkolem bude vybrat z každé dvojice článek, který byste si raději přečetli. Následně budete mít možnost přečíst si z těchto článků tři náhodně vybrané. Tento úkol bude mít opět 24 kol."
 
 qMyself = "Který článek byste si raději chtěl(a) přečíst?"
 
@@ -94,6 +94,8 @@ class Choice(ExperimentFrame):
 
         self.left = Text(self, font = "helvetica 15", relief = "flat", background = "white", width = 50, height = 10, wrap = "word", highlightbackground = "white")
         self.right = Text(self, font = "helvetica 15", relief = "flat", background = "white", width = 50, height = 10, wrap = "word", highlightbackground = "white")
+        self.left.tag_configure("center", justify="center")
+        self.right.tag_configure("center", justify="center")
 
         questionText = qOthers if who == "others" else qMyself
         question = ttk.Label(self, text = questionText, font = "helvetica 15 bold", background = "white", justify = "center")
@@ -125,7 +127,7 @@ class Choice(ExperimentFrame):
 
         
     def chosen(self, choice):
-        limit = 0.2 if TESTING else 0.5
+        limit = 0.1 if TESTING else 0.5
         if perf_counter() - self.t0 < limit:
             return
         chosen = 0 if choice == "A" else 1
@@ -156,8 +158,8 @@ class Choice(ExperimentFrame):
         self.right["state"] = "normal"
         self.left.delete("1.0", "end")
         self.right.delete("1.0", "end")
-        self.left.insert("1.0", self.titles[self.items[self.trial - 1][0]]) 
-        self.right.insert("1.0", self.titles[self.items[self.trial - 1][1]])
+        self.left.insert("1.0", self.titles[self.items[self.trial - 1][0]], "center ") 
+        self.right.insert("1.0", self.titles[self.items[self.trial - 1][1]], "center ")
         self.left["state"] = "disabled" 
         self.right["state"] = "disabled"
 
@@ -185,7 +187,8 @@ class Articles(ExperimentFrame):
 
         self.title = Text(self, font="helvetica 15 bold", relief="flat", background="white", width=80, height=2, wrap="word", highlightbackground="white")
         self.title.tag_configure("center", justify="center")  
-        self.text = Text(self, font="helvetica 15", relief="flat", background="white", width=80, height=15, wrap="word", highlightbackground="white", spacing2 = 5, spacing3 = 20)
+        height = 10 if self.who == "myself" else 12
+        self.text = Text(self, font="helvetica 15", relief="flat", background="white", width=80, height=height, wrap="word", highlightbackground="white", spacing2 = 5, spacing3 = 20)
 
         self.scrollbar = ttk.Scrollbar(self, command=self.on_scroll)  # Bind to custom scroll function
         self.text.config(yscrollcommand=self.scrollbar.set)
@@ -245,7 +248,9 @@ class Articles(ExperimentFrame):
         
     def disable(self):
         self.next["state"] = "disabled"
-        limit = 0.1 if TESTING else 3
+        limit = 0.5 if self.who == "myself" else 2
+        if TESTING:
+            limit = 0.1
         self.after(int(limit * 6000), self.enable)   
         
     def proceed(self):
@@ -277,12 +282,12 @@ ArticlesMyself = (Articles, {"who": "myself"})
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
-    GUI([#InstructionsArticlesOthers, 
-         #ChoiceOthers,      
-         #InstructionsArticlesMyself,
+    GUI([InstructionsArticlesOthers, 
+         ChoiceOthers,      
+         InstructionsArticlesMyself,
          ChoiceMyself,
-         #InstructionsReading,
+         InstructionsReading,
          ArticlesMyself,
-         #InstructionsReadingOthers,
-         #ArticlesOthers  
+         InstructionsReadingOthers,
+         ArticlesOthers  
          ])

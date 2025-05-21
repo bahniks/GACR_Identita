@@ -34,10 +34,10 @@ Bude Vám náhodně přidělena jedna ze dvou rolí: budete buď hráčem A, neb
 
 Předem nebudete vědět, jaká je Vaše role a uvedete tedy rozhodnutí pro obě role.
 
-Tuto úlohu budete hrát v rámci studie celkem pětkrát. Vždy dostanete popis druhého hráče, s kterým hrajete (tj. informaci o tom, jaké skupiny jsou jim blízké). Pouze jeden popis bude nicméně odpovídat skutečnému účastníkovi studie. Zbývající čtyři popisy budou uměle vytvořené. Vaše odměna za úlohu bude záviset pouze na Vaší hře se skutečným účastníkem studie. Ostatní hry Vaší konečnou odměnu nijak neovlivní.
+Tuto úlohu budete hrát v rámci studie celkem sedmkrát. Vždy dostanete popis druhého hráče, s kterým hrajete (tj. informaci o tom, jaké skupiny jsou mu blízké a vzdálené). Alespoň jeden popis bude odpovídat skutečnému účastníkovi studie. Zbývající popisy budou uměle vytvořené. Vaše odměna za úlohu bude záviset pouze na Vaší hře v jednom kole úlohy se skutečným účastníkem studie. Ostatní hry Vaší konečnou odměnu nijak neovlivní.
 
-Na konci studie se dozvíte, jaká byla Vaše role a jaký je celkový výsledek rozhodnutí Vás a druhého účastníka. 
-"""
+Na konci studie se dozvíte, jaká byla Vaše role a jaký je celkový výsledek rozhodnutí Vás a druhého účastníka."""
+
 
 intstuctionsT2a = "Pro účastníka studie, s kterým jste spárován(a), jsou blízké a vzdálené tyto skupiny:"
 
@@ -52,7 +52,6 @@ Předem nebudete vědět, jaká je Vaše role a uvedete tedy rozhodnutí pro ob�
 Svou volbu učiňte posunutím modrých ukazatelů níže.
 
 Až se rozhodnete u všech možností, uveďte pomocí ukazatele, kolik očekáváte, že Vám pošle zpět hráč B, pokud bude náhodně vybráno, že jste hráč A."""
-
 
 
 trustControl1 = "Jaká je role hráče A a hráče B ve studii?"
@@ -201,12 +200,16 @@ class Trust(InstructionsFrame):
             root.status["trustblock"] = 1
             self.groups = {}                
             self.groups["real1"] = root.status["groups"][4]
-            proenvi = random.randint(-8,-4)
+            proenvi = random.randint(-8,-7)
+            proenvi2 = random.randint(-5,-4)
             neutral = random.choice([-2, -1, 1, 2])            
-            antienvi = random.randint(4,8)
+            antienvi = random.randint(7,8)
+            antienvi2 = random.randint(4,5)
             self.groups["proenvi"] = createSyntetic(proenvi, "string")
+            self.groups["proenvi2"] = createSyntetic(proenvi2, "string")
             self.groups["neutral"] = createSyntetic(neutral, "string")
             self.groups["antienvi"] = createSyntetic(antienvi, "string")
+            self.groups["antienvi2"] = createSyntetic(antienvi2, "string")
             if len(root.status["groups"]) == 6:                
                 self.groups["real2"] = self.root.status["groups"][5]
             else:                
@@ -275,6 +278,9 @@ class Trust(InstructionsFrame):
         
         self.groupFrame.grid(row = 0, column = 0, columnspan = 3, pady = 5, sticky = S)
         self.text.grid(row = 1, column = 0, columnspan = 3)
+
+        self.trialLabel = ttk.Label(self, text = "Hra {}/7".format(self.root.status["trustblock"]), font = "helvetica 15", background = "white")
+        self.trialLabel.grid(row = 0, column = 1, columnspan = 3, pady = 15, padx = 20, sticky = NE)
 
         self.deciding = True
 
@@ -448,8 +454,6 @@ WaitResults = (Wait, {"what": "results"})
 WaitArticles = (Wait, {"what": "articles"})
 
 
-#TrustResult = (InstructionsFrame, {"text": "{}", "update": ["trustResult"]})
-
 controlTexts = [[trustControl1, trustAnswers1, trustFeedback1], [trustControl2, trustAnswers2, trustFeedback2], [trustControl3, trustAnswers3, trustFeedback3]]
 IntroTrust = (InstructionsFrame, {"text": instructionsT0, "height": 6, "width": 80, "font": 15})
 InstructionsTrust = (InstructionsAndUnderstanding, {"text": instructionsT1.format(TRUST, TRUST, int(TRUST/5), TRUST) + "\n\n", "height": 20, "width": 100, "name": "Trust Control Questions", "randomize": False, "controlTexts": controlTexts, "fillerheight": 300, "finalButton": "Pokračovat k volbě"})
@@ -462,7 +466,7 @@ if __name__ == "__main__":
          WaitGroups,
          #IntroTrust,
          #InstructionsTrust,
-         Trust, Trust, Trust, Trust, Trust,
+         Trust, Trust, Trust, Trust, Trust, Trust, Trust,
          WaitResults,
          Ending
          ])

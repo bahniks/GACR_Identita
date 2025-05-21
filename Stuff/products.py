@@ -23,9 +23,7 @@ from gui import GUI
 questionText = """Který z dvojice výrobků byste si raději odnesl(a) domů?
 Vyberte kliknutím na obrázek."""
 
-intro = """Blížíme se ke konci tohoto experimentálního sezení. Jako malé poděkování vylosujeme každého desátého respondenta, který vyhraje nad rámec své odměny několik výrobků podle vlastního výběru. 
-
-Nyní Vám postupně ukážeme 15 párů výrobků. U každého páru klikněte na ten výrobek, který by se Vám líbil více. Máte pravděpodobnost 10%, že vyhrajete náhodně vybraných 5 výrobků z těch, které si vyberete. Vybírejte proto prosím pečlivě, později už není možné volbu změnit. 
+intro = """Nyní Vám postupně ukážeme 15 párů výrobků. U každého páru klikněte na ten výrobek, který byste si raději odnesli domů. Máte pravděpodobnost 10%, že vyhrajete náhodně vybraných 5 výrobků z těch, které si vyberete. Vybírejte proto prosím pečlivě, později už není možné volbu změnit. 
 """
 
 notChosenText = """V úloze s výběrem výrobků jste nebyl(a) vylosován(a)."""
@@ -35,7 +33,7 @@ chosenText = """V úloze s výběrem výrobků jste byl(a) vylosován(a). Obdrž
 ##################################################################################################################
 
 
-ProductsIntro =(InstructionsFrame, {"text": intro, "height": 7})
+ProductsIntro = (InstructionsFrame, {"text": intro, "height": 7})
 
 
 class Choices(ExperimentFrame):
@@ -58,6 +56,9 @@ class Choices(ExperimentFrame):
         self.twoProducts = TwoProducts(self)
         self.twoProducts.grid(row = 1, column = 0)
 
+        self.trialText = ttk.Label(self, text = "", font = "helvetica 15", background = "white", justify = "left", width = 15)
+        self.trialText.grid(column = 0, row = 0, pady = 30, padx = 10, sticky = NE)
+
         self.columnconfigure(0, weight = 1)      
         self.rowconfigure(0, weight = 1)
         self.rowconfigure(2, weight = 1)
@@ -66,6 +67,8 @@ class Choices(ExperimentFrame):
         
     def proceed(self):
         self.order += 1
+        self.trialText["text"] = f"Produkt {self.order + 1:>3}/{len(self.infos)}"
+
         if self.order == len(self.infos):
             self.root.status["products"] = self.selected
             if self.root.status["bag"] == "-1":
@@ -96,10 +99,10 @@ class TwoProducts(Canvas):
         self.selected = self.root.selected
             
         self.leftProduct = OneProduct(self)
-        self.leftProduct.grid(column = 1, row = 1, padx = 5)
+        self.leftProduct.grid(column = 1, row = 1, padx = 5, sticky = NSEW)
 
         self.rightProduct = OneProduct(self)
-        self.rightProduct.grid(column = 3, row = 1, padx = 5)
+        self.rightProduct.grid(column = 3, row = 1, padx = 5, sticky = NSEW)
                             
         self.columnconfigure(0, weight = 1)
         self.columnconfigure(2, weight = 1)
@@ -135,13 +138,13 @@ class OneProduct(Canvas):
         self.product = Product(self)
         self.product.grid(column = 1, row = 0)
 
-        self.label = ttk.Label(self, text = "", background = "white", font = "helvetica 15", width = 60, anchor = "center")
+        self.label = ttk.Label(self, text = "", background = "white", font = "helvetica 15 bold", width = 55, anchor = "center")
         self.label.grid(column = 1, row = 1, pady = 8)
         self.bottomLabel = ttk.Label(self, text = "", background = "white", font = "helvetica 15")
         self.bottomLabel.grid(column = 1, row = 2, pady = 4)
 
         self.columnconfigure(0, weight = 1)
-        self.columnconfigure(2, weight = 1)
+        self.columnconfigure(2, weight = 1)         
 
     def changeImage(self, product, description):        
         self.product.changeImage(product + ".png")        
@@ -161,6 +164,8 @@ class OneProduct(Canvas):
 class Product(Label):
     def __init__(self, root):
         super().__init__(root, background = "white", foreground = "white", relief = "flat", borderwidth = 10)
+        self.config(width=460, height=460)
+        self["anchor"] = "center"
 
         self.root = root
         self.selected = self.root.selected

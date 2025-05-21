@@ -29,7 +29,7 @@ intro = """Studie se skládá z několika různých úkolů a otázek. Níže je
 <b>7) Výběr výrobků:</b> Budete si vybírat výrobky, které budete moct získat.
 <b>8) Čtení článků:</b> Budete mít čas si dříve vybrané články přečíst.
 <b>9) Příspěvek charitě:</b> Budete se rozhodovat, zda přispějete na charitu, pokud získáte peníze v loterii.
-<b>10) Loterie:</b> Můžete se rozhodnout zúčastnit se další loterie a získat peníze v závislosti na výsledcích loterie.
+<b>10) Loterie:</b> Můžete se rozhodnout zúčastnit se další loterie a získat peníze v závislosti na výsledcích této loterie.
 <b>11) Konec studie a platba:</b> Poté, co skončíte, půjdete do vedlejší místnosti, kde podepíšete pokladní dokument, na základě kterého obdržíte vydělané peníze v hotovosti. Jelikož v dokumentu bude uvedena pouze celková suma, experimentátor, který Vám bude vyplácet odměnu, nebude vědět, kolik jste vydělali v jednotlivých částech studie.
 
 Veškeré interakce s ostatními účastniky studie proběhnou pouze přes počítač a anonymně. Nikdy nebudete navzájem vědět, s kým v rámci experimentu interagujete.
@@ -46,7 +46,7 @@ Za účast na studii dostáváte {} Kč.
 
 <b>Vaše odměna za tuto studii je tedy dohromady {} Kč, zaokrouhleno na desítky korun nahoru získáváte {} Kč. Napište prosím tuto (zaokrouhlenou) částku do příjmového dokladu na stole před Vámi.</b>
 
-Studie založená na datech získaných v tomto experimentu bude volně dostupná na stránkách Centra laboratorního a experimentálního výzkumu FPH VŠE krátce po vyhodnocení dat a publikaci výsledků. 
+Studie založená na datech získaných v tomto experimentu bude volně dostupná na stránkách Decision Lab Prague (decisionlab.vse.cz) krátce po vyhodnocení dat a publikaci výsledků. 
 
 <b>Žádáme Vás, abyste nesděloval(a) detaily této studie možným účastníkům, aby jejich volby a odpovědi nebyly ovlivněny a znehodnoceny.</b>
   
@@ -54,11 +54,11 @@ Můžete si vzít všechny svoje věci a vyplněný příjmový doklad, a aniž 
 
 Děkujeme za Vaši účast!
  
-Centrum laboratorního a experimentálního výzkumu FPH VŠE""" 
+Decision Lab Prague při FPH VŠE""" 
 
 
 login = """
-Vítejte na výzkumné studii pořádané Fakultou podnikohospodářskou Vysoké školy ekonomické v Praze! 
+Vítejte na výzkumné studii pořádané Fakultou podnikohospodářskou Vysoké školy ekonomické v Praze ve spolupráci s Univerzitou Karlovou! 
 
 Za účast na studii obdržíte {} Kč. Kromě toho můžete vydělat další peníze v průběhu studie. 
 
