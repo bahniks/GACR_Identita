@@ -162,14 +162,14 @@ class Charity(InstructionsFrame):
             self.file.write(f"{self.id}\t{self.charities[i+add]}\t{self.frames[i].valueVar.get()}\t{self.win}\t{chosen}\n")        
 
 
-CharityInstructions = (InstructionsFrame, {"text": charityInstructions, "height": 8, "width": 80, "font": 15})
+CharityInstructions = (InstructionsFrame, {"text": charityInstructions, "height": 16, "width": 80, "font": 15})
 
 
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
     from intros import Ending
-    GUI([#CharityInstructions,
+    GUI([CharityInstructions,
          Charity,
          Ending
          ])

@@ -21,7 +21,7 @@ from constants import TESTING, URL, SAMENESS
 # TEXTS
 
 
-introSameness = f"""Nyní vám ukážeme odpovědi jedenácti osob, z nichž jedna je od dalších účastníků této studie a zbývajících deset je uměle vytvořených. Uvidíte, které skupiny těmto osobám byly blízké a které vzdálené. 
+introSameness = f"""Nyní vám ukážeme odpovědi jedenácti osob, z nichž jedna je od dalšího účastníka této studie a zbývajících deset je uměle vytvořených. Uvidíte, které skupiny těmto osobám byly blízké a které vzdálené. 
 
 Vaším úkolem bude odhadnout, do jaké míry se s těmito lidmi shodujete v tom, co se vám líbí. Pokud bude Váš odhad správný u dalšího účastníka studie, dostanete bonus {SAMENESS} Kč. Za odhady u uměle vytvořených osob žádný bonus nedostáváte. 
 

@@ -36,7 +36,9 @@ Předem nebudete vědět, jaká je Vaše role a uvedete tedy rozhodnutí pro ob�
 
 Tuto úlohu budete hrát v rámci studie celkem sedmkrát. Vždy dostanete popis druhého hráče, s kterým hrajete (tj. informaci o tom, jaké skupiny jsou mu blízké a vzdálené). Alespoň jeden popis bude odpovídat skutečnému účastníkovi studie. Zbývající popisy budou uměle vytvořené. Vaše odměna za úlohu bude záviset pouze na Vaší hře v jednom kole úlohy se skutečným účastníkem studie. Ostatní hry Vaší konečnou odměnu nijak neovlivní.
 
-Na konci studie se dozvíte, jaká byla Vaše role a jaký je celkový výsledek rozhodnutí Vás a druhého účastníka."""
+Na konci studie se dozvíte, jaká byla Vaše role a jaký je celkový výsledek rozhodnutí Vás a druhého účastníka.
+
+Pro ověření pochopení úlohy odpovězte na kontrolní otázky níže."""
 
 
 intstuctionsT2a = "Pro účastníka studie, s kterým jste spárován(a), jsou blízké a vzdálené tyto skupiny:"
@@ -347,7 +349,7 @@ class Trust(InstructionsFrame):
 
 class Wait(InstructionsFrame):
     def __init__(self, root, what):
-        super().__init__(root, text = "", height = 3, font = 15, proceed = False, width = 45)
+        super().__init__(root, text = "Čekejte na ostatní účastníky studie", height = 3, font = 15, proceed = False, width = 45)
         self.progressBar = ttk.Progressbar(self, orient = HORIZONTAL, length = 400, mode = 'indeterminate')
         self.progressBar.grid(row = 2, column = 1, sticky = N)
 
@@ -372,9 +374,10 @@ class Wait(InstructionsFrame):
                             ids.append(part_id)
                         response = "_".join(ids) + "!" + "~".join(persons)
                     elif self.what == "articles":
-                        titles = read_all("articles_others_titles.txt") 
-                        articles = random.sample([i for i in range(len(titles))], 3)
-                        response = "_".join([str(i) for i in articles])
+                        types = random.choices(["envi", "filler", "anti"], k = 3)
+                        nums = random.sample(range(1, 16), 3)
+                        articles = [f"{types[i]}{nums[i]}" for i in range(3)]                                                
+                        response = "_".join(articles)
                     elif self.what == "results":                                        
                         # trustgame
                         if self.root.status["trust_roles"][0] == "A":                        
@@ -396,7 +399,8 @@ class Wait(InstructionsFrame):
                         data = data.encode('ascii')                
                         with urllib.request.urlopen(URL, data = data) as f:
                             response = f.read().decode("utf-8")     
-                            print(response)  
+                            if URL == "http://127.0.0.1:8000/":
+                                print(response)  
                     except Exception as e:
                         continue
 
@@ -406,7 +410,7 @@ class Wait(InstructionsFrame):
                         self.root.status["paired_ids"] = ids.split("_")
                         self.root.status["groups"] = persons.split("~")
                     elif self.what == "articles":
-                        self.root.status["otherArticles"] = response.split("_")                        
+                        self.root.status["othersArticles"] = response.split("_")                        
                     elif self.what == "results":
                         # trustgame
                         pair, sentA, sentB, favoritism, sameness = response.split("_")
@@ -456,7 +460,7 @@ WaitArticles = (Wait, {"what": "articles"})
 
 controlTexts = [[trustControl1, trustAnswers1, trustFeedback1], [trustControl2, trustAnswers2, trustFeedback2], [trustControl3, trustAnswers3, trustFeedback3]]
 IntroTrust = (InstructionsFrame, {"text": instructionsT0, "height": 6, "width": 80, "font": 15})
-InstructionsTrust = (InstructionsAndUnderstanding, {"text": instructionsT1.format(TRUST, TRUST, int(TRUST/5), TRUST) + "\n\n", "height": 20, "width": 100, "name": "Trust Control Questions", "randomize": False, "controlTexts": controlTexts, "fillerheight": 300, "finalButton": "Pokračovat k volbě"})
+InstructionsTrust = (InstructionsAndUnderstanding, {"text": instructionsT1.format(TRUST, TRUST, int(TRUST/5), TRUST) + "\n\n", "height": 22, "width": 100, "name": "Trust Control Questions", "randomize": False, "controlTexts": controlTexts, "fillerheight": 300, "finalButton": "Pokračovat k volbě"})
 
 
 if __name__ == "__main__":

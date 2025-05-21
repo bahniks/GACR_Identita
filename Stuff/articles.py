@@ -62,7 +62,10 @@ class Choice(ExperimentFrame):
             filler = ["filler{}".format(i) for i in range(1, self.total + 1)]
             random.shuffle(envi)
             random.shuffle(filler)
-            self.items = [[i, j] if random.random() < 0.5 else [j, i] for i, j in zip(envi, filler)]            
+            self.items = [[i, j] if random.random() < 0.5 else [j, i] for i, j in zip(envi, filler)]      
+            
+            self.root.status["myselfArticlesTitles"] = self.titles
+            
         else:
             self.root.status["othersArticlesChosen"] = []        
             self.titles = {}
@@ -70,7 +73,8 @@ class Choice(ExperimentFrame):
             t = read_all("articles_others_titles.txt")                        
             for count, title in enumerate(t.split("\n")):      
                 n = count % 16    
-                self.titles[types[count // 16] + str(n + 1)] = title                                
+                self.titles[types[count // 16] + str(n + 1)] = title  
+            self.root.status["othersArticlesTitles"] = self.titles                             
 
             pairs = [["envi", "anti"], ["envi", "filler"], ["anti", "filler"]]
             pairs *= int(self.total / 3)        
@@ -178,14 +182,12 @@ class Articles(ExperimentFrame):
         self.total = 3
         self.trial = 1
 
-        if TESTING and self.who == "myself" and not "myselfArticlesChosen" in self.root.status:
-            self.root.status["articles"] = ["7_anti", "11_filler", "20_envi"]                      
-        if TESTING and self.who == "others" and not "othersArticles" in self.root.status:
-            titles = read_all("articles_others_titles.txt")            
-            self.root.status["othersArticlesTitles"] = random.sample(titles.split("\n"), self.total) 
-        elif "othersArticles" in self.root.status:
-            titles = read_all("articles_others_titles.txt")
-            self.root.status["othersArticlesTitles"] = titles[self.root.status["othersArticles"]]
+        # if TESTING and self.who == "myself" and not "myselfArticlesChosen" in self.root.status:
+        #     self.root.status["articles"] = ["7_anti", "11_filler", "20_envi"]                      
+        if TESTING and self.who == "others":
+            if not "othersArticles" in self.root.status:            
+                self.root.status["othersArticles"] = ["anti10", "envi15", "filler16"]            
+            #self.root.status["othersArticlesTitles"] = self.root.status["othersArticlesTitles"][self.root.status["othersArticles"]]
 
         self.trialText = ttk.Label(self, text=f"Článek: 1/{self.total}", font="helvetica 15 bold", background="white", justify="right")
 
@@ -236,12 +238,13 @@ class Articles(ExperimentFrame):
 
         self.title["state"] = "normal"
         self.title.delete("1.0", "end")
-        self.title.insert("1.0", source[self.trial - 1].replace(".", "\n"), "center")
+        self.chosen = self.root.status["myselfArticlesChosen"][self.trial - 1] if self.who == "myself" else self.root.status["othersArticles"][self.trial - 1]
+        self.title.insert("1.0", source[self.chosen].replace(".", "\n"), "center")
         self.title["state"] = "disabled"
 
         self.text["state"] = "normal"
         self.text.delete("1.0", "end")
-        self.filename = "{}.txt".format(source[self.trial - 1]).replace(":", "_").replace("?", "_").replace("%", "_").replace("„", "_").replace("“", "_").strip()
+        self.filename = "{}.txt".format(source[self.chosen]).replace(":", "_").replace("?", "_").replace("%", "_").replace("„", "_").replace("“", "_").strip()
         with open(os.path.join(os.getcwd(), "Stuff", "Texts", self.filename), encoding = "utf-8") as f:
             self.text.insert("1.0", f.read().strip("'").strip('"').strip())
         self.text["state"] = "disabled"
@@ -258,7 +261,7 @@ class Articles(ExperimentFrame):
         self.after(int(limit * 6000), self.enable)   
         
     def proceed(self):
-        self.file.write("\t".join([self.id, self.who, str(self.trial), self.filename, str(perf_counter() - self.t0), str(self.scrolled), str(self.end)]) + "\n")
+        self.file.write("\t".join([self.id, self.who, str(self.trial), self.chosen, self.filename.rstrip(".txt"), str(perf_counter() - self.t0), str(self.scrolled), str(self.end)]) + "\n")
         self.trial += 1
         if self.trial > self.total:
             self.nextFun()
@@ -286,12 +289,14 @@ ArticlesMyself = (Articles, {"who": "myself"})
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(os.getcwd()))
+    from trustgame import WaitArticles
     GUI([InstructionsArticlesOthers, 
          ChoiceOthers,      
          InstructionsArticlesMyself,
          ChoiceMyself,
          InstructionsReading,
          ArticlesMyself,
+         WaitArticles,
          InstructionsReadingOthers,
          ArticlesOthers  
          ])
