@@ -58,7 +58,7 @@ class CommentFrame(Canvas):
 
     def write(self):
         content = self.text.get("1.0", "end")
-        self.root.file.write(self.root.id + "\t" + content.replace("\n", "  ").replace("\t", " ") + "\n\n")
+        self.root.file.write(self.root.id + "\t" + content.replace("\n", "  ").replace("\t", " ") + "\n")
 
 
 

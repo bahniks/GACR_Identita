@@ -79,7 +79,7 @@ class Groups(InstructionsFrame):
 
 
     def nextFun(self):
-        self.file.write(self.id + "\t" + "_".join(self.chosen) + "\t" + "_".join(self.distant) + "\n")
+        self.file.write(self.id + "\t" + "_".join(self.chosen) + "\t" + "_".join(self.distant) + "\n\n")
         data = {'id': self.id, 'round': "groups", 'offer': "_".join(self.chosen) + "|" + "_".join(self.distant)}
         if URL != "TEST":
             self.sendData(data)
