@@ -9,6 +9,7 @@ from collections import defaultdict
 
 import random
 import os
+import copy
 import urllib.request
 import urllib.parse
 
@@ -38,8 +39,8 @@ class Liking(InstructionsFrame):
         self.maximum = 30
 
         with open(os.path.join(os.getcwd(), "Stuff", "pairs.txt"), "r", encoding="utf-8") as file:
-            self.pairs = [line.strip().split(" ") for line in file]
-        self.originalPairs = self.pairs.copy()
+            self.pairs = [line.strip().split(" ") for line in file]        
+        self.originalPairs = copy.deepcopy(self.pairs)
         random.shuffle(self.pairs)
    
         self.trialText = ttk.Label(self, text = "", font = "helvetica 15", background = "white", justify = "right")

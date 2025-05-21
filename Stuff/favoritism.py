@@ -162,7 +162,7 @@ class Favoritism(InstructionsFrame):
 
     def nextTrial(self):
         if self.trial != 0:
-            if self.trial == self.realTrial:
+            if self.trial == self.realTrial + 1:
                 data = "_".join([self.first.choice.get(), self.second.choice.get(), self.third.choice.get()])
                 data = data.replace("ignore", "0").replace("add", f"{FAVORITISM}").replace("remove", f"-{FAVORITISM}")
                 data += "|" + "_".join(self.root.status["paired_ids"][i] for i in self.realOrder)

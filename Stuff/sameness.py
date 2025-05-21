@@ -147,7 +147,7 @@ class Sameness(InstructionsFrame):
             value = self.people[self.trial - 1]
             if value == "REAL":
                 self.root.status["sameness_prediction"] = self.valueVar.get()
-            self.file.write(f"{self.id}\t{self.trial}\t{value}\t{"|".join(self.close)}\t{"|".join(self.distant)}\t{self.valueVar.get()}\n")        
+            self.file.write(f'{self.id}\t{self.trial}\t{value}\t{"|".join(self.close)}\t{"|".join(self.distant)}\t{self.valueVar.get()}\n')        
 
         if self.trial == self.totalTrials:
             self.file.write("\n")

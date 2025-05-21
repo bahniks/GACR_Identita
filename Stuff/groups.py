@@ -20,11 +20,11 @@ from constants import TESTING, URL
 # TEXTS
 NUMGROUPS = 5
 
-closeText = f"""Ze skupin níže vyberte kliknutím na tlačítko {NUMGROUPS} skupin, které jsou Vám nejbližší.
-(Dalším kliknutím na tlačítko můžete volbu zrušit.)"""
+closeText = f"""<center>Ze skupin níže vyberte kliknutím na tlačítko {NUMGROUPS} skupin, které jsou Vám nejbližší.
+(Dalším kliknutím na tlačítko můžete volbu zrušit.)</center>"""
 
-distantText = f"""Nyní ze skupin níže vyberte kliknutím na tlačítko {NUMGROUPS} skupin, které jsou Vám nejvzdálenější.
-(Dalším kliknutím na tlačítko můžete volbu zrušit.)"""
+distantText = f"""<center>Nyní ze skupin níže vyberte kliknutím na tlačítko {NUMGROUPS} skupin, které jsou Vám nejvzdálenější.
+(Dalším kliknutím na tlačítko můžete volbu zrušit.)</center>"""
 
 remainingText = "Zbývá vybrat skupin: {}"
 

@@ -30,9 +30,13 @@ introArticlesMyself = "Nyní Vám budeme ukazovat titulky jiných článků. Jed
 qMyself = "Který článek byste si raději chtěl(a) přečíst?"
 
 
-introReading = "Nyní máte možnost přečíst si tři náhodně vybrané články z těch, které jste si vybrali dříve."
+introReading = """Nyní máte možnost přečíst si tři náhodně vybrané články z těch, které jste si vybrali dříve.
+Na tyto články se již dále nebudeme ptát a na jejich přečtení nijak nezávisí Vaše odměna.
+Tlačítko Pokračovat se automaticky aktivuje po 30 vteřinách."""
 
-introReadingOthers = "Nyní máte možnost si přečíst náhodně vybrané články, které vybrali ostatní účastníci studie."
+introReadingOthers = """Nyní máte možnost si přečíst náhodně vybrané články, které vybrali ostatní účastníci studie.
+Na tyto články se již dále nebudeme ptát a na jejich přečtení nijak nezávisí Vaše odměna.
+Tlačítko Pokračovat se automaticky aktivuje po 2 minutách."""
 
 ################################################################################
 

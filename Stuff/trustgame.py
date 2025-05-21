@@ -211,7 +211,7 @@ class Trust(InstructionsFrame):
             self.groups["antienvi"] = createSyntetic(antienvi, "string")
             self.groups["antienvi2"] = createSyntetic(antienvi2, "string")
             if len(root.status["groups"]) == 6:                
-                self.groups["real2"] = self.root.status["groups"][5]
+                self.groups["real2"] = root.status["groups"][5]
             else:                
                 neutral2 = random.choice([-2, -1, 1, 2])                
                 self.groups["neutral2"] = createSyntetic(neutral2, "string")                        
