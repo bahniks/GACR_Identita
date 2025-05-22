@@ -1,6 +1,0 @@
-TEXT ENVI 17
-Toto je envi text 17
-Toto je envi text 17
-Toto je envi text 17
-Toto je envi text 17
-Toto je envi text 17

@@ -24,7 +24,7 @@ from sameness import createSyntetic
 
 introFavoritism = f"""V rámci této úlohy dostanete Vy i všichni ostatní účastníci studie počáteční bonus {FAVORITISM*3} Kč.
 
-V této úloze dostanete popis pěti trojic osob (tj. informaci o tom, jaké skupiny jsou jim blízké a vzdálené). U každé trojice vyberete jednu osobu, které přidělíte {FAVORITISM} Kč, a jednu, které {FAVORITISM} Kč odeberete. Ze sedmi trojic bude jedna trojice odpovídat skutečné trojici dalších účastníků výzkumu a zbývající trojice budou uměle vytvořené. Pouze u trojice skutečných účastníků studie budou peníze na základě Vašich voleb skutečně přiděleny či odebrány.
+V této úloze dostanete popis sedmi trojic osob (tj. informaci o tom, jaké skupiny jsou jim blízké a vzdálené). U každé trojice vyberete jednu osobu, které přidělíte {FAVORITISM} Kč, a jednu, které {FAVORITISM} Kč odeberete. Zbývající osobě se odměna nezmění. Ze sedmi trojic bude jedna trojice odpovídat skutečné trojici dalších účastníků výzkumu a zbývající trojice budou uměle vytvořené. Pouze u trojice skutečných účastníků studie budou peníze na základě Vašich voleb skutečně přiděleny či odebrány.
 
 Váš popis bude podobně zobrazen u třech dalších účastníků studie. Na základě jejich voleb tedy za tuto úlohu dostanete celkem 0-{FAVORITISM*6} Kč k odměně. Výši této odměny se dozvíte na konci studie."""
 
@@ -58,7 +58,7 @@ class FavoritismFrame(Canvas):
 
         ttk.Style().configure("TRadiobutton", background = "white", font = "helvetica 15")
         self.add = ttk.Radiobutton(self, text = f"Přidělit {FAVORITISM} Kč", variable = self.choice, value = "add", command = self.clicked)
-        self.ignore = ttk.Radiobutton(self, text = "", variable = self.choice, value = "ignore", command = self.clicked)
+        self.ignore = ttk.Radiobutton(self, text = "      "*3, variable = self.choice, value = "ignore", command = self.clicked)
         self.remove = ttk.Radiobutton(self, text = f"Odebrat {FAVORITISM} Kč", variable = self.choice, value = "remove", command = self.clicked)
 
         self.label.grid(column = 0, row = 0, pady = 10)
@@ -219,7 +219,7 @@ class Favoritism(InstructionsFrame):
 
 
 
-InstructionsFavoritism = (InstructionsFrame, {"text": introFavoritism, "height": 11})
+InstructionsFavoritism = (InstructionsFrame, {"text": introFavoritism, "height": 12})
 
 
 

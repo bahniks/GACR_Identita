@@ -1,6 +1,0 @@
-TEXT ENVI 10
-Toto je envi text 10
-Toto je envi text 10
-Toto je envi text 10
-Toto je envi text 10
-Toto je envi text 10

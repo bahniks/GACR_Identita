@@ -13,6 +13,7 @@ import os
 
 from common import ExperimentFrame, InstructionsFrame, read_all, Measure
 from gui import GUI
+from constants import TESTING
 
 
 
@@ -144,7 +145,7 @@ class OneProduct(Canvas):
         self.bottomLabel.grid(column = 1, row = 2, pady = 4)
 
         self.columnconfigure(0, weight = 1)
-        self.columnconfigure(2, weight = 1)         
+        self.columnconfigure(2, weight = 1) 
 
     def changeImage(self, product, description):        
         self.product.changeImage(product + ".png")        
@@ -172,13 +173,14 @@ class Product(Label):
 
         self.bind("<Enter>", self.entered)
         self.bind("<Leave>", self.left)
-        self.bind("<1>", self.clicked)
+        self.bind("<1>", self.clicked)        
 
     def changeImage(self, file):
         file = os.path.join(os.path.dirname(__file__), "Products", file)        
         self.image = PhotoImage(file = file)
         self["image"] = self.image
         self.file = file
+        self.t0 = perf_counter()        
 
     def entered(self, _):
         self.config(cursor = "hand2")
@@ -187,6 +189,9 @@ class Product(Label):
         self.config(cursor = "arrow")
 
     def clicked(self, _):
+        if not TESTING:
+            if perf_counter() - self.t0 < 0.2:            
+                return
         name = os.path.basename(self.file).rstrip(".png")
         folder = os.path.basename(os.path.dirname(self.file))
         self.selected[name] = folder

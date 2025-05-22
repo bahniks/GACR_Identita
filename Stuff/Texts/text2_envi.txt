@@ -1,6 +1,0 @@
-TEXT ENVI 2
-Toto je envi text 2
-Toto je envi text 2
-Toto je envi text 2
-Toto je envi text 2
-Toto je envi text 2

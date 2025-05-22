@@ -6,8 +6,8 @@ CHARITY = 200
 
 
 AUTOFILL = False
-TESTING = False
+TESTING = True
 GOTHROUGH = False
-URL = "https://dlab-bahnik.pythonanywhere.com/"
-#URL = "TEST"
+#URL = "https://dlab-bahnik.pythonanywhere.com/"
+URL = "TEST"
 #URL = "http://127.0.0.1:8000/"

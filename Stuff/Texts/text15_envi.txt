@@ -1,4 +1,0 @@
-TEXT ENVI 15
-Toto je envi text 15
-Toto je envi text 15
-Toto je envi text 15

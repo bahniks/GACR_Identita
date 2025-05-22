@@ -25,7 +25,7 @@ intro = """Studie se skládá z několika různých úkolů a otázek. Níže je
 <b>3) Články:</b> Budete vybírat články pro přečtení.
 <b>4) Dělení peněz:</b> Budete se rozhodovat, jak dělit peníze v páru s jiným účastníkem studie.
 <b>5) Přidělování peněz:</b> Budete rozdělovat peníze mezi další účastníky studie. V tomto úkolu můžete od ostatních účastníků získat peníze.
-<b>6) Podobnost:</b> Budete hodnotit, nakolik jsou Vám další účastníci studie podobní.
+<b>6) Podobnost:</b> Budete hodnotit, nakolik jsou Vám další účastníci studie podobní. V tomto úkolu můžete také získat peníze.
 <b>7) Výběr výrobků:</b> Budete si vybírat výrobky, které budete moct získat.
 <b>8) Čtení článků:</b> Budete mít čas si dříve vybrané články přečíst.
 <b>9) Příspěvek charitě:</b> Budete se rozhodovat, zda přispějete na charitu, pokud získáte peníze v loterii.
@@ -57,21 +57,22 @@ Děkujeme za Vaši účast!
 Decision Lab Prague při FPH VŠE""" 
 
 
-login = """
-Vítejte na výzkumné studii pořádané Fakultou podnikohospodářskou Vysoké školy ekonomické v Praze ve spolupráci s Univerzitou Karlovou! 
+login = """Vítejte na výzkumné studii pořádané Fakultou podnikohospodářskou Vysoké školy ekonomické v Praze ve spolupráci s Univerzitou Karlovou! 
 
 Za účast na studii obdržíte {} Kč. Kromě toho můžete vydělat další peníze v průběhu studie. 
 
 Studie bude trvat cca 50-70 minut.
 
-Děkujeme, že jste vypnul(a) svůj mobilní telefon, a že nebudete s nikým komunikovat v průběhu studie. Pokud s někým budete komunikovat nebo pokud budete nějakým jiným způsobem narušovat průběh studie, budete požádán(a), abyste opustil(a) laboratoř, bez nároku na vyplacení peněz.
-
-Pokud jste již tak neučinil(a), přečtěte si informovaný souhlas a pokud s ním budete souhlasit, podepište ho. 
-
-Do textového pole níže zadejte Váš kód, který jste obdržel(a) mailem a uvedl(a) v rámci dotazníkového šetření. Poté klikněte na tlačítko pokračovat.
+Do textového pole níže zadejte Váš kód, který jste obdržel(a) mailem a uvedl(a) v rámci dotazníkového šetření. 
 
 Pokud kód neznáte, nebo pokud máte jakékoliv dotazy, zvedněte ruku a tiše vyčkejte příchodu výzkumného asistenta.
-""".format(PARTICIPATION_FEE)
+
+Děkujeme, že jste vypnul(a) svůj mobilní telefon, a že nebudete s nikým komunikovat v průběhu studie. Pokud s někým budete komunikovat nebo pokud budete nějakým jiným způsobem narušovat průběh studie, budete požádán(a), abyste opustil(a) laboratoř, bez nároku na vyplacení peněz.
+
+Přečtěte si prosím informovaný souhlas a pokud s ním budete souhlasit, podepište ho. 
+
+Pro přihlášení ke studii klikněte na tlačítko pokračovat.""".format(PARTICIPATION_FEE)
+
 
 
 ################################################################################

@@ -1,2 +1,0 @@
-TEXT ENVI 8
-Toto je envi text 8

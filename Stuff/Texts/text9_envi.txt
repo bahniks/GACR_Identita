@@ -1,6 +1,0 @@
-TEXT ENVI 9
-Toto je envi text 9
-Toto je envi text 9
-Toto je envi text 9
-Toto je envi text 9
-Toto je envi text 9

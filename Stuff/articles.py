@@ -100,8 +100,8 @@ class Choice(ExperimentFrame):
         leftLabel = ttk.Label(self, text = "Článek A", font = "helvetica 15 bold", background = "white", justify = "center")
         rightLabel = ttk.Label(self, text = "Článek B", font = "helvetica 15 bold", background = "white", justify = "center")
 
-        self.left = Text(self, font = "helvetica 15", relief = "flat", background = "white", width = 50, height = 10, wrap = "word", highlightbackground = "white")
-        self.right = Text(self, font = "helvetica 15", relief = "flat", background = "white", width = 50, height = 10, wrap = "word", highlightbackground = "white")
+        self.left = Text(self, font = "helvetica 15", relief = "flat", background = "white", width = 50, height = 6, wrap = "word", highlightbackground = "white")
+        self.right = Text(self, font = "helvetica 15", relief = "flat", background = "white", width = 50, height = 6, wrap = "word", highlightbackground = "white")
         self.left.tag_configure("center", justify="center")
         self.right.tag_configure("center", justify="center")
 
@@ -114,12 +114,12 @@ class Choice(ExperimentFrame):
 
         self.trialText.grid(column = 3, columnspan = 2, row = 0, pady = 30, padx = 30, sticky = NE)
 
-        leftLabel.grid(column = 1, row = 1, pady = 10)
-        rightLabel.grid(column = 3, row = 1, pady = 10)
+        leftLabel.grid(column = 1, row = 2, pady = 10)
+        rightLabel.grid(column = 3, row = 2, pady = 10)
 
-        self.left.grid(column = 1, row = 2)
-        self.right.grid(column = 3, row = 2)
-        question.grid(column = 1, row = 3, columnspan = 3, pady = 30)
+        self.left.grid(column = 1, row = 3)
+        self.right.grid(column = 3, row = 3)
+        question.grid(column = 1, row = 1, columnspan = 3, pady = 30)
         leftChoice.grid(column = 1, row = 4, pady = 20)
         rightChoice.grid(column = 3, row = 4, pady = 20)
 
@@ -258,7 +258,7 @@ class Articles(ExperimentFrame):
         limit = 0.5 if self.who == "myself" else 2
         if TESTING:
             limit = 0.1
-        self.after(int(limit * 6000), self.enable)   
+        self.after(int(limit * 60000), self.enable)   
         
     def proceed(self):
         self.file.write("\t".join([self.id, self.who, str(self.trial), self.chosen, self.filename.rstrip(".txt"), str(perf_counter() - self.t0), str(self.scrolled), str(self.end)]) + "\n")

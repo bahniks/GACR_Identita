@@ -26,6 +26,8 @@ Pokud budete vylosováni, tak náhodně vybereme jednu z těchto organizací a r
 
 charityInstructions2 = f"""<b>Pokud budete vylosováni, tak náhodně vybereme jednu z organizací zobrazených na této nebo další obrazovce a rozdělíme {CHARITY} Kč mezi Vás a danou organizaci podle rozhodnutí, které učiníte nyní.</b> Pomocí posuvníků níže určete, kolik peněz byste dané organizaci chtěli dát a kolik si nechat pro sebe v případě, že bude náhodně vybrána daná organizace."""
 
+charityInstructions2b = f"""<b>Pokud budete vylosováni, tak náhodně vybereme jednu z organizací zobrazených na této nebo předchozí obrazovce a rozdělíme {CHARITY} Kč mezi Vás a danou organizaci podle rozhodnutí, které učiníte nyní.</b> Pomocí posuvníků níže určete, kolik peněz byste dané organizaci chtěli dát a kolik si nechat pro sebe v případě, že bude náhodně vybrána daná organizace."""
+
 charityNotChosenText = f"""V úloze s výběrem neziskové organizace jste nebyl(a) vylosován(a)."""
 charityChosenText = """V úloze s výběrem neziskové organizace jste byl(a) vylosován(a). Z neziskových organizací byla náhodně vybrána {}. Dle Vaší volby obdržíte {} Kč a organizaci {} po skončení studie pošleme {} Kč."""
 
@@ -116,7 +118,7 @@ class Charity(InstructionsFrame):
         self.frames = {}
         for i in range(len(self.charities)//2):          
             self.frames[i] = ScaleFrame(self, maximum = CHARITY, charity = self.charities[i], description = self.descriptions[i])            
-            self.frames[i].grid(column = 1, row = i + 2, pady = 1, sticky = W)
+            self.frames[i].grid(column = 1, row = i + 2, pady = 2, sticky = W)
             self.rowconfigure(i + 2, weight = 1)
             
         self.next.grid(column = 0, row = 20, columnspan = 3, pady = 10, sticky = N)            
@@ -138,10 +140,17 @@ class Charity(InstructionsFrame):
         self.write()
         if self.first:
             self.first = False
+            self.text["state"] = "normal"
+            self.text.delete("1.0", "end")
+            self.text.insert("1.0", charityInstructions2b)
+            self.addStandardTags()
+            self.text["state"] = "disabled"
             add = len(self.charities)//2
+
             for i in range(len(self.charities)//2):          
+                self.frames[i].destroy()
                 self.frames[i] = ScaleFrame(self, maximum = CHARITY, charity = self.charities[i+add], description = self.descriptions[i+add])            
-                self.frames[i].grid(column = 1, row = i + 2, pady = 1, sticky = W)            
+                self.frames[i].grid(column = 1, row = i + 2, pady = 2, sticky = W)            
         else:
             if not self.win:
                 self.root.status["results"] += [charityNotChosenText]

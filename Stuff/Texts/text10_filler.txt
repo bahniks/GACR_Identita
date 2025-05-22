@@ -1,2 +1,0 @@
-TEXT FILLER 10
-Toto je filler text 10

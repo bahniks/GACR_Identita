@@ -64,7 +64,7 @@ def createSyntetic(value, output = "lists"):
     elif value < 0:
         close = random.sample(neutral, 5 - v[0]) + random.sample(antienvironmental, v[0])
         neutral = [group for group in neutral if group not in close]
-        distant = random.sample(proenvironmental, 5 - v[1]) + random.sample(neutral, v[1])
+        distant = random.sample(proenvironmental, v[1]) + random.sample(neutral, 5 - v[1])
 
     if output == "lists":
         return(close, distant)

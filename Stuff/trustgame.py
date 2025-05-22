@@ -32,7 +32,7 @@ Bude Vám náhodně přidělena jedna ze dvou rolí: budete buď hráčem A, neb
 <i>Hráč A:</i> Má možnost poslat hráči B od 0 do {} Kč (po {} Kč). Poslaná částka se ztrojnásobí a obdrží ji hráč B.
 <i>Hráč B:</i> Může poslat zpět hráči A jakékoli množství peněz získaných v této úloze, tedy úvodních {} Kč a ztrojnásobenou částku poslanou hráčem A.
 
-Předem nebudete vědět, jaká je Vaše role a uvedete tedy rozhodnutí pro obě role.
+Předem nebudete vědět, jaká je Vaše role a uvedete tedy rozhodnutí pro obě role. Protože nebudete předem vědět, jak by se rozhodl druhý účastník jako hráč A, budete uvádět své volby pro různé možnosti jeho rozhodnutí.
 
 Tuto úlohu budete hrát v rámci studie celkem sedmkrát. Vždy dostanete popis druhého hráče, s kterým hrajete (tj. informaci o tom, jaké skupiny jsou mu blízké a vzdálené). Alespoň jeden popis bude odpovídat skutečnému účastníkovi studie. Zbývající popisy budou uměle vytvořené. Vaše odměna za úlohu bude záviset pouze na Vaší hře v jednom kole úlohy se skutečným účastníkem studie. Ostatní hry Vaší konečnou odměnu nijak neovlivní.
 
@@ -44,7 +44,7 @@ Pro ověření pochopení úlohy odpovězte na kontrolní otázky níže."""
 intstuctionsT2a = "Pro účastníka studie, s kterým jste spárován(a), jsou blízké a vzdálené tyto skupiny:"
 
 
-instructionsT2 = """On(a) podobně bude vědět, jaké skupiny jsou blízké a vzdálené Vám.
+instructionsT2 = """On podobně bude vědět, jaké skupiny jsou blízké a vzdálené Vám.
 
 <i>Hráč A:</i> Má možnost poslat hráči B od 0 do {} Kč (po {} Kč). Poslaná částka se ztrojnásobí a obdrží ji hráč B.
 <i>Hráč B:</i> Může poslat zpět hráči A jakékoli množství peněz získaných v této úloze, tedy úvodních {} Kč a ztrojnásobenou částku poslanou hráčem A.
@@ -60,7 +60,7 @@ trustControl1 = "Jaká je role hráče A a hráče B ve studii?"
 trustAnswers1 = ["Hráč A rozhoduje, kolik vezme hráči B peněz a hráč B se rozhoduje, kolik vezme hráči A peněz na oplátku.",
 "Hráč A rozhoduje, kolik hráči B pošle peněz. Poslané peníze se ztrojnásobí a hráč B může poslat hráči A\njakékoli množství dostupných peněz zpět.", 
 "Hráči A a B se rozhodují, kolik si navzájem pošlou peněz. Transfer peněz mezi nimi je dán rozdílem poslaných peněz.", 
-"Hráč A se rozhoduje, kolik hráči B pošle peněz. Poslané peníze se ztrojnásobí. Hráč B může vzít hráči A\njakékoli množství zbylých peněz."]
+"Hráč A se rozhoduje, kolik hráči B pošle peněz. Poslané peníze se ztrojnásobí. Hráč B může vzít hráči A\njakékoli množství peněz, které hráči A zůstaly."]
 trustFeedback1 = ["Chybná odpověď. Hráč A rozhoduje, kolik hráči B pošle peněz. Poslané peníze se ztrojnásobí a hráč B může poslat hráči B jakékoli množství dostupných peněz zpět.", 
 "Správná odpověď.", "Chybná odpověď. Hráč A rozhoduje, kolik hráči B pošle peněz. Poslané peníze se ztrojnásobí a hráč B může poslat hráči B jakékoli množství dostupných peněz zpět.", 
 "Chybná odpověď. Hráč A rozhoduje, kolik hráči B pošle peněz. Poslané peníze se ztrojnásobí a hráč B může poslat hráči B jakékoli množství dostupných peněz zpět."]

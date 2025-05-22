@@ -1,2 +1,0 @@
-TEXT ENVI 5
-Toto je envi text 5

@@ -1,7 +1,0 @@
-TEXT ENVI 4
-Toto je envi text 4
-Toto je envi text 4
-Toto je envi text 4
-Toto je envi text 4
-Toto je envi text 4
-Toto je envi text 4

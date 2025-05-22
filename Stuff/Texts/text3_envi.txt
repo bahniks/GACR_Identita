@@ -1,5 +1,0 @@
-TEXT ENVI 3
-Toto je envi text 3
-Toto je envi text 3
-Toto je envi text 3
-Toto je envi text 3
