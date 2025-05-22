@@ -1,15 +1,15 @@
-burakovemaslo	Alnatura bio arašídové máslo, 250 g	Grizly arašídový krém, 250 g
-ovocnatycinka	Bio tyèinka jablko & banán, 25 g	Nutrend ovocná tyèinka banán a jablko, 30 g
-horkacokolada	Ivoria bio hoøká èokoláda 85% , 100 g	Casino Hoøká èokoláda 85%, 100 g
-vlocky	Alnatura bio vloèky ovesné jemné, 500 g	Emco ovesné vloèky jemné, 500 g
-instantnikava	Bio instantní káva Klassik, 100 g	Casino Instantní káva, 100 g
-pistacie	Bio pistácie pražené, solené, 200 g	Grizly pistácie pražené, solené, 250 g
-pesto	Bio pesto bazalka a kešu, 190 g	Franz Josef Kaiser Bazalkové pesto alla Genovese, 190 g
-matovycaj	Cotterley bio mátový èaj, 20 ks	Leros èajová náruè - máta, 20 ks
-pennetestoviny	Bio tìstoviny penne, 500 g	Adriana penne tìstoviny, 500 g
-cokoladovatycinka	Tyèinka s mléènou èokoládou a keksy, 37,5 g	Lindt Nocciolatte èokoládová tyèinka, 35 g
-mletakava	Casino bio 100% Arabika mletá káva, 250 g	Casino káva pure Arabica, 250 g
-galetky	St.Michel bio galetky máslové, 130 g	St.Michel velké galetky s moøskou solí, 150 g
-kokosovatycinka	Alnatura bio tyèinka kokosová v mléèné èokoládì, 2x20 g	Bounty kokosová tyèinka v mléèné èokoládì, 57 g
-precliky	Bio preclíky se solí bezlepkové, 80 g	Boehli preclíky, 100 g
-dzem	Paquito bio džem jahodový 55%, 360 g	Bonne Maman jahodový džem extra, 370 g
+burakovemaslo	Alnatura bio ara??dov? m?slo, 250 g	Grizly ara??dov? kr?m, 250 g
+ovocnatycinka	Bio ty?inka jablko & ban?n, 25 g	Nutrend ovocn? ty?inka ban?n a jablko, 30 g
+horkacokolada	Ivoria bio ho?k? ?okol?da 85%, 100 g	Casino Ho?k? ?okol?da 85%, 100 g
+vlocky	Alnatura bio vlo?ky ovesn? jemn?, 500 g	Emco ovesn? vlo?ky jemn?, 500 g
+instantnikava	Bio instantn? k?va Klassik, 100 g	Casino Instantn? k?va, 100 g
+pistacie	Bio pist?cie pra?en?, solen?, 200 g	Grizly pist?cie pra?en?, solen?, 250 g
+pesto	Bio pesto bazalka a ke?u, 190 g	Franz Josef Kaiser Bazalkov? pesto alla Genovese, 190 g
+matovycaj	Cotterley bio m?tov? ?aj, 20 ks	Leros ?ajov? n?ru? - m?ta, 20 ks
+pennetestoviny	Bio t?stoviny penne, 500 g	Adriana penne t?stoviny, 500 g
+cokoladovatycinka	Ty?inka s ml??nou ?okol?dou a keksy, 37,5 g	Lindt Nocciolatte ?okol?dov? ty?inka, 35 g
+mletakava	Casino bio 100% Arabika mlet? k?va, 250 g	Casino k?va pure Arabica, 250 g
+galetky	St.Michel bio galetky m?slov?, 130 g	St.Michel velk? galetky s mo?skou sol?, 150 g
+kokosovatycinka	Alnatura bio ty?inka kokosov? v ml??n? ?okol?d?, 2x20 g	Bounty kokosov? ty?inka v ml??n? ?okol?d?, 57 g
+precliky	Bio precl?ky se sol? bezlepkov?, 80 g	Boehli precl?ky, 100 g
+dzem	Paquito bio d?em jahodov? 55%, 360 g	Bonne Maman jahodov? d?em extra, 370 g

@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Set specific encoding and line endings for products.txt
+Stuff/products.txt text eol=lf working-tree-encoding=UTF-8
