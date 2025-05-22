@@ -40,7 +40,7 @@ class Choices(ExperimentFrame):
     def __init__(self, root):
         super().__init__(root)
 
-        with open(os.path.join(os.path.dirname(__file__), "products.txt")) as f:
+        with open(os.path.join(os.path.dirname(__file__), "products.txt"), encoding = "utf-8") as f:
             self.infos = [line.rstrip().split("\t") for line in f]
         random.shuffle(self.infos)
 
