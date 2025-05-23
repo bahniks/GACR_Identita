@@ -1,100 +1,73 @@
 import os
+import itertools
 
 
-studies = {"Login": ("id", "condition","reward_order", "token", "winning_block", "winning_trust", "roles", "pairs", "hexaco_id"),
-           "Cheating Instructions Control Questions": ("id", "item", "answer"),
-           "Cheating 1": ("id", "block", "trial", "version", "condition", "roll", "prediction", "report", "reward", "time", "time1", "time2"), 
-           "Cheating 2": ("id", "block", "trial", "version", "condition", "roll", "prediction", "report", "reward", "time", "time1", "time2"), 
-           "Selection": ("id", "block", "choice"),
-           "Cheating 3": ("id", "block", "trial", "version", "condition", "roll", "prediction", "report", "reward", "time", "time1", "time2"),
-           "Trust Control Questions": ("id", "item", "answer"),  
-           "Trust": ("id", "block", "pair", "role", "condition", "reward_order", "endowment", "return0", "return1", "return2", "return3", "return4", "return5", "sent"),
-           "Trust Results": ("id", "block", "sent", "returned"),
-           "Cheating 4 Control Question": ("id", "item", "answer"),                      
-           "Selection": ("id", "block", "choice"),
-           "Cheating 4": ("id", "block", "trial", "version", "condition", "roll", "prediction", "report", "reward", "time", "time1", "time2"),
-           "Cheating Results": ("id", "block", "outcome", "wins", "reward", "version"),
-           "Trust": ("id", "block", "pair", "role", "condition", "reward_order", "endowment", "return0", "return1", "return2", "return3", "return4", "return5", "sent"),
-           "Trust Results": ("id", "block", "sent", "returned"),        
-           "Selection": ("id", "block", "choice"),   
-           "Cheating 5": ("id", "block", "trial", "version", "condition", "roll", "prediction", "report", "reward", "time", "time1", "time2"),
-           "Cheating Results": ("id", "block", "outcome", "wins", "reward", "version"),
-           "Trust": ("id", "block", "pair", "role", "condition", "reward_order", "endowment", "return0", "return1", "return2", "return3", "return4", "return5", "sent"),
-           "Trust Results": ("id", "block", "sent", "returned"),  
-           "Token": ("id", "paid"),  
-           "Selection": ("id", "block", "choice"),   
-           "Cheating 6": ("id", "block", "trial", "version", "condition", "roll", "prediction", "report", "reward", "time", "time1", "time2"),
-           "Cheating Results": ("id", "block", "outcome", "wins", "reward", "version"),
-           "Trust": ("id", "block", "pair", "role", "condition", "reward_order", "endowment", "return0", "return1", "return2", "return3", "return4", "return5", "sent"),
-           "Trust Results": ("id", "block", "sent", "returned"),             
-           "Lottery": ("id", "choice1", "choice2", "choice3", "choice4", "choice5", "chosen", "win"),
+studies = {"Login": ("id", "code","bag", "pairs", "roles"),
+           "Groups": ("id", "close", "distant"),           
+           "Liking": ("id", "trial", "left", "right", "choice"),
+           "Articles": ("id", "for_whom", "trial", "articleA", "articleB", "choice"), 
+           "Groups Results": ("id", *[f"paired{i}" for i in range(1, 7)], *itertools.chain.from_iterable([[*[f"close{i}_paired{j}" for i in range(1, 5)], * [f"distant{i}_paired{j}" for i in range(1, 5)]] for j in range(1, 7)])), 
+           "Trust Control Questions": ("id", "item", "answer"), 
+           "Trust": ("id", "block", "other", "groups", "return0", "return1", "return2", "return3", "return4", "return5", "sent", "prediction"),
+           "Favoritism": ("id", "trial", "groups1", "value1", "decision1", "groups2", "value2", "decision2", "groups3", "value3", "decision3", "real"),
+           "Sameness": ("id", "trial", "value", "close", "distant", "prediction"),
+           "Products": ("id", "trial", "left", "right", "choice", "time"),
+           "Reading": ("id", "chooser", "trial", "article", "title", "time", "scrolled", "scrolled_to_end"),
+           "Articles Results": ("id", "article1", "article2", "Article3"),
+           "Charities": ("id", "charity", "contribution", "won", "chosen_charity"),
            "Dice Lottery": ("id", "rolls", "reward"),
-           "Anchoring": ("id", "trial", "item", "true", "comparison1", "time1", "estimate1", "time2", "condition", "response", "time3", "estimate2", "time4"),
-            "Political Skill": ("id", "item", "answer"),           
-           "TDMS": ("id", "item", "answer"),
            "Demographics": ("id", "sex", "age", "language", "student", "field"),
            "Comments": ("id", "comment"),
-           "Ending": ("id", "reward", "chosen_block")}
+           "Results Results": ("id", "pair", "sentA", "sentB", "favoritism", "sameness"),
+           "Ending": ("id", "reward")}
 
-frames = ["Initial",
-          "Login",
-          "Intro",
-          "HEXACOintro",
-          "CheatingInstructions",
-          "Cheating",
-          "Instructions2",
-          "Cheating",
-          "Instructions3",
-          "Cheating",
-          "Info3",
-          "InstructionsTrust",
-          "Trust",
-          "WaitTrust",
-          "TrustResult",
-          "Instructions4Check",
-          "Cheating",
-          "OutcomeWait",          
-          "Trust",
-          "WaitTrust",
-          "TrustResult",
-          "Instructions5",
-          "Cheating",
-          "OutcomeWait",
-          "Trust",
-          "WaitTrust",
-          "TrustResult",
-          "Instructions6",
-          "Cheating",
-          "OutcomeWait",
-          "Trust",
-          "WaitTrust",
-          "TrustResult",
-          "EndCheating",
-          "Lottery",
-          "LotteryWin",
-          "LotteryInstructions",
-          "DiceLottery",
-          "AnchoringInstructions", 
-          "Anchoring",
-          "QuestInstructions",
-          "PoliticalSkill",
-          "TDMS",
-          "HEXACOinfo",
-          "Demographics",
-          "Comments",
-          "Ending",
-          "end"
-         ]
+frames = [
+    "Initial",
+    "Login",
+    "Intro",
+    "InstructionsGroups",
+    "Groups",
+    "InstructionsLiking",
+    "Liking",
+    "InstructionsArticlesOthers",
+    "ChoiceOthers",
+    "InstructionsArticlesMyself",
+    "ChoiceMyself",
+    "WaitGroups",
+    "IntroTrust",
+    "InstructionsTrust",
+    "Trust1", "Trust2", "Trust3", "Trust4", "Trust5", "Trust6", "Trust7",
+    "InstructionsFavoritism",
+    "Favoritism",
+    "InstructionsSameness",
+    "Sameness",
+    "ProductsIntro",
+    "Choices",
+    "InstructionsReading",
+    "ArticlesMyself",
+    "WaitArticles",
+    "InstructionsReadingOthers",    
+    "ArticlesOthers",
+    "CharityInstructions",
+    "Charity",
+    "LotteryInstructions",
+    "DiceLottery",
+    "Demographics",
+    "Comments",
+    "WaitResults",
+    "Ending",
+    "end"]
+
 
 read = True
 compute = False
 
 if read:
     for study in studies:
-        with open("{} results.txt".format(study), mode = "w") as f:
+        with open("{} results.txt".format(study), mode = "w", encoding="utf-8") as f:
             f.write("\t".join(studies[study]))
 
-    with open("Time results.txt", mode = "w") as times:
+    with open("Time results.txt", mode = "w", encoding="utf-8") as times:
         times.write("\t".join(["id", "order", "frame", "time"]))
 
     files = os.listdir()
@@ -109,15 +82,15 @@ if read:
 
                 study = line.strip()
                 if line.startswith("time: "):
-                    with open("Time results.txt", mode = "a") as times:
-                        print(frames[count-1])
-                        print(line.split()[1])
+                    with open("Time results.txt", mode = "a", encoding="utf-8") as times:
                         times.write("\n" + "\t".join([file, str(count), frames[count-1], line.split()[1]]))
                         count += 1
                         continue
                 if study in studies:
-                    with open("{} results.txt".format(study), mode = "a") as results:
+                    with open("{} results.txt".format(study), mode = "a", encoding="utf-8") as results:                        
                         for line in datafile:
+                            if study == "Groups Results":
+                                line.replace("~", "\t").replace("|", "\t") 
                             content = line.strip()
                             if not content or content.startswith("time: "):
                                 break

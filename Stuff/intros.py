@@ -30,11 +30,11 @@ intro = """Studie se skládá z několika různých úkolů a otázek. Níže je
 <b>8) Čtení článků:</b> Budete mít čas si dříve vybrané články přečíst.
 <b>9) Příspěvek charitě:</b> Budete se rozhodovat, zda přispějete na charitu, pokud získáte peníze v loterii.
 <b>10) Loterie:</b> Můžete se rozhodnout zúčastnit se další loterie a získat peníze v závislosti na výsledcích této loterie.
-<b>11) Konec studie a platba:</b> Poté, co skončíte, půjdete do vedlejší místnosti, kde podepíšete pokladní dokument, na základě kterého obdržíte vydělané peníze v hotovosti. Jelikož v dokumentu bude uvedena pouze celková suma, experimentátor, který Vám bude vyplácet odměnu, nebude vědět, kolik jste vydělali v jednotlivých částech studie.
+<b>11) Konec studie a platba:</b> Poté, co skončíte, půjdete do vedlejší místnosti, kde podepíšete pokladní doklad, na základě kterého obdržíte vydělané peníze v hotovosti. Jelikož v dokumentu bude uvedena pouze celková suma, experimentátor, který Vám bude vyplácet odměnu, nebude vědět, kolik jste vydělali v jednotlivých částech studie.
 
 Veškeré interakce s ostatními účastniky studie proběhnou pouze přes počítač a anonymně. Nikdy nebudete navzájem vědět, s kým v rámci experimentu interagujete.
 
-Všechny informace, které v průběhu studie uvidíte, jsou pravdivé a nebudete za žádných okolností klamáni či jinak podváděni.
+Všechny informace, které v průběhu studie uvidíte, jsou pravdivé a nebudete za žádných okolností klamáni.
 
 V případě, že máte otázky nebo narazíte na technický problém během úkolů, zvedněte ruku a tiše vyčkejte příchodu výzkumného asistenta.
 """
@@ -46,7 +46,7 @@ Za účast na studii dostáváte {} Kč.
 
 <b>Vaše odměna za tuto studii je tedy dohromady {} Kč, zaokrouhleno na desítky korun nahoru získáváte {} Kč. Napište prosím tuto (zaokrouhlenou) částku do příjmového dokladu na stole před Vámi.</b>
 
-Studie založená na datech získaných v tomto experimentu bude volně dostupná na stránkách Decision Lab Prague (decisionlab.vse.cz) krátce po vyhodnocení dat a publikaci výsledků. 
+Výsledky studie založené na datech získaných v tomto experimentu budou volně dostupné na stránkách Decision Lab Prague (decisionlab.vse.cz) krátce po vyhodnocení dat a publikaci výsledků. 
 
 <b>Žádáme Vás, abyste nesděloval(a) detaily této studie možným účastníkům, aby jejich volby a odpovědi nebyly ovlivněny a znehodnoceny.</b>
   

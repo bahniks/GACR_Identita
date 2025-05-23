@@ -218,7 +218,7 @@ class Articles(ExperimentFrame):
 
         self.next["state"] = "disabled"
 
-        self.file.write("Articles\n")
+        self.file.write("Reading\n")
 
         self.createText()
         
