@@ -152,6 +152,7 @@ class Charity(InstructionsFrame):
                 self.frames[i] = ScaleFrame(self, maximum = CHARITY, charity = self.charities[i+add], description = self.descriptions[i+add])            
                 self.frames[i].grid(column = 1, row = i + 2, pady = 2, sticky = W)            
         else:
+            self.file.write("\n")
             if not self.win:
                 self.root.status["results"] += [charityNotChosenText]
             super().nextFun()
@@ -161,7 +162,6 @@ class Charity(InstructionsFrame):
             self.file.write("Charities\n")   
             add = 0
         else:
-            self.file.write("\n")
             add = len(self.charities)//2
         for i in range(len(self.charities)//2):
             chosen = 1 if self.charities[i + add] == self.chosenCharity else 0

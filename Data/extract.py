@@ -4,8 +4,8 @@ import itertools
 
 studies = {"Login": ("id", "code","bag", "pairs", "roles"),
            "Groups": ("id", "close", "distant"),           
-           "Liking": ("id", "trial", "left", "right", "choice"),
-           "Articles": ("id", "for_whom", "trial", "articleA", "articleB", "choice"), 
+           "Liking": ("id", "trial", "left", "right", "choice", "time"),
+           "Articles": ("id", "for_whom", "trial", "articleA", "articleB", "choice", "time"), 
            "Groups Results": ("id", *[f"paired{i}" for i in range(1, 7)], *itertools.chain.from_iterable([[*[f"close{i}_paired{j}" for i in range(1, 5)], * [f"distant{i}_paired{j}" for i in range(1, 5)]] for j in range(1, 7)])), 
            "Trust Control Questions": ("id", "item", "answer"), 
            "Trust": ("id", "block", "other", "groups", "return0", "return1", "return2", "return3", "return4", "return5", "sent", "prediction"),

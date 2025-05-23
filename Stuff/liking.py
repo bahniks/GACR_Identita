@@ -90,7 +90,7 @@ class Liking(InstructionsFrame):
             
             left = self.currentPair[0]
             right = self.currentPair[1]            
-            self.file.write(f"{self.id}\t{self.trial}\t{left}\t{right}\t{answer}\n")
+            self.file.write(f"{self.id}\t{self.trial}\t{left}\t{right}\t{answer}\t{perf_counter() - self.t0}\n")
 
             for i in range(len(self.originalPairs)):
                 search = left if answer == "left" else right

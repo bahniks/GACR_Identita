@@ -53,7 +53,11 @@ Předem nebudete vědět, jaká je Vaše role a uvedete tedy rozhodnutí pro ob�
 
 Svou volbu učiňte posunutím modrých ukazatelů níže.
 
-Až se rozhodnete u všech možností, uveďte pomocí ukazatele, kolik očekáváte, že Vám pošle zpět hráč B, pokud bude náhodně vybráno, že jste hráč A."""
+{}"""
+
+endA = "<b>Nejprve se rozhodněte, kolik peněz pošlete hráči B, pokud bude náhodně vybráno, že jste hráč A.</b>"
+endPrediction = "<b>Nyní uveďte pomocí ukazatele, kolik očekáváte, že Vám pošle zpět hráč B, pokud bude náhodně vybráno, že jste hráč A.</b>"
+endB = "<b>Nakonec u všech možností uveďte pomocí ukazatele, kolik pošlete zpět hráči A, pokud bude náhodně vybráno, že jste hráč B.</b>"
 
 
 trustControl1 = "Jaká je role hráče A a hráče B ve studii?"
@@ -84,8 +88,9 @@ favoritismResultText = "V úkolu, kde Vám ostatní účastníci mohli přiděli
 samenessResultTextCorrect = f"Podobnost dalšího účastníka studie jste odhadl(a) správně a získal(a) jste tedy {SAMENESS} Kč."
 samenessResultTextIncorrect = f"Podobnost dalšího účastníka studie jste neodhadl(a) správně a nezískal(a) jste tedy za tuto úlohu žádnou odměnu."
 
-checkButtonText = "Rozhodl(a) jsem se u všech možností"
+checkButtonText3 = "Rozhodl(a) jsem se u všech možností"
 checkButtonText2 = "Uvedl(a) jsem svou předpověď"
+checkButtonText = "Uvedl(a) jsem své rozhodnutí"
 
 
 ################################################################################
@@ -113,8 +118,8 @@ class ScaleFrame(Canvas):
                             variable = self.valueVar, command = self.changedValue)
         self.value.bind("<Button-1>", self.onClick)
 
-        self.playerText1 = "Já:" if player == "A" else "Hráč A:"
-        self.playerText2 = "Hráč B:" if player == "A" else "Já:"
+        self.playerText1 = "Já:" if player == "A" or player == "prediction" else "Hráč A:"
+        self.playerText2 = "Hráč B:" if player == "A" or player == "prediction" else "Já:"
         self.totalText1 = "{0:3d} Kč" if player == "A" else "{0:3d} Kč"
         self.totalText2 = "{0:3d} Kč" if player == "A" else "{0:3d} Kč"
 
@@ -125,7 +130,7 @@ class ScaleFrame(Canvas):
         self.valueLab.grid(column = 3, row = 1)        
         self.currencyLab.grid(column = 4, row = 1)
 
-        fg = "white" if not self.player else "black"
+        fg = "white" if self.player == "prediction" else "black"
 
         self.playerLab1 = ttk.Label(self, text = self.playerText1, font = "helvetica {}".format(font), background = "white", width = 6, anchor = "e", foreground = fg) 
         self.playerLab2 = ttk.Label(self, text = self.playerText2, font = "helvetica {}".format(font), background = "white", width = 6, anchor = "e", foreground = fg) 
@@ -139,6 +144,14 @@ class ScaleFrame(Canvas):
         self.totalLab2.grid(column = 9, row = 1, padx = 3, sticky = "ew")
         self.spaces.grid(column = 7, row = 1)        
         
+        self.changedValue(0)
+
+
+    def showPrediction(self):
+        self.playerLab1["foreground"] = "black"
+        self.playerLab2["foreground"] = "black"
+        self.totalLab1["foreground"] = "black"
+        self.totalLab2["foreground"] = "black"
         self.changedValue(0)
 
 
@@ -166,6 +179,11 @@ class ScaleFrame(Canvas):
             self.totalLab2["text"] = self.totalText2.format(self.returned * 3 + self.endowment - newval)
             self.totalLab2["font"] = "helvetica {} bold".format(self.font)
             self.playerLab2["font"] = "helvetica {} bold".format(self.font)
+        elif self.player == "prediction":
+            self.totalLab1["text"] = self.totalText1.format(self.endowment - (self.maximum - self.endowment) // 3 + newval)
+            self.totalLab2["text"] = self.totalText2.format(self.maximum - newval)
+            self.totalLab1["font"] = "helvetica {} bold".format(self.font)
+            self.playerLab1["font"] = "helvetica {} bold".format(self.font)
         #self.parent.checkAnswers()
               
 
@@ -179,14 +197,14 @@ class GroupsFrame(Canvas):
         self.label = ttk.Label(self, text=intstuctionsT2a, font="helvetica 15 bold", background="white")
         self.label.grid(row = 0, column = 0, columnspan = 2, pady = 10, sticky=W)
 
-        self.closeText = Text(self, wrap=WORD, font="helvetica 15", height=7, width=50, background="white", relief="flat")
+        self.closeText = Text(self, wrap=WORD, font="helvetica 15", height=7, width=45, background="white", relief="flat")
         self.closeText.grid(row = 1, column = 0, pady = 10)
         self.closeText.tag_configure("bold", font = "helvetica 15 bold", foreground = "blue")
         self.closeText.insert("1.0", "\n".join(["Blízké skupiny:"] + close))
         self.closeText.tag_add("bold", "1.0", "2.0")
         self.closeText.config(state=DISABLED)
 
-        self.distantText = Text(self, wrap=WORD, font="helvetica 15", height=7, width=50, background="white", relief="flat")
+        self.distantText = Text(self, wrap=WORD, font="helvetica 15", height=7, width=45, background="white", relief="flat")
         self.distantText.grid(row = 1, column = 1, pady = 10)
         self.distantText.tag_configure("bold", font = "helvetica 15 bold", foreground = "red")
         self.distantText.insert("1.0", "\n".join(["Vzdálené skupiny:"] + distant))
@@ -226,10 +244,10 @@ class Trust(InstructionsFrame):
 
         endowment = TRUST    
         
-        text = instructionsT2.format(endowment, int(endowment/5), endowment)
+        text = instructionsT2.format(endowment, int(endowment/5), endowment, endA)
 
         height = 13
-        width = 102
+        width = 90
 
         super().__init__(root, text = text, height = height, font = 15, width = width)
         
@@ -259,12 +277,12 @@ class Trust(InstructionsFrame):
                 player = "A"
             else:
                 ttk.Label(self, text = "Očekávám, že hráč B pošle zpět:", font = "helvetica 15", background = "white").grid(column = 0, row = 4, pady = 1, sticky = E)  
-                player = None
+                player = "prediction"
             maximum = int(i * 3 * endowment / 5 + endowment) if i < 6 else endowment            
             self.frames[i] = ScaleFrame(self, maximum = maximum, player = player, returned = int(i*endowment/5), endowment = endowment)
             row = 7 + i if i < 6 else i - 3
             self.frames[i].grid(column = 1, row = row, pady = 1)
-            if i == 7:
+            if i != 6:
                 self.frames[i].value["state"] = "disabled"
         
         self.labB = ttk.Label(self, text = "Pokud budu hráč B", font = "helvetica 15 bold", background = "white")
@@ -284,7 +302,7 @@ class Trust(InstructionsFrame):
         self.trialLabel = ttk.Label(self, text = "Hra {}/7".format(self.root.status["trustblock"]), font = "helvetica 15", background = "white")
         self.trialLabel.grid(row = 0, column = 1, columnspan = 3, pady = 15, padx = 20, sticky = NE)
 
-        self.deciding = True
+        self.status = "A"
 
         self.rowconfigure(0, weight = 1)
         self.rowconfigure(1, weight = 0)
@@ -303,7 +321,7 @@ class Trust(InstructionsFrame):
         self.next["state"] = "normal" if self.checkVar.get() else "disabled"
       
     def nextFun(self):
-        if self.deciding:
+        if self.status == "A":
             for i, frame in self.frames.items():
                 if i != 7:
                     frame.value["state"] = "normal" if not self.checkVar.get() else "disabled"
@@ -311,10 +329,23 @@ class Trust(InstructionsFrame):
                     frame.value["state"] = "normal" if self.checkVar.get() else "disabled"
                     frame.maximum = TRUST + int(self.frames[6].valueVar.get()) * 3
                     frame.value["to"] = frame.maximum
-            self.deciding = False
+                    frame.showPrediction()
+            self.status = "prediction"
             self.checkBut["text"] = checkButtonText2
             self.next["state"] = "disabled"
             self.checkVar.set(False)
+            self.changeText(instructionsT2.format(TRUST, int(TRUST/5), TRUST, endPrediction))
+        elif self.status == "prediction":
+            for i, frame in self.frames.items():
+                if i > 5:
+                    frame.value["state"] = "disabled"
+                else:
+                    frame.value["state"] = "normal"
+            self.status = "B"
+            self.checkBut["text"] = checkButtonText3
+            self.next["state"] = "disabled"
+            self.checkVar.set(False)
+            self.changeText(instructionsT2.format(TRUST, int(TRUST/5), TRUST, endB))
         else:
             self.send()
             self.write()

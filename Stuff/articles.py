@@ -144,7 +144,7 @@ class Choice(ExperimentFrame):
         else:
             self.root.status["othersArticlesChosen"].append([*self.items[self.trial - 1], self.items[self.trial - 1][chosen]])
         
-        self.file.write("\t".join([self.id, self.who, str(self.trial), *self.items[self.trial - 1][0].split("_"), *self.items[self.trial - 1][1].split("_"), choice]) + "\n")
+        self.file.write("\t".join([self.id, self.who, str(self.trial), *self.items[self.trial - 1][0].split("_"), *self.items[self.trial - 1][1].split("_"), choice, str(perf_counter() - self.t0)]) + "\n")
         self.trial += 1
         self.trialText["text"] = f"Volba: {self.trial}/{self.total}"
         if self.trial > self.total:
@@ -182,11 +182,13 @@ class Articles(ExperimentFrame):
         self.total = 3
         self.trial = 1
 
-        # if TESTING and self.who == "myself" and not "myselfArticlesChosen" in self.root.status:
-        #     self.root.status["articles"] = ["7_anti", "11_filler", "20_envi"]                      
-        if TESTING and self.who == "others":
-            if not "othersArticles" in self.root.status:            
-                self.root.status["othersArticles"] = ["anti10", "envi15", "filler16"]            
+        # if TESTING and self.who == "myself" and URL == "TEST":
+        #      self.root.status["myselfArticlesChosen"] = [f"envi{i}" for i in range(1, 25)] + [f"filler{i}" for i in range(1, 25)]           
+        #      self.total = 48
+        # if TESTING and self.who == "others":
+        #     if not "othersArticles" in self.root.status:            
+        #         self.root.status["othersArticles"] = [f"envi{i}" for i in range(1, 17)] + [f"filler{i}" for i in range(1, 17)] + [f"anti{i}" for i in range(1, 17)]      
+        #         self.total = 48            
             #self.root.status["othersArticlesTitles"] = self.root.status["othersArticlesTitles"][self.root.status["othersArticles"]]
 
         self.trialText = ttk.Label(self, text=f"Článek: 1/{self.total}", font="helvetica 15 bold", background="white", justify="right")
@@ -246,7 +248,7 @@ class Articles(ExperimentFrame):
         self.text.delete("1.0", "end")
         self.filename = "{}.txt".format(source[self.chosen]).replace(":", "_").replace("?", "_").replace("%", "_").replace("„", "_").replace("“", "_").strip()
         with open(os.path.join(os.getcwd(), "Stuff", "Texts", self.filename), encoding = "utf-8") as f:
-            self.text.insert("1.0", f.read().strip("'").strip('"').strip())
+            self.text.insert("1.0", f.read().strip("'").strip('"').strip().replace('""', '"'))
         self.text["state"] = "disabled"
         self.t0 = perf_counter()
         self.disable()
@@ -257,7 +259,7 @@ class Articles(ExperimentFrame):
         self.next["state"] = "disabled"
         limit = 0.5 if self.who == "myself" else 2
         if TESTING:
-            limit = 0.1
+            limit = 0.001
         self.after(int(limit * 60000), self.enable)   
         
     def proceed(self):
