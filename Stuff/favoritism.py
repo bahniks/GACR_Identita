@@ -26,7 +26,7 @@ introFavoritism = f"""V rámci této úlohy dostanete Vy i všichni ostatní ú�
 
 V této úloze dostanete popis sedmi trojic osob (tj. informaci o tom, jaké skupiny jsou jim blízké a vzdálené). U každé trojice vyberete jednu osobu, které přidělíte {FAVORITISM} Kč, a jednu, které {FAVORITISM} Kč odeberete. Zbývající osobě se odměna nezmění. Ze sedmi trojic bude jedna trojice odpovídat skutečné trojici dalších účastníků výzkumu a zbývající trojice budou uměle vytvořené. Pouze u trojice skutečných účastníků studie budou peníze na základě Vašich voleb skutečně přiděleny či odebrány.
 
-Váš popis bude podobně zobrazen u třech dalších účastníků studie. Na základě jejich voleb tedy za tuto úlohu dostanete celkem 0-{FAVORITISM*6} Kč k odměně. Výši této odměny se dozvíte na konci studie."""
+Váš popis bude podobně zobrazen třem dalším účastníkům studie. Na základě jejich voleb tedy za tuto úlohu dostanete celkem 0-{FAVORITISM*6} Kč k odměně. Výši této odměny se dozvíte na konci studie."""
 
 qFavoritism= f"Pomocí tlačítek vyberte, které osobě přidělíte a které odeberete {FAVORITISM} Kč.\nKaždá možnost musí být zvolena právě jednou."
 
