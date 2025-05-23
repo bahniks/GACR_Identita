@@ -9,9 +9,9 @@ studies = {"Login": ("id", "code","bag", "pairs", "roles"),
            "Groups Results": ("id", *[f"paired{i}" for i in range(1, 7)], *itertools.chain.from_iterable([[*[f"close{i}_paired{j}" for i in range(1, 5)], * [f"distant{i}_paired{j}" for i in range(1, 5)]] for j in range(1, 7)])), 
            "Trust Control Questions": ("id", "item", "answer"), 
            "Trust": ("id", "block", "other", "groups", "return0", "return1", "return2", "return3", "return4", "return5", "sent", "prediction"),
-           "Favoritism": ("id", "trial", "groups1", "value1", "decision1", "groups2", "value2", "decision2", "groups3", "value3", "decision3", "real"),
+           "Favoritism": ("id", "trial", "close1", "distant1", "value1", "decision1", "close2", "distant2", "value2", "decision2", "close3", "distant3", "value3", "decision3", "real"),
            "Sameness": ("id", "trial", "value", "close", "distant", "prediction"),
-           "Products": ("id", "trial", "left", "right", "choice", "time"),
+           "Products": ("id", "trial", "choice", "left", "right", "time"),
            "Reading": ("id", "chooser", "trial", "article", "title", "time", "scrolled", "scrolled_to_end"),
            "Articles Results": ("id", "article1", "article2", "Article3"),
            "Charities": ("id", "charity", "contribution", "won", "chosen_charity"),
@@ -90,7 +90,7 @@ if read:
                     with open("{} results.txt".format(study), mode = "a", encoding="utf-8") as results:                        
                         for line in datafile:
                             if study == "Groups Results":
-                                line.replace("~", "\t").replace("|", "\t") 
+                                line.replace("~", "\t").replace("|", "\t").replace("!", "\t") 
                             content = line.strip()
                             if not content or content.startswith("time: "):
                                 break

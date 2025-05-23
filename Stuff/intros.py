@@ -186,7 +186,7 @@ class Initial(InstructionsFrame):
                     return
                 elif response == "load":
                     self.root.status["code"] = self.codeVar.get()
-                    super().nextFun()   # load from temp.json?  # TODO                 
+                    super().nextFun()              
                     return
                 elif response == "no_questionnaire":
                     self.problemLabel["text"] = "Před účastí na experimentu je potřeba vyplnit alespoň 5 dní předem dotazník, na který se dostanete pomocí odkazu, který Vám přišel s pozvánkou mailem. Dnes se experimentu tedy nemůžete zúčastnit. Přivolejte výzkumného asistenta zvednutím ruky. Můžete se přihlasit na jiný termín 5 dní po vyplnění dotazníku."                
