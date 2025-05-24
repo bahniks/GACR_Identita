@@ -380,7 +380,7 @@ class Trust(InstructionsFrame):
 
 class Wait(InstructionsFrame):
     def __init__(self, root, what):
-        super().__init__(root, text = "Čekejte na ostatní účastníky studie", height = 3, font = 15, proceed = False, width = 45)
+        super().__init__(root, text = "Čekejte na data od ostatních účastníků studie", height = 3, font = 15, proceed = False, width = 45)
         self.progressBar = ttk.Progressbar(self, orient = HORIZONTAL, length = 400, mode = 'indeterminate')
         self.progressBar.grid(row = 2, column = 1, sticky = N)
 

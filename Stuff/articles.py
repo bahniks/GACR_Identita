@@ -20,7 +20,7 @@ from constants import TESTING, URL
 ################################################################################
 # TEXTS
 
-introArticlesOthers = "Nyní Vám budeme ukazovat titulky článků. Jedná se o krátké články, které vyjadřují různé názory autorů. Vaším úkolem bude vybrat z každé dvojice článek, který by si podle Vás měli ostatní účastníci experimentu přečíst. Některé z článků, které vyberete, dostanou náhodně vybraní účastníci této studie a budou mít čas si je přečíst. Tento úkol bude mít 24 kol."
+introArticlesOthers = "Nyní Vám budeme ukazovat titulky článků. Jedná se o krátké články, které vyjadřují různé názory autorů. Vaším úkolem bude vybrat z každé dvojice článek, který by si podle Vás měli ostatní účastníci experimentu přečíst. Vybraní účastníci této studie dostanou některé náhodně vybrané články z těch, které vyberete, a budou mít čas si je přečíst. Tento úkol bude mít 24 kol."
 
 qOthers = "Který z uvedených článků chcete, aby si jiný účastník studie přečetl?"
 

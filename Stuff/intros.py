@@ -134,14 +134,14 @@ class Initial(InstructionsFrame):
         self.codeEntry = ttk.Entry(self.codeFrame, width = 8, font = "Helvetica 15", textvariable = self.codeVar)
         self.codeEntry.grid(row = 0, column = 2, padx = 10)
 
+        self.filler = ttk.Label(self.codeFrame, text = "\n\n\n\n\n", font = "Helvetica 15", background = "white")
+        self.filler.grid(row = 1, column = 0, columnspan = 1, sticky = W)
+
         self.codeLabel = ttk.Label(self.codeFrame, text = "Kód:", font = "Helvetica 15", background = "white") 
         self.codeLabel.grid(row = 0, column = 1)
 
-        self.problemLabel = ttk.Label(self.codeFrame, text = "", font = "Helvetica 15", background = "white", foreground = "red", wraplength = 800)
+        self.problemLabel = ttk.Label(self.codeFrame, text = "", font = "Helvetica 15", background = "white", foreground = "red", wraplength = 750)
         self.problemLabel.grid(row = 1, column = 0, columnspan = 4, pady = 10)
-
-        self.filler = ttk.Label(self.codeFrame, text = "\n\n\n\n\n", font = "Helvetica 15", background = "white")
-        self.filler.grid(row = 1, column = 0, columnspan = 1, sticky = W)
 
         self.codeFrame.rowconfigure(1, weight = 1)
 
@@ -221,7 +221,7 @@ class Initial(InstructionsFrame):
 
 
 
-Intro = (InstructionsFrame, {"text": intro, "proceed": True, "height": 30})
+Intro = (InstructionsFrame, {"text": intro, "proceed": True, "height": 32})
 #Initial = (InstructionsFrame, {"text": login, "proceed": False, "height": 19, "keys": ["g", "G"]})
 
 
