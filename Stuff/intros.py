@@ -184,9 +184,8 @@ class Initial(InstructionsFrame):
                     self.problemLabel["text"] = "Experimentu jste se již zúčastnil(a). Není možné se zúčastnit znovu. Přivolejte výzkumného asistenta zvednutím ruky."                
                     self.codeEntry["state"] = "disabled"
                     return
-                elif response == "load":
-                    self.root.status["code"] = self.codeVar.get()
-                    super().nextFun()              
+                elif response == "opened":
+                    self.problemLabel["text"] = "Experiment s tímto kóden je již otevřený. Přivolejte výzkumného asistenta zvednutím ruky."
                     return
                 elif response == "no_questionnaire":
                     self.problemLabel["text"] = "Před účastí na experimentu je potřeba vyplnit alespoň 5 dní předem dotazník, na který se dostanete pomocí odkazu, který Vám přišel s pozvánkou mailem. Dnes se experimentu tedy nemůžete zúčastnit. Přivolejte výzkumného asistenta zvednutím ruky. Můžete se přihlasit na jiný termín 5 dní po vyplnění dotazníku."                

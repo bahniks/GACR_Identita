@@ -135,7 +135,7 @@ class GUI(Tk):
 
 
     def uploadResults(self):
-        for i in range(5):
+        for i in range(20):
             # Set the URL of the Django app that handles file uploads
             url = URL + "results/"
 

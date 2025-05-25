@@ -166,8 +166,8 @@ class Charity(InstructionsFrame):
         for i in range(len(self.charities)//2):
             chosen = 1 if self.charities[i + add] == self.chosenCharity else 0
             if chosen and self.win:
-                self.root.status["results"] += [charityChosenText.format(self.chosenCharity, int(self.frames[i].valueVar.get()), self.chosenCharity, CHARITY - int(self.frames[i].valueVar.get()))]
-                self.root.status["reward"] += int(self.frames[i].valueVar.get())                
+                self.root.status["results"] += [charityChosenText.format(self.chosenCharity, CHARITY - int(self.frames[i].valueVar.get()), self.chosenCharity, int(self.frames[i].valueVar.get()))]
+                self.root.status["reward"] += CHARITY - int(self.frames[i].valueVar.get())                
             self.file.write(f"{self.id}\t{self.charities[i+add]}\t{self.frames[i].valueVar.get()}\t{self.win}\t{chosen}\n")        
 
 
