@@ -6,7 +6,7 @@ CHARITY = 200
 
 
 AUTOFILL = False
-TESTING = True
+TESTING = False
 GOTHROUGH = False
 URL = "https://dlab-bahnik.pythonanywhere.com/"
 #URL = "TEST"
